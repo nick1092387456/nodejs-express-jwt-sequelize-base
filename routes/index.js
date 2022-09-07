@@ -1,11 +1,6 @@
-const express = require('express')
-const router = express.Router()
-const userController = require('../controllers/user-controller')
+let apis = require('./apis')
 
-router.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+module.exports = (app) => {
+  app.use('/api', apis)
+}
 
-router.get('/users', userController.getUsers)
-
-module.exports = router
