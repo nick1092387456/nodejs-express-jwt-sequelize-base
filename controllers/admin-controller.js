@@ -1,6 +1,6 @@
 const adminController = {
   getUsers: (req, res) => {
-    return res.json('admin/users')
+    return res.json('adminPage')
   },
 }
 
