@@ -5,6 +5,12 @@ const { authenticated, authenticatedAdmin } = require('../middleware/auth')
 const userController = require('../controllers/user-controller')
 const adminController = require('../controllers/admin-controller')
 
+//admin
+router.post(
+  '/admin',
+  passport.authenticate('local', { session: false }),
+  adminController.signIn
+)
 router.get(
   '/admin',
   authenticated,
@@ -12,12 +18,14 @@ router.get(
   adminController.getUsers
 )
 
+
+//users
 router.get('/users', authenticated, userController.getUsers)
 
 //jwt signin
-router.post('/users/signup', userController.signUp)
+router.post('/signup', userController.signUp)
 router.post(
-  '/users/signin',
+  '/signin',
   passport.authenticate('local', { session: false }),
   userController.signIn
 )

@@ -13,14 +13,14 @@ passport.use(
     {
       usernameField: 'email',
       passwordField: 'password',
-      passReqToCallback: true,
     },
     // authenticate user
-    (req, email, password, cb) => {
+    (email, password, cb) => {
       User.findOne({ where: { email } }).then((user) => {
         if (!user) return cb(null, false)
         bcrypt.compare(password, user.password).then((res) => {
           if (!res) return cb(null, false)
+          console.log(`LocalStrategy : ${user}`)
           return cb(null, user)
         })
       })
@@ -47,6 +47,7 @@ passport.serializeUser((user, cb) => {
 passport.deserializeUser((id, cb) => {
   User.findByPk(id).then((user) => {
     user = user.toJSON()
+    console.log(user)
     return cb(null, user)
   })
 })
