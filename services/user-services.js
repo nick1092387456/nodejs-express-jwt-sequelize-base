@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs')
 const db = require('../models')
 const { User } = db
+const jwt = require('jsonwebtoken')
 
 const userServices = {
   signUp: async (req, callback) => {
@@ -25,16 +26,33 @@ const userServices = {
       return callback(null, { status: 'error', message: err })
     }
   },
-
+  signIn: async (req, callback) => {
+    try {
+      const userData = req.user.toJSON()
+      delete userData.password
+      const token = jwt.sign(userData, process.env.JWT_SECRET, {
+        expiresIn: '30d',
+      })
+      return callback(null, {
+        status: 'success',
+        data: { token, user: userData },
+      })
+    } catch (err) {
+      return callback(null, { status: 'error', message: err })
+    }
+  },
   getUsers: (req, callback) => {
     try {
       return callback(null, {
-        id: req.user.id,
-        name: req.user.name,
-        email: req.user.email,
+        status: 'success',
+        data: {
+          id: req.user.id,
+          name: req.user.name,
+          email: req.user.email,
+        },
       })
     } catch (err) {
-      return callback(err)
+      return callback(null, { status: 'error', message: err })
     }
   },
 }

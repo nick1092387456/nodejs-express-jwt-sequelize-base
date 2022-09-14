@@ -9,20 +9,16 @@ const User = db.User
 
 passport.use(
   new LocalStrategy(
-    // customize user field
     {
       usernameField: 'email',
       passwordField: 'password',
+      passReqToCallback: true,
     },
-    // authenticate user
-    (email, password, cb) => {
+    (req, email, password, cb) => {
       User.findOne({ where: { email } }).then((user) => {
         if (!user) return cb(null, false)
-        bcrypt.compare(password, user.password).then((res) => {
-          if (!res) return cb(null, false)
-          console.log(`LocalStrategy : ${user}`)
-          return cb(null, user)
-        })
+        if (!bcrypt.compareSync(password, user.password)) return cb(null, false)
+        return cb(null, user)
       })
     }
   )
@@ -47,7 +43,6 @@ passport.serializeUser((user, cb) => {
 passport.deserializeUser((id, cb) => {
   User.findByPk(id).then((user) => {
     user = user.toJSON()
-    console.log(user)
     return cb(null, user)
   })
 })

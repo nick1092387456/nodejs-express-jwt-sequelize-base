@@ -1,4 +1,3 @@
-const jwt = require('jsonwebtoken')
 const userServices = require('../services/user-services')
 
 const userController = {
@@ -8,16 +7,10 @@ const userController = {
     )
   },
   signIn: (req, res, next) => {
-    try {
-      const userData = req.user.toJSON()
-      delete userData.password
-      const token = jwt.sign(userData, process.env.JWT_SECRET, {
-        expiresIn: '30d',
-      })
-      res.json({ status: 'success', data: { token, user: userData } })
-    } catch (err) {
-      next(err)
-    }
+    console.log(req.body)
+    userServices.signIn(req, (err, data) =>
+      err ? next(err) : res.status(200).json(data)
+    )
   },
   getUsers: (req, res, next) => {
     userServices.getUsers(req, (err, data) =>
