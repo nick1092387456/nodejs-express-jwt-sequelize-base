@@ -2,16 +2,17 @@ const passport = require('../config/passport')
 
 const authenticated = (req, res, next) => {
   passport.authenticate('jwt', { session: false }, (err, user) => {
-    if (err || !user)
-      return res.status(401).json({ status: 'error', message: 'unauthorized' })
+    if (err || !user) {
+      return res
+        .status(401)
+        .json({ status: 'error', message: '請先登入再使用' })
+    }
     if (user) {
       req.user = user
       return next()
     }
   })(req, res, next)
 }
-
-// const authenticated = passport.authenticate('jwt', { session: false })
 
 const authenticatedAdmin = (req, res, next) => {
   if (req.user && req.user.isAdmin) return next()

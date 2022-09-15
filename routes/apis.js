@@ -4,6 +4,7 @@ const passport = require('../config/passport')
 const { authenticated, authenticatedAdmin } = require('../middleware/auth')
 const userController = require('../controllers/user-controller')
 const adminController = require('../controllers/admin-controller')
+const { generalErrorHandler } = require('../middleware/error-handler')
 
 //admin
 router.post(
@@ -18,16 +19,14 @@ router.get(
   adminController.getUsers
 )
 
-
 //users
 router.get('/users', authenticated, userController.getUsers)
 
 //jwt signin
 router.post('/signup', userController.signUp)
-router.post(
-  '/signin',
-  passport.authenticate('local', { session: false }),
-  userController.signIn
-)
+router.post('/signin', userController.signIn)
+
+//error handle
+router.use('/', generalErrorHandler)
 
 module.exports = router
