@@ -16,7 +16,7 @@ const userServices = {
     try {
       const result = await signInValidation(req.body)
       if (result.status == '200') {
-        const payload = { id: result.id }
+        const payload = { id: result.data.id }
         const token = jwt.sign(payload, process.env.JWT_SECRET, {
           expiresIn: '30d',
         })
@@ -39,7 +39,7 @@ const userServices = {
         },
       })
     } catch (err) {
-      return callback(null, { status: 'error', message: err })
+      return callback({ status: '400', message: err })
     }
   },
 }

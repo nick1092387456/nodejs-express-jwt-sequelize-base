@@ -1,19 +1,14 @@
 const express = require('express')
 const router = express.Router()
-const passport = require('../config/passport')
 const { authenticated, authenticatedAdmin } = require('../middleware/auth')
 const userController = require('../controllers/user-controller')
 const adminController = require('../controllers/admin-controller')
 const { generalErrorHandler } = require('../middleware/error-handler')
 
 //admin
-router.post(
-  '/admin',
-  passport.authenticate('local', { session: false }),
-  adminController.signIn
-)
+router.post('/admin/signin', adminController.signIn)
 router.get(
-  '/admin',
+  '/admin/users',
   authenticated,
   authenticatedAdmin,
   adminController.getUsers
@@ -21,8 +16,6 @@ router.get(
 
 //users
 router.get('/users', authenticated, userController.getUsers)
-
-//jwt signin
 router.post('/signup', userController.signUp)
 router.post('/signin', userController.signIn)
 

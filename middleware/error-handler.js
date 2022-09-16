@@ -4,7 +4,7 @@ module.exports = {
       console.log('instance error')
       res.status(401).json(err)
     } else {
-      res.status(401).json(err)
+      res.status(err.status).json(err)
     }
     next(err)
   },

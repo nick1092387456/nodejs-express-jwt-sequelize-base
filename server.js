@@ -7,7 +7,6 @@ const port = process.env.PORT || 3000
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(passport.initialize())
-app.use(passport.session())
 app.use((req, res, next) => {
   res.locals.user = req.user
   next()
