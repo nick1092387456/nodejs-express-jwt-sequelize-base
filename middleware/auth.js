@@ -3,9 +3,7 @@ const passport = require('../config/passport')
 const authenticated = (req, res, next) => {
   try {
     passport.authenticate('jwt', { session: false }, (err, user) => {
-      if (err || !user) {
-        throw { status: '401', message: '請先登入再使用' }
-      }
+      if (err || !user) throw { status: '401', message: '請先登入再使用' }
       if (user) {
         req.user = user
         return next()

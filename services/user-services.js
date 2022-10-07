@@ -28,14 +28,15 @@ const userServices = {
       return callback(err)
     }
   },
-  getUsers: (req, callback) => {
+  getCurrentUsers: (req, callback) => {
     try {
       return callback(null, {
-        status: 'success',
+        status: '200',
         data: {
           id: req.user.id,
           name: req.user.name,
           email: req.user.email,
+          isAdmin: req.user.isAdmin,
         },
       })
     } catch (err) {
