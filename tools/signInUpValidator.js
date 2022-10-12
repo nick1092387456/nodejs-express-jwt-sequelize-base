@@ -26,7 +26,7 @@ async function signUpValidation(body) {
       gender,
       birthday,
       duty,
-      privateCheck,
+      privateCheck
     )
     if (
       !email ||
@@ -111,23 +111,20 @@ async function signInValidation(body) {
   try {
     const { email, password } = body
     if (!email || !password)
-      throw {
+      return {
         success: false,
         message: '所有欄位都必須填寫!',
-        data: { email, password },
       }
     const user = await User.findOne({ where: { email } })
     if (!user)
-      throw {
+      return {
         success: false,
         message: 'email未註冊',
-        data: { email, password },
       }
     if (!bcrypt.compareSync(password, user.password))
-      throw {
+      return {
         success: false,
         message: '帳號或密碼錯誤',
-        data: { email, password },
       }
     const result = user.toJSON()
     delete result.password

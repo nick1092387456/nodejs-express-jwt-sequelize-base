@@ -57,7 +57,10 @@ const userServices = {
         result.token = token
         return callback(null, result)
       }
-      return callback(result)
+      return callback(null,{
+        status: false,
+        message: result.message || '登入失敗，請重新輸入'
+      })
     } catch (err) {
       return callback(err)
     }
