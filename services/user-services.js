@@ -24,6 +24,15 @@ const userServices = {
           duty,
           privateCheck,
         } = req.body
+        let genderENG,
+          dutyENG = ''
+        if (gender === '男') genderENG = 'M'
+        else if (gender === '女') genderENG = 'F'
+        else throw new Error({ message: '無效的輸入' })
+        if (duty === '教練') dutyENG = 'Coach'
+        else if (duty === '運動員') dutyENG = 'Athlete'
+        else if (duty === '資料管理員') dutyENG = 'Analyst'
+        else throw new Error({ message: '無效的輸入' })
         await User.create({
           email,
           password: bcrypt.hashSync(password, bcrypt.genSaltSync(10), null),
@@ -31,9 +40,9 @@ const userServices = {
           description,
           avatar,
           idNumber,
-          gender,
+          gender: genderENG,
           birthday,
-          duty,
+          duty: dutyENG,
           privateCheck,
         })
         return callback(null, { status: 'success', message: '註冊成功!' })
@@ -57,9 +66,9 @@ const userServices = {
         result.token = token
         return callback(null, result)
       }
-      return callback(null,{
+      return callback(null, {
         status: false,
-        message: result.message || '登入失敗，請重新輸入'
+        message: result.message || '登入失敗，請重新輸入',
       })
     } catch (err) {
       return callback(err)

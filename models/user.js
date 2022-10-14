@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     { sequelize, modelName: 'User', tableName: 'Users', underscored: true }
   )
   User.associate = function (models) {
-    User.hasMany(models.CoachStudentShip)
+    User.hasMany(models.CoachAthleteShip)
   }
   return User
 }

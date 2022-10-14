@@ -1,6 +1,6 @@
 module.exports = {
   up: (queryInterface, Sequelize) =>
-    queryInterface.createTable('CoachStudentShips', {
+    queryInterface.createTable('CoachAthleteShips', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -15,7 +15,7 @@ module.exports = {
           key: 'id',
         },
       },
-      studentId: {
+      athleteId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         reference: {
@@ -35,5 +35,5 @@ module.exports = {
         type: Sequelize.DATE,
       },
     }),
-  down: (queryInterface) => queryInterface.dropTable('CoachStudentShips'),
+  down: (queryInterface) => queryInterface.dropTable('CoachAthleteShips'),
 }
