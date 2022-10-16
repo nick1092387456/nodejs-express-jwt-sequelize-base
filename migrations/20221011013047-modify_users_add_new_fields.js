@@ -14,7 +14,6 @@ module.exports = {
       type: Sequelize.STRING(10),
       allowNull: false,
       unique: true,
-
     })
     await queryInterface.addColumn('Users', 'gender', {
       type: Sequelize.STRING(1),
@@ -26,7 +25,6 @@ module.exports = {
     })
     await queryInterface.addColumn('Users', 'duty', {
       type: Sequelize.STRING,
-      allowNull: false,
     })
   },
 

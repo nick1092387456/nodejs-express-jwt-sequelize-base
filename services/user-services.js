@@ -77,8 +77,8 @@ const userServices = {
   getCurrentUsers: (req, callback) => {
     try {
       return callback(null, {
-        success: true,
-        data: {
+        status: 'success',
+        user: {
           id: req.user.id,
           name: req.user.name,
           email: req.user.email,
@@ -86,7 +86,51 @@ const userServices = {
         },
       })
     } catch (err) {
-      return callback({ success: '400', message: err })
+      return callback({ status: 'error', message: err })
+    }
+  },
+  getUser: async (req, callback) => {
+    try {
+      const { id } = req.params
+      const user = await User.findByPk(id, {
+        attributes: [
+          'id',
+          'name',
+          'email',
+          'description',
+          'avatar',
+          'gender',
+          'birthday',
+          'duty',
+          'private_check',
+        ],
+        include: [
+          {
+            model: User,
+            as: 'coach',
+            attributes: ['id', 'name', 'avatar'],
+            through: { attributes: [] },
+          },
+          {
+            model: User,
+            as: 'athlete',
+            attributes: ['id', 'name', 'avatar'],
+            through: { attributes: [] },
+          },
+        ],
+      })
+      if (!user) {
+        throw new Error({
+          status: 'error',
+          message: '找不到使用者,已返回至您的個人檔案！',
+        })
+      }
+      return callback(null, {
+        status: 'success',
+        user: user.toJSON(),
+      })
+    } catch (err) {
+      return callback({ status: 'error', message: err })
     }
   },
 }

@@ -19,7 +19,16 @@ module.exports = (sequelize, DataTypes) => {
     { sequelize, modelName: 'User', tableName: 'Users', underscored: true }
   )
   User.associate = function (models) {
-    User.hasMany(models.CoachAthleteShip)
+    User.belongsToMany(User, {
+      through: models.CoachAthleteShip,
+      foreignKey: 'athleteId',
+      as: 'coach',
+    })
+    User.belongsToMany(User, {
+      through: models.CoachAthleteShip,
+      foreignKey: 'coachId',
+      as: 'athlete',
+    })
   }
   return User
 }

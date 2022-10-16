@@ -1,14 +1,27 @@
 'use strict'
+const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
-  const CoachAthleteShip = sequelize.define(
-    'CoachAthleteShip',
-    {
-      sport: DataTypes.STRING,
-    },
-    {}
-  )
-  CoachAthleteShip.associate = function (models) {
-    CoachAthleteShip.belongsTo(models.User)
+  class CoachAthleteShip extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    // static associate(models) {
+    //   // define association here
+    // }
   }
+  CoachAthleteShip.init(
+    {
+      coachId: DataTypes.INTEGER,
+      athleteId: DataTypes.INTEGER,
+    },
+    {
+      sequelize,
+      modelName: 'CoachAthleteShip',
+      tableName: 'CoachAthleteShips',
+      underscored: true,
+    }
+  )
   return CoachAthleteShip
 }

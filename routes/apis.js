@@ -16,6 +16,7 @@ router.get(
 
 //users
 router.get('/get_current_user', authenticated, userController.getCurrentUsers)
+router.get('/getUser/:id', authenticated, userController.getUser)
 router.post('/signup', userController.signUp)
 router.post('/signin', userController.signIn)
 

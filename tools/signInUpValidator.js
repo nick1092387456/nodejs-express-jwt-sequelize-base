@@ -3,7 +3,6 @@ const db = require('../models')
 const { User } = db
 
 async function signUpValidation(body) {
-  console.log('----------------formDate驗證中------------------')
   try {
     const {
       email,
@@ -14,20 +13,9 @@ async function signUpValidation(body) {
       gender,
       birthday,
       duty,
-      privateCheck,
+      // privateCheck,
     } = body
-    console.log(body)
-    console.log(
-      email,
-      password,
-      passwordCheck,
-      name,
-      idNumber,
-      gender,
-      birthday,
-      duty,
-      privateCheck
-    )
+
     if (
       !email ||
       !password ||
