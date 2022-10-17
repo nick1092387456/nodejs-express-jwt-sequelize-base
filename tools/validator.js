@@ -13,7 +13,6 @@ async function signUpValidation(body) {
       gender,
       birthday,
       duty,
-      // privateCheck,
     } = body
 
     if (
@@ -122,7 +121,48 @@ async function signInValidation(body) {
   }
 }
 
+async function userEditValidation(body) {
+  try {
+    const { name, gender, birthday } = body
+    // if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{6,10}$/.text(password)) {
+    //   return {
+    //     success: false,
+    //     message:
+    //       '密碼輸入需 6~10 個由至少有一個數字、至少有一個小寫英文字母、至少有一個大寫英文字母。至少有一個「特殊符號」',
+    //   }
+    // }
+    if (name.length > 50)
+      return {
+        success: false,
+        message: '姓名需小於50字',
+      }
+    if (!/[\u4E00-\u9FFFa-zA-Z]+/g.test(name))
+      return {
+        success: false,
+        message: '姓名不可以有符號',
+      }
+    if (!['男', '女'].includes(gender)) {
+      return {
+        success: false,
+        message: '性別輸入錯誤',
+      }
+    }
+    const birthdayValidate = new Date(birthday)
+    if (!(birthdayValidate instanceof Date && !isNaN(birthdayValidate))) {
+      return {
+        success: false,
+        message: '日期格式有誤',
+      }
+    }
+
+    return { success: true }
+  } catch (err) {
+    return err
+  }
+}
+
 module.exports = {
   signUpValidation,
   signInValidation,
+  userEditValidation,
 }

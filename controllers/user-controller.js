@@ -21,6 +21,16 @@ const userController = {
       err ? next(err) : res.status(200).json(data)
     )
   },
+  putUser: (req, res, next) => {
+    userServices.putUser(req, (err, data) =>
+      err ? next(err) : res.status(200).json(data)
+    )
+  },
+  passwordEdit: (req, res, next) => {
+    userServices.passwordEdit(req, (err, data) =>
+      err ? next(err) : res.status(200).json(data)
+    )
+  },
 }
 
 module.exports = userController

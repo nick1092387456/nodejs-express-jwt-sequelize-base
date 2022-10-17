@@ -2,7 +2,9 @@ const jwt = require('jsonwebtoken')
 const {
   signUpValidation,
   signInValidation,
-} = require('../tools/signInUpValidator')
+  userEditValidation,
+} = require('../tools/validator')
+const { translateGender, translateDuty } = require('../tools/translator')
 const bcrypt = require('bcryptjs')
 const db = require('../models')
 const { User } = db
@@ -24,15 +26,11 @@ const userServices = {
           duty,
           privateCheck,
         } = req.body
-        let genderENG,
-          dutyENG = ''
-        if (gender === '男') genderENG = 'M'
-        else if (gender === '女') genderENG = 'F'
-        else throw new Error({ message: '無效的輸入' })
-        if (duty === '教練') dutyENG = 'Coach'
-        else if (duty === '運動員') dutyENG = 'Athlete'
-        else if (duty === '資料管理員') dutyENG = 'Analyst'
-        else throw new Error({ message: '無效的輸入' })
+        const genderENG = translateGender(gender)
+        if (!genderENG) throw new Error({ message: '無效的輸入' })
+        const dutyENG = translateDuty(duty)
+        if (!dutyENG) throw new Error({ message: '無效輸入' })
+
         await User.create({
           email,
           password: bcrypt.hashSync(password, bcrypt.genSaltSync(10), null),
@@ -98,11 +96,12 @@ const userServices = {
           'name',
           'email',
           'description',
+          'idNumber',
           'avatar',
           'gender',
           'birthday',
           'duty',
-          'private_check',
+          'privateCheck',
         ],
         include: [
           {
@@ -132,6 +131,44 @@ const userServices = {
     } catch (err) {
       return callback({ status: 'error', message: err })
     }
+  },
+  putUser: async (req, callback) => {
+    try {
+      //檢查權限
+      if (Number(req.params.id) !== Number(req.user.id)) {
+        return callback({ status: 'error', message: '只能編輯自己的資料' })
+      }
+      //驗證輸入資料格式
+      const inputValidateResult = userEditValidation(req.body)
+      if (!inputValidateResult) {
+        return callback({
+          status: 'error',
+          message: inputValidateResult.message,
+        })
+      }
+      //更新文字資料
+      const { name, gender, birthday, description } = req.body
+      const user = await User.findByPk(req.params.id)
+      const genderENG = translateGender(gender)
+      await user.update({
+        name,
+        gender: genderENG,
+        birthday,
+        description,
+      })
+      //如果有上傳檔案，更新上傳檔案
+      if (req.file) {
+        const filePath = req.file.path.split('\\')[1]
+        const avatar = `${req.protocol}://${req.headers.host}/avatars/${filePath}`
+        await user.update({ avatar })
+      }
+      return callback(null, { status: 'success', message: '更新完成' })
+    } catch (err) {
+      return callback({ status: 'error', message: '更新失敗，請稍後再試' })
+    }
+  },
+  passwordEdit: async (req, callback) => {
+    console.log(req, callback)
   },
 }
 

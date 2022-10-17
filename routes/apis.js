@@ -4,6 +4,7 @@ const { authenticated, authenticatedAdmin } = require('../middleware/auth')
 const userController = require('../controllers/user-controller')
 const adminController = require('../controllers/admin-controller')
 const { generalErrorHandler } = require('../middleware/error-handler')
+const { avatarUpload } = require('../middleware/avatarUpload')
 
 //admin
 router.post('/admin/signin', adminController.signIn)
@@ -16,7 +17,14 @@ router.get(
 
 //users
 router.get('/get_current_user', authenticated, userController.getCurrentUsers)
-router.get('/getUser/:id', authenticated, userController.getUser)
+router.get('/user/:id', authenticated, userController.getUser)
+router.put(
+  '/user/:id',
+  authenticated,
+  avatarUpload.single('avatar'),
+  userController.putUser
+)
+router.put('/user/:id/passwordEdit', authenticated,userController.passwordEdit)
 router.post('/signup', userController.signUp)
 router.post('/signin', userController.signIn)
 

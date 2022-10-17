@@ -6,6 +6,7 @@ const passport = require('./config/passport')
 const port = process.env.PORT || 3000
 
 app.use(cors())
+app.use('/avatars', express.static('avatars'))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(passport.initialize())

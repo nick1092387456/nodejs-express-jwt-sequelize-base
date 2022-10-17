@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const { signInValidation } = require('../tools/signInUpValidator')
+const { signInValidation } = require('../tools/validator')
 const db = require('../models')
 const { User } = db
 
