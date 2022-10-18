@@ -6,7 +6,11 @@ const {
   passwordCheck,
   passwordEditValidation,
 } = require('../tools/validator')
-const { translateGender, translateDuty } = require('../tools/translator')
+const {
+  translateGender,
+  translateDuty,
+  translateSport,
+} = require('../tools/translator')
 const bcrypt = require('bcryptjs')
 const db = require('../models')
 const { User } = db
@@ -26,13 +30,21 @@ const userServices = {
           gender,
           birthday,
           duty,
+          sport,
           privateCheck,
         } = req.body
         const genderENG = translateGender(gender)
-        if (!genderENG) throw new Error({ message: '無效的輸入' })
+        if (!genderENG)
+          return callback(null, { status: 'error', message: '無效的性別輸入!' })
         const dutyENG = translateDuty(duty)
-        if (!dutyENG) throw new Error({ message: '無效輸入' })
-
+        if (!dutyENG)
+          return callback(null, { status: 'error', message: '無效的職責輸入!' })
+        const sportENG = translateSport(sport)
+        if (!sportENG)
+          return callback(null, {
+            status: 'error',
+            message: '無效的運動項目輸入!',
+          })
         await User.create({
           email,
           password: bcrypt.hashSync(password, bcrypt.genSaltSync(10), null),
@@ -43,14 +55,16 @@ const userServices = {
           gender: genderENG,
           birthday,
           duty: dutyENG,
+          sport: sportENG,
           privateCheck,
         })
         return callback(null, { status: 'success', message: '註冊成功!' })
+      } else {
+        return callback(null, {
+          status: false,
+          message: result.message || '註冊失敗，請重新輸入',
+        })
       }
-      return callback(null, {
-        status: false,
-        message: result.message || '註冊失敗，請重新輸入',
-      })
     } catch (err) {
       return callback(err)
     }
@@ -103,6 +117,7 @@ const userServices = {
           'gender',
           'birthday',
           'duty',
+          'sport',
           'privateCheck',
         ],
         include: [
@@ -145,12 +160,14 @@ const userServices = {
         })
       }
       //更新文字資料
-      const { name, gender, birthday, description } = req.body
+      const { name, gender, sport, birthday, description } = req.body
       const user = await User.findByPk(req.params.id)
       const genderENG = translateGender(gender)
+      const sportENG = translateSport(sport)
       await user.update({
         name,
         gender: genderENG,
+        sport: sportENG,
         birthday,
         description,
       })

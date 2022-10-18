@@ -8,4 +8,18 @@ function translateDuty(duty) {
   return list[duty]
 }
 
-module.exports = { translateGender, translateDuty }
+function translateSport(sport) {
+  const list = {
+    女子曲棍球: 'women_hockey',
+    男子曲棍球: 'men_hockey',
+    韻律體操: 'rhythmic_gymnastics',
+    角力: 'wrestling',
+    橄欖球: 'rugby',
+    划船: 'boating',
+    自由車: 'liberty_car',
+    柔道: 'judo',
+  }
+  return list[sport]
+}
+
+module.exports = { translateGender, translateDuty, translateSport }
