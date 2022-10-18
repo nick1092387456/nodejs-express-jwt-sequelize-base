@@ -39,6 +39,12 @@ async function signUpValidation(body) {
         success: false,
         message: '姓名不可以有符號',
       }
+    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{6,10}$/.test(password))
+      return {
+        success: false,
+        message:
+          '密碼輸入需 6~10 個由至少有一個數字、至少有一個小寫英文字母、至少有一個大寫英文字母。至少有一個「特殊符號」。',
+      }
     if (password !== passwordCheck)
       return {
         success: false,
@@ -121,6 +127,33 @@ async function signInValidation(body) {
   }
 }
 
+async function passwordCheck(body) {
+  try {
+    const { userId, password } = body
+    if (!userId || !password) {
+      return {
+        success: false,
+        message: '請輸入原密碼',
+      }
+    }
+    const user = await User.findByPk(userId)
+    if (!user) {
+      return {
+        success: false,
+        message: '查無此使用者',
+      }
+    }
+    if (!bcrypt.compareSync(password, user.password))
+      return {
+        success: false,
+        message: '密碼錯誤',
+      }
+    return { success: true, message: '密碼驗證成功' }
+  } catch (err) {
+    return { success: false, message: err }
+  }
+}
+
 async function userEditValidation(body) {
   try {
     const { name, gender, birthday } = body
@@ -161,8 +194,31 @@ async function userEditValidation(body) {
   }
 }
 
+async function passwordEditValidation(body) {
+  try {
+    const { password } = body
+    if (!password) {
+      return {
+        success: false,
+        message: '請輸入愈更改的密碼',
+      }
+    }
+    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{6,10}$/.test(password))
+      return {
+        success: false,
+        message:
+          '密碼輸入需 6~10 個由至少有一個數字、至少有一個小寫英文字母、至少有一個大寫英文字母。至少有一個「特殊符號」。',
+      }
+    return { success: true, message: '密碼驗證成功' }
+  } catch (err) {
+    return { success: false, message: err }
+  }
+}
+
 module.exports = {
   signUpValidation,
   signInValidation,
   userEditValidation,
+  passwordCheck,
+  passwordEditValidation,
 }

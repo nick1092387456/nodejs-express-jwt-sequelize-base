@@ -31,6 +31,11 @@ const userController = {
       err ? next(err) : res.status(200).json(data)
     )
   },
+  passwordInputCheck: (req, res, next) => {
+    userServices.passwordInputCheck(req, (err, data) =>
+      err ? next(err) : res.status(200).json(data)
+    )
+  },
 }
 
 module.exports = userController

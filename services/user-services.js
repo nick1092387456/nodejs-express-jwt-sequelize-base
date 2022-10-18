@@ -3,6 +3,8 @@ const {
   signUpValidation,
   signInValidation,
   userEditValidation,
+  passwordCheck,
+  passwordEditValidation,
 } = require('../tools/validator')
 const { translateGender, translateDuty } = require('../tools/translator')
 const bcrypt = require('bcryptjs')
@@ -134,10 +136,6 @@ const userServices = {
   },
   putUser: async (req, callback) => {
     try {
-      //檢查權限
-      if (Number(req.params.id) !== Number(req.user.id)) {
-        return callback({ status: 'error', message: '只能編輯自己的資料' })
-      }
       //驗證輸入資料格式
       const inputValidateResult = userEditValidation(req.body)
       if (!inputValidateResult) {
@@ -168,7 +166,33 @@ const userServices = {
     }
   },
   passwordEdit: async (req, callback) => {
-    console.log(req, callback)
+    try {
+      const { userId, password } = req.body
+      const result = await passwordEditValidation(req.body)
+      if (!result.success) {
+        return callback(null, { status: 'error', message: result.message })
+      }
+      const user = await User.findByPk(userId)
+      await user.update({
+        password: bcrypt.hashSync(password, bcrypt.genSaltSync(10), null),
+      })
+      return callback(null, { status: 'success', message: '更新完成' })
+    } catch (err) {
+      return callback(null, { status: 'error', message: err })
+    }
+  },
+
+  passwordInputCheck: async (req, callback) => {
+    try {
+      const result = await passwordCheck(req.body)
+      if (result.success) {
+        return callback(null, { status: 'success', message: '密碼驗證成功' })
+      } else {
+        return callback(null, { status: 'error', message: result.message })
+      }
+    } catch (err) {
+      return callback({ status: 'error', message: '密碼驗證錯誤' })
+    }
   },
 }
 
