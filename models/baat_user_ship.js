@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     'Baat_user_ship',
     {
       baatInbodyId: DataTypes.INTEGER,
+      baatGripStrengthId: DataTypes.INTEGER,
       userId: DataTypes.INTEGER,
       detectAt: DataTypes.DATE,
     },

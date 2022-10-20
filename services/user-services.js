@@ -13,7 +13,7 @@ const {
 } = require('../tools/translator')
 const bcrypt = require('bcryptjs')
 const db = require('../models')
-const { User, BaatInbody } = db
+const { User, BaatInbody, BaatGripStrength } = db
 
 const userServices = {
   signUp: async (req, callback) => {
@@ -156,17 +156,18 @@ const userServices = {
         include: [
           {
             model: BaatInbody,
-            as: 'BaatData',
+            as: 'Baat_Inbody',
+            attributes: ['key', 'value', 'detectAt'],
+            through: { attributes: [] },
+          },
+          {
+            model: BaatGripStrength,
+            as: 'Baat_GripStrength',
             attributes: ['key', 'value', 'detectAt'],
             through: { attributes: [] },
           },
         ],
       })
-
-      // const user = await User.findByPk(req.params.id, {
-      //   attributes: [],
-      //   include: { all: true, through: { attributes: [] } },
-      // })
 
       if (!user) {
         return callback(null, {
