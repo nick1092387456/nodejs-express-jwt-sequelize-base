@@ -1,5 +1,5 @@
 'use strict'
-// const { Model } = require('sequelize')
+
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
     'User',
@@ -29,6 +29,11 @@ module.exports = (sequelize, DataTypes) => {
       through: models.CoachAthleteShip,
       foreignKey: 'coachId',
       as: 'athlete',
+    })
+    User.belongsToMany(models.Baat, {
+      through: models.Baat_user_ship,
+      foreignKey: 'UserId',
+      as: 'BaatData',
     })
   }
   return User

@@ -37,7 +37,7 @@ module.exports = {
           gender: 'F',
           birthday: faker.date.birthdate(),
           duty: 'Coach',
-          sport: "women's_hockey",
+          sport: 'women_hockey',
           private_check: true,
           created_at: new Date(),
           updated_at: new Date(),
@@ -54,7 +54,7 @@ module.exports = {
           gender: 'F',
           birthday: faker.date.birthdate(),
           duty: 'Athlete',
-          sport: "women's_hockey",
+          sport: 'women_hockey',
           private_check: true,
           created_at: new Date(),
           updated_at: new Date(),
@@ -65,6 +65,23 @@ module.exports = {
           password: bcrypt.hashSync('12345678', bcrypt.genSaltSync(10), null),
           is_admin: false,
           name: 'user3',
+          description: faker.lorem.sentence(),
+          avatar: faker.image.avatar(),
+          id_number: 'A266666789',
+          gender: 'M',
+          birthday: faker.date.birthdate(),
+          duty: 'Athlete',
+          sport: 'women_hockey',
+          private_check: true,
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          id: 5,
+          email: 'user4@example.com',
+          password: bcrypt.hashSync('12345678', bcrypt.genSaltSync(10), null),
+          is_admin: false,
+          name: 'user4',
           description: faker.lorem.sentence(),
           avatar: faker.image.avatar(),
           id_number: 'A255556789',
@@ -79,13 +96,19 @@ module.exports = {
       ],
       {}
     )
-    // generate CoachAthleteShips seed
+    // generate Coach_athlete_ships seed
     return queryInterface.bulkInsert(
-      'CoachAthleteShips',
+      'Coach_athlete_ships',
       [
         {
           coach_id: 2,
           athlete_id: 3,
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          coach_id: 2,
+          athlete_id: 4,
           created_at: new Date(),
           updated_at: new Date(),
         },
@@ -97,6 +120,6 @@ module.exports = {
   // 把 Users Table 中的資料清空，並且寫入 null
   down: (queryInterface) => {
     queryInterface.bulkDelete('Users', null, {})
-    return queryInterface.bulkDelete('CoachAthleteShips', null, {})
+    return queryInterface.bulkDelete('Coach_athlete_ships', null, {})
   },
 }

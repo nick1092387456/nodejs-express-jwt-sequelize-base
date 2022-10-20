@@ -21,7 +21,15 @@ router.get(
 
 //users
 router.get('/get_current_user', authenticated, userController.getCurrentUsers)
+
 router.get('/user/:id', authenticated, userController.getUser)
+
+router.get(
+  '/user/:id/getBaat',
+  authenticated,
+  isSelfUser,
+  userController.getBaat
+)
 router.put(
   '/user/:id',
   authenticated,

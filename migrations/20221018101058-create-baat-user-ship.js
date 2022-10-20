@@ -2,20 +2,18 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Coach_athlete_ships', {
+    await queryInterface.createTable('Baat_user_ships', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      coach_id: {
+      baat_id: {
         type: Sequelize.INTEGER,
-        references: { model: 'Users', key: 'id' },
       },
-      athlete_id: {
+      user_id: {
         type: Sequelize.INTEGER,
-        references: { model: 'Users', key: 'id' },
       },
       created_at: {
         allowNull: false,
@@ -28,6 +26,6 @@ module.exports = {
     })
   },
   down: async (queryInterface) => {
-    await queryInterface.dropTable('Coach_athlete_ships')
+    await queryInterface.dropTable('Baat_user_ships')
   },
 }

@@ -13,7 +13,7 @@ const {
 } = require('../tools/translator')
 const bcrypt = require('bcryptjs')
 const db = require('../models')
-const { User } = db
+const { User, Baat } = db
 
 const userServices = {
   signUp: async (req, callback) => {
@@ -144,6 +144,39 @@ const userServices = {
       return callback(null, {
         status: 'success',
         user: user.toJSON(),
+      })
+    } catch (err) {
+      return callback({ status: 'error', message: err })
+    }
+  },
+  getBaat: async (req, callback) => {
+    try {
+      const user = await User.findByPk(req.params.id, {
+        attributes: [],
+        include: [
+          {
+            model: Baat,
+            as: 'BaatData',
+            attributes: ['key', 'value', 'detectAt'],
+            through: { attributes: [] },
+          },
+        ],
+      })
+
+      // const user = await User.findByPk(req.params.id, {
+      //   attributes: [],
+      //   include: { all: true, through: { attributes: [] } },
+      // })
+
+      if (!user) {
+        return callback(null, {
+          status: 'error',
+          message: '找不到使用者,已返回至您的個人檔案！',
+        })
+      }
+      return callback(null, {
+        status: 'success',
+        user: user,
       })
     } catch (err) {
       return callback({ status: 'error', message: err })
