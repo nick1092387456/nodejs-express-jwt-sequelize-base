@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
   const Baat_user_ship = sequelize.define(
     'Baat_user_ship',
     {
-      baatId: DataTypes.INTEGER,
+      baatInbodyId: DataTypes.INTEGER,
       userId: DataTypes.INTEGER,
       detectAt: DataTypes.DATE,
     },

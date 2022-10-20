@@ -9,7 +9,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      baat_id: {
+      baat_inbody_id: {
         type: Sequelize.INTEGER,
       },
       user_id: {

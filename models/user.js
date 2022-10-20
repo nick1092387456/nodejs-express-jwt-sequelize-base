@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'coachId',
       as: 'athlete',
     })
-    User.belongsToMany(models.Baat, {
+    User.belongsToMany(models.BaatInbody, {
       through: models.Baat_user_ship,
       foreignKey: 'UserId',
       as: 'BaatData',

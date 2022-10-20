@@ -13,7 +13,7 @@ const {
 } = require('../tools/translator')
 const bcrypt = require('bcryptjs')
 const db = require('../models')
-const { User, Baat } = db
+const { User, BaatInbody } = db
 
 const userServices = {
   signUp: async (req, callback) => {
@@ -155,7 +155,7 @@ const userServices = {
         attributes: [],
         include: [
           {
-            model: Baat,
+            model: BaatInbody,
             as: 'BaatData',
             attributes: ['key', 'value', 'detectAt'],
             through: { attributes: [] },

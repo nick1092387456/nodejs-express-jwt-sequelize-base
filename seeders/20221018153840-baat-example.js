@@ -8,12 +8,12 @@ async function transformCSV(queryInterface, csvFileName, table) {
   const data = await parser(csvFileName)
   const key = data[0]
   const dataCount = data.length - 1
-  // let idName = ''
-  // if (table === 'Baat_inbodies') {
-  //   idName = 'Baat_inbody_id'
-  // } else {
-  //   idName = table.slice(0, table.length - 1).toLowerCase() + '_id'
-  // }
+  let idName = ''
+  if (table === 'Baat_inbodies') {
+    idName = 'baat_inbody_id'
+  } else {
+    idName = table.slice(0, table.length - 1).toLowerCase() + '_id'
+  }
   let baatId = 1
   for (let x = 0; x < dataCount; x++) {
     let idNumber = data[x + 1][0]
@@ -38,7 +38,7 @@ async function transformCSV(queryInterface, csvFileName, table) {
 
       await queryInterface.bulkInsert('Baat_user_ships', [
         {
-          baat_id: baatId,
+          [idName]: baatId,
           user_id: user.id,
           created_at: new Date(),
           updated_at: new Date(),
@@ -51,7 +51,7 @@ async function transformCSV(queryInterface, csvFileName, table) {
 
 module.exports = {
   up: async (queryInterface) => {
-    await transformCSV(queryInterface, 'body_composition', 'Baats')
+    await transformCSV(queryInterface, 'body_composition', 'Baat_inbodies')
     // await transformCSV(queryInterface, 'grip_strength', 'Baat_grip_strengths')
     // await transformCSV(queryInterface, 'CMJ')
     // await transformCSV(queryInterface, 'IMTP')
@@ -61,6 +61,6 @@ module.exports = {
   down: async (queryInterface) => {
     // queryInterface.bulkDelete('Baat', null, {})
     // queryInterface.bulkDelete('Baat_grip_strengths', null, {})
-    return queryInterface.bulkDelete('Baat', null, {})
+    return queryInterface.bulkDelete('Baat_inbodies', null, {})
   },
 }

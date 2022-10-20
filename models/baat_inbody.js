@@ -1,8 +1,8 @@
 'use strict'
 
 module.exports = (sequelize, DataTypes) => {
-  const Baat = sequelize.define(
-    'Baat',
+  const BaatInbody = sequelize.define(
+    'BaatInbody',
     {
       key: DataTypes.STRING,
       value: DataTypes.STRING,
@@ -10,17 +10,17 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'Baat',
-      tableName: 'Baats',
+      modelName: 'BaatInbody',
+      tableName: 'Baat_inbodies',
       underscored: true,
     }
   )
-  Baat.associate = function (models) {
-    Baat.belongsToMany(models.User, {
+  BaatInbody.associate = function (models) {
+    BaatInbody.belongsToMany(models.User, {
       through: models.Baat_user_ship,
-      foreignKey: 'BaatId',
+      foreignKey: 'BaatInbodyId',
       as: 'BaatUser',
     })
   }
-  return Baat
+  return BaatInbody
 }
