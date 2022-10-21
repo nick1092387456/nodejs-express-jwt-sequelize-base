@@ -3,8 +3,11 @@ module.exports = (sequelize, DataTypes) => {
   const Baat_user_ship = sequelize.define(
     'Baat_user_ship',
     {
-      baatInbodyId: DataTypes.INTEGER,
-      baatGripStrengthId: DataTypes.INTEGER,
+      baat_inbody_id: DataTypes.INTEGER,
+      baat_grip_strength_id: DataTypes.INTEGER,
+      baat_cmj_id: DataTypes.INTEGER,
+      baat_imtp_id: DataTypes.INTEGER,
+      baat_wingate_test_id: DataTypes.INTEGER,
       userId: DataTypes.INTEGER,
       detectAt: DataTypes.DATE,
     },

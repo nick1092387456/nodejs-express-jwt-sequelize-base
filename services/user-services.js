@@ -13,7 +13,14 @@ const {
 } = require('../tools/translator')
 const bcrypt = require('bcryptjs')
 const db = require('../models')
-const { User, BaatInbody, BaatGripStrength } = db
+const {
+  User,
+  BaatInbody,
+  BaatGripStrength,
+  baat_cmj,
+  baat_imtp,
+  baat_wingate_test,
+} = db
 
 const userServices = {
   signUp: async (req, callback) => {
@@ -151,33 +158,52 @@ const userServices = {
   },
   getBaat: async (req, callback) => {
     try {
-      const user = await User.findByPk(req.params.id, {
+      let userData = await User.findByPk(req.params.id, {
         attributes: [],
         include: [
           {
             model: BaatInbody,
             as: 'Baat_Inbody',
-            attributes: ['key', 'value', 'detectAt'],
+            attributes: ['id', 'key', 'value', 'detectAt'],
             through: { attributes: [] },
           },
           {
             model: BaatGripStrength,
             as: 'Baat_GripStrength',
-            attributes: ['key', 'value', 'detectAt'],
+            attributes: ['id', 'key', 'value', 'detectAt'],
+            through: { attributes: [] },
+          },
+          {
+            model: baat_cmj,
+            as: 'Baat_cmj',
+            attributes: ['id', 'key', 'value', 'detect_at'],
+            through: { attributes: [] },
+          },
+          {
+            model: baat_imtp,
+            as: 'Baat_imtp',
+            attributes: ['id', 'key', 'value', 'detect_at'],
+            through: { attributes: [] },
+          },
+          {
+            model: baat_wingate_test,
+            as: 'Baat_wingate_test',
+            attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },
         ],
       })
 
-      if (!user) {
+      if (!userData) {
         return callback(null, {
           status: 'error',
           message: '找不到使用者,已返回至您的個人檔案！',
         })
       }
+
       return callback(null, {
         status: 'success',
-        user: user,
+        data: userData,
       })
     } catch (err) {
       return callback({ status: 'error', message: err })
@@ -232,7 +258,6 @@ const userServices = {
       return callback(null, { status: 'error', message: err })
     }
   },
-
   passwordInputCheck: async (req, callback) => {
     try {
       const result = await passwordCheck(req.body)
