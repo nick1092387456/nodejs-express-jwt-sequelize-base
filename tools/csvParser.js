@@ -6,10 +6,10 @@ const path = require('path')
 //測試用
 // parser('body_composition')
 
-async function parser(fileName) {
+async function parser(fileName,documentPath) {
   const inputFilePath = path.resolve(
     process.cwd(),
-    `./exampleCSV/${fileName}.csv`
+    `${documentPath}${fileName}.csv`
   )
   const inputFile = await fsPromises.readFile(inputFilePath)
   const parsedResult = await parseCSV(inputFile, {
@@ -18,7 +18,7 @@ async function parser(fileName) {
     trim: true,
     // columns: true,
   })
-  console.log('parsedResult', parsedResult)
+  // console.log('parsedResult', parsedResult)
   return parsedResult
 }
 

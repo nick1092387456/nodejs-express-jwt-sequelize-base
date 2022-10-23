@@ -5,7 +5,7 @@ const { User } = db
 
 const detectDate = new Date('2022-07-19')
 async function transformCSV(queryInterface, csvFileName, table) {
-  const data = await parser(csvFileName)
+  const data = await parser(csvFileName, './exampleCSV/')
   const key = data[0]
   const dataCount = data.length - 1
   let idName = ''

@@ -7,6 +7,7 @@ const {
 } = require('../middleware/auth')
 const userController = require('../controllers/user-controller')
 const adminController = require('../controllers/admin-controller')
+const analystController = require('../controllers/analyst-controller')
 const { generalErrorHandler } = require('../middleware/error-handler')
 const { avatarUpload } = require('../middleware/avatarUpload')
 
@@ -17,6 +18,18 @@ router.get(
   authenticated,
   authenticatedAdmin,
   adminController.getUsers
+)
+
+//analyst
+router.get(
+  '/analyst/:id/getTemplate',
+  authenticated,
+  analystController.getTemplate
+)
+router.post(
+  '/analyst/:id/postTemplate',
+  authenticated,
+  analystController.postTemplate
 )
 
 //users
