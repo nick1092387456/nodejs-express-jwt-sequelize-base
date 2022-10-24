@@ -11,6 +11,11 @@ const analystController = {
       err ? next(err) : res.status(200).json(data)
     )
   },
+  uploadTemplate: (req, res, next) => {
+    analystServices.uploadTemplate(req, (err, data) =>
+      err ? next(err) : res.status(200).json(data)
+    )
+  },
 }
 
 module.exports = analystController

@@ -48,6 +48,21 @@ const analystServices = {
       return callback(err)
     }
   },
+  uploadTemplate: async (req, callback) => {
+    try {
+      if (!req.fileName || !req.file) {
+        return callback(null, {
+          status: 'error',
+          message: '請選擇要上傳的CSV資料及類型',
+        })
+      }
+      if (req.file) {
+        return callback(null, { status: 'success', message: '資料上傳成功' })
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  },
 }
 
 module.exports = analystServices

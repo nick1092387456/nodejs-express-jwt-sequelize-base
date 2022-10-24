@@ -10,6 +10,7 @@ const adminController = require('../controllers/admin-controller')
 const analystController = require('../controllers/analyst-controller')
 const { generalErrorHandler } = require('../middleware/error-handler')
 const { avatarUpload } = require('../middleware/avatarUpload')
+const { csvUpload } = require('../middleware/csvUpload')
 
 //admin
 router.post('/admin/signin', adminController.signIn)
@@ -31,12 +32,16 @@ router.post(
   authenticated,
   analystController.postTemplate
 )
+router.post(
+  '/analyst/:id/uploadTemplate',
+  authenticated,
+  csvUpload.single('file'),
+  analystController.uploadTemplate
+)
 
 //users
 router.get('/get_current_user', authenticated, userController.getCurrentUsers)
-
 router.get('/user/:id', authenticated, userController.getUser)
-
 router.get(
   '/user/:id/getBaat',
   authenticated,
