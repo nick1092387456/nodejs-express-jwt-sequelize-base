@@ -38,6 +38,11 @@ router.post(
   csvUpload.single('file'),
   analystController.uploadTemplate
 )
+router.get(
+  '/analyst/:id/reviewTemplate',
+  authenticated,
+  analystController.reviewTemplate
+)
 
 //users
 router.get('/get_current_user', authenticated, userController.getCurrentUsers)

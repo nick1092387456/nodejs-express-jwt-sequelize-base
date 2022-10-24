@@ -16,6 +16,11 @@ const analystController = {
       err ? next(err) : res.status(200).json(data)
     )
   },
+  reviewTemplate: (req, res, next) => {
+    analystServices.reviewTemplate(req, (err, data) =>
+      err ? next(err) : res.status(200).json(data)
+    )
+  },
 }
 
 module.exports = analystController

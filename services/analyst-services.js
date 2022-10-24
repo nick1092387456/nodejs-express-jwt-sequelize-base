@@ -63,6 +63,30 @@ const analystServices = {
       console.log(err)
     }
   },
+  reviewTemplate: async (req, callback) => {
+    try {
+      const fileName = Object.keys(req.query)[0]
+      const data = await parser(fileName, './public/Labs/baat/')
+
+      const header = data[0]
+      const content = data.slice(1)
+      const headerParse = header.reduce((acc, cur) => {
+        return (acc = acc.concat({ text: cur, value: cur }))
+      }, [])
+      const contentParse = content.map((item) => {
+        return item.reduce((acc, cur, idx) => {
+          return (acc = { ...acc, [header[idx]]: cur })
+        }, {})
+      })
+      return callback(null, {
+        status: 'success',
+        headers: headerParse,
+        content: contentParse,
+      })
+    } catch (err) {
+      return callback(err)
+    }
+  },
 }
 
 module.exports = analystServices
