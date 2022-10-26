@@ -8,7 +8,6 @@ const storage = multer.diskStorage({
   filename: function (req, file, cb) {
     try {
       const obj = Object.assign({}, req.body)
-      console.log('fileName in multer middleware: ',obj)
       cb(null, obj.fileName + '.csv')
     } catch (err) {
       cb({ status: 'error', message: err })

@@ -2,6 +2,8 @@ const fs = require('fs')
 const path = require('path')
 const parser = require('../tools/csvParser')
 const writer = require('../tools/csvWriter')
+const db = require('../models')
+const { User, Baat_user_ship } = db
 
 const directoryPath = path.resolve(process.cwd(), `./public/Labs/baat/template`)
 
@@ -50,13 +52,60 @@ const analystServices = {
   },
   uploadTemplate: async (req, callback) => {
     try {
-      if (!req.fileName || !req.file) {
+      if (!req.body.fileName || !req.file || !req.body.detect_at) {
         return callback(null, {
           status: 'error',
-          message: '請選擇要上傳的CSV資料及類型',
+          message: '請選擇要上傳的CSV資料、類型、檢測日期',
         })
       }
+
       if (req.file) {
+        const dbModelName = {
+          body_composition: 'BaatInbody',
+          grip_strength: 'BaatGripStrength',
+          CMJ: 'baat_cmj',
+          IMTP: 'baat_imtp',
+          wingate_test: 'baat_wingate_test',
+        }
+        const dbColumnName = {
+          body_composition: 'Baat_inbody_id',
+          grip_strength: 'Baat_grip_strength_id',
+          CMJ: 'baat_cmj_id',
+          IMTP: 'baat_imtp_id',
+          wingate_test: 'baat_wingate_test_id',
+        }
+
+        const { fileName, detect_at } = req.body
+        const date = new Date(detect_at)
+        const csvData = await parser(fileName, './public/Labs/baat/')
+        const key = csvData[0]
+        const value = csvData.slice(1)
+        await Promise.all(
+          value.map(async (_value) => {
+            const id = _value[0]
+            const user = await User.findOne({
+              where: { idNumber: id },
+              raw: true,
+            })
+            for (let i = 0, j = _value.length; i < j; i++) {
+              const result = await db[dbModelName[fileName]].create({
+                key: key[i],
+                value: _value[i],
+                detect_at: date,
+                created_at: new Date(),
+                updated_at: new Date(),
+              })
+
+              await Baat_user_ship.create({
+                [dbColumnName[fileName]]: result.id,
+                user_id: user ? user.id : id,
+                created_at: new Date(),
+                updated_at: new Date(),
+              })
+            }
+          })
+        )
+
         return callback(null, { status: 'success', message: '資料上傳成功' })
       }
     } catch (err) {

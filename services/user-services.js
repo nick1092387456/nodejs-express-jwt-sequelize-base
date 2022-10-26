@@ -164,13 +164,13 @@ const userServices = {
           {
             model: BaatInbody,
             as: 'Baat_Inbody',
-            attributes: ['id', 'key', 'value', 'detectAt'],
+            attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },
           {
             model: BaatGripStrength,
             as: 'Baat_GripStrength',
-            attributes: ['id', 'key', 'value', 'detectAt'],
+            attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },
           {
