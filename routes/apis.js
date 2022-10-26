@@ -43,6 +43,11 @@ router.get(
   authenticated,
   analystController.reviewTemplate
 )
+router.get(
+  '/analyst/:id/downloadTemplate',
+  authenticated,
+  analystController.downloadTemplate
+)
 
 //users
 router.get('/get_current_user', authenticated, userController.getCurrentUsers)

@@ -21,6 +21,12 @@ const analystController = {
       err ? next(err) : res.status(200).json(data)
     )
   },
+  downloadTemplate: (req, res, next) => {
+    analystServices.downloadTemplate(req, (err, data) => {
+      if (err) next(err)
+      res.download(data.filePath)
+    })
+  },
 }
 
 module.exports = analystController

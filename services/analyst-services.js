@@ -136,6 +136,29 @@ const analystServices = {
       return callback(err)
     }
   },
+  downloadTemplate: async (req, callback) => {
+    try {
+      // const { templateName } = req.query
+      const fileName = Object.keys(req.query)[0]
+      const filePath = await path.resolve(
+        process.cwd(),
+        `./public/Labs/baat/${fileName}.csv`
+      )
+      if (!filePath) {
+        return callback(null, {
+          status: 'error',
+          message: '找不到檔案，請聯絡管理員上傳範本',
+        })
+      }
+      return callback(null, {
+        status: 'success',
+        filePath,
+        fileName,
+      })
+    } catch (err) {
+      return callback(err)
+    }
+  },
 }
 
 module.exports = analystServices
