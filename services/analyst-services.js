@@ -142,7 +142,7 @@ const analystServices = {
       const fileName = Object.keys(req.query)[0]
       const filePath = await path.resolve(
         process.cwd(),
-        `./public/Labs/baat/${fileName}.csv`
+        `./public/Labs/baat/template/${fileName}.csv`
       )
       if (!filePath) {
         return callback(null, {

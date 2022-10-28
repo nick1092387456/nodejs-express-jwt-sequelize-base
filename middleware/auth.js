@@ -30,7 +30,7 @@ const authenticatedAdmin = (req, res, next) => {
 
 const isSelfUser = (req, res, next) => {
   if (req.params.id !== req.user.id.toString()) {
-    return res.json({ status: 'error', message: '不可修改非本人資料' })
+    return res.json({ status: 'error', message: '您沒有權限觀看或編輯' })
   }
   next()
 }
