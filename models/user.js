@@ -55,6 +55,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'user_id',
       as: 'Baat_wingate_test',
     })
+    User.hasOne(models.Role, {
+      foreignKey: 'user_id',
+      allowNull: false,
+    })
   }
   return User
 }
