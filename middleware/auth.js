@@ -19,9 +19,9 @@ const authenticatedAdmin = (req, res, next) => {
   try {
     if (req.user) {
       if (req.user.isAdmin) return next()
-      throw new Error({ status: 'error', message: '你沒有管理員權限' })
+      return res.json({ status: 'error', message: '您沒有權限觀看或編輯' })
     } else {
-      throw new Error({ status: 'error', message: '請先登入再使用' })
+      return res.json({ status: 'error', message: '請先登入再使用' })
     }
   } catch (err) {
     next(err)

@@ -8,6 +8,7 @@ const {
 const userController = require('../controllers/user-controller')
 const adminController = require('../controllers/admin-controller')
 const analystController = require('../controllers/analyst-controller')
+const coachController = require('../controllers/coach-controller')
 const { generalErrorHandler } = require('../middleware/error-handler')
 const { avatarUpload } = require('../middleware/avatarUpload')
 const { csvUpload } = require('../middleware/csvUpload')
@@ -48,6 +49,9 @@ router.get(
   authenticated,
   analystController.downloadTemplate
 )
+
+//coach
+router.get('/coach/:id', authenticated, coachController.getTrainees)
 
 //users
 router.get('/get_current_user', authenticated, userController.getCurrentUsers)

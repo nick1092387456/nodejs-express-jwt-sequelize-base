@@ -1,11 +1,11 @@
 module.exports = {
-  generalErrorHandler(err, req, res, next) {
+  generalErrorHandler(err, req, res) {
     if (err instanceof Error) {
-      console.log('instance error')
       res.status(401).json(err)
+      return
     } else {
-      res.status(500).json(err.message)
+      res.status(500).json(err)
+      return
     }
-    next(err)
   },
 }
