@@ -51,7 +51,17 @@ router.get(
 )
 
 //coach
-router.get('/coach/:id', authenticated, coachController.getTrainees)
+router.get(
+  '/coach/:id/getTraineesData',
+  authenticated,
+  coachController.getTraineesData
+)
+router.get('/coach/:id/getTrainees', authenticated, coachController.getTrainees)
+router.post(
+  '/coach/:id/toggleStatus',
+  authenticated,
+  coachController.toggleStatus
+)
 
 //users
 router.get('/get_current_user', authenticated, userController.getCurrentUsers)

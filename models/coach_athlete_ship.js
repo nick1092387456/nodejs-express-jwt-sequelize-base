@@ -6,6 +6,9 @@ module.exports = (sequelize, DataTypes) => {
     {
       coachId: DataTypes.INTEGER,
       athleteId: DataTypes.INTEGER,
+      startAt: DataTypes.DATE,
+      stopAt: DataTypes.DATE,
+      status: DataTypes.STRING,
     },
     {
       sequelize,

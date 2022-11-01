@@ -1,4 +1,6 @@
 const db = require('../models')
+const { Op } = require('sequelize')
+
 const {
   User,
   BaatInbody,
@@ -6,10 +8,55 @@ const {
   baat_cmj,
   baat_imtp,
   baat_wingate_test,
+  CoachAthleteShip,
 } = db
 
 const coachServices = {
   getTrainees: async (req, callback) => {
+    try {
+      const { id } = req.params
+      const { sport } = req.user
+      const user = await User.findByPk(id, {
+        attributes: [],
+        include: [
+          {
+            model: User,
+            where: { sport: sport },
+            as: 'athlete',
+            attributes: [
+              'id',
+              'name',
+              'email',
+              'avatar',
+              'gender',
+              'birthday',
+              'sport',
+              'privateCheck',
+            ],
+            through: {
+              as: 'career',
+              attributes: ['start_at', 'stop_at', 'status'],
+            },
+          },
+        ],
+      })
+
+      if (!user) {
+        return callback(null, {
+          status: 'error',
+          message: '找不到使用者',
+        })
+      }
+      return callback(null, {
+        status: 'success',
+        user: user.toJSON(),
+      })
+    } catch (err) {
+      return callback({ status: 'error', message: err })
+    }
+  },
+
+  getTraineesData: async (req, callback) => {
     try {
       const { id } = req.params
       const user = await User.findByPk(id, {
@@ -65,6 +112,51 @@ const coachServices = {
         status: 'success',
         user: user.toJSON(),
       })
+    } catch (err) {
+      return callback({ status: 'error', message: err })
+    }
+  },
+  toggleStatus: async (req, callback) => {
+    try {
+      const { coachId, id, start_at, stop_at, status } = req.body
+      const athleteId = id
+      const relation = await CoachAthleteShip.findOne({
+        where: { [Op.and]: [{ coach_id: coachId }, { athlete_id: athleteId }] },
+      })
+      if (relation === null) {
+        CoachAthleteShip.create({
+          coachId: coachId,
+          athleteId: athleteId,
+          start_at: new Date(start_at),
+          stop_at: new Date(stop_at),
+          status: 'onTraining',
+        })
+        return callback(null, { status: 'success', message: '學員已新增' })
+      }
+
+      if (status === 'onTraining') {
+        const updateResult = await relation.update({
+          startAt: new Date(start_at),
+          stopAt: new Date(stop_at),
+          status: 'stopTraining',
+        })
+        return callback(null, {
+          status: 'success',
+          message: '狀態已更新成停止訓練',
+          data: updateResult.status,
+        })
+      } else {
+        const updateResult = await relation.update({
+          startAt: new Date(start_at),
+          stopAt: new Date(stop_at),
+          status: 'onTraining',
+        })
+        return callback(null, {
+          status: 'success',
+          message: '狀態已更新成訓練中',
+          data: updateResult.status,
+        })
+      }
     } catch (err) {
       return callback({ status: 'error', message: err })
     }
