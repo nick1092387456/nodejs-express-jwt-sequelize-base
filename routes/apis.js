@@ -51,7 +51,7 @@ router.get(
 )
 
 //coach
-router.get(
+router.post(
   '/coach/:id/getTraineesData',
   authenticated,
   coachController.getTraineesData

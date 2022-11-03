@@ -15,7 +15,6 @@ const coachServices = {
   getTrainees: async (req, callback) => {
     try {
       const { sport } = req.user
-
       const user = await User.findAll({
         where: { [Op.and]: [{ sport: sport }, { duty: 'Athlete' }] },
         attributes: [
@@ -39,8 +38,6 @@ const coachServices = {
         raw: true,
       })
 
-      console.log('careerData: ', careerData)
-
       const result = user.reduce((acc, cur) => {
         for (let i = 0, j = careerData.length; i < j; i++) {
           if (cur.id === careerData[i].athlete_id) {
@@ -49,8 +46,6 @@ const coachServices = {
         }
         return acc.concat({ ...cur })
       }, [])
-
-      console.log('result: ', result)
 
       if (!user) {
         return callback(null, {
@@ -113,63 +108,62 @@ const coachServices = {
       return callback({ status: 'error', message: err })
     }
   },
+  
   getTraineesData: async (req, callback) => {
     try {
-      const { id } = req.params
-      const user = await User.findByPk(id, {
-        attributes: [],
-        include: [
-          {
-            model: User,
-            as: 'athlete',
-            attributes: ['id', 'name', 'avatar'],
-            through: { attributes: [] },
-            include: [
-              {
-                model: BaatInbody,
-                as: 'Baat_Inbody',
-                attributes: ['id', 'key', 'value', 'detect_at'],
-                through: { attributes: [] },
-              },
-              {
-                model: BaatGripStrength,
-                as: 'Baat_GripStrength',
-                attributes: ['id', 'key', 'value', 'detect_at'],
-                through: { attributes: [] },
-              },
-              {
-                model: baat_cmj,
-                as: 'Baat_cmj',
-                attributes: ['id', 'key', 'value', 'detect_at'],
-                through: { attributes: [] },
-              },
-              {
-                model: baat_imtp,
-                as: 'Baat_imtp',
-                attributes: ['id', 'key', 'value', 'detect_at'],
-                through: { attributes: [] },
-              },
-              {
-                model: baat_wingate_test,
-                as: 'Baat_wingate_test',
-                attributes: ['id', 'key', 'value', 'detect_at'],
-                through: { attributes: [] },
-              },
-            ],
-          },
-        ],
-      })
-      if (!user) {
-        throw new Error({
+      const { athleteId, labName } = req.body
+      let traineesData = null
+
+      if (labName === 'baat') {
+        traineesData = await User.findByPk(athleteId, {
+          attributes: [],
+          include: [
+            {
+              model: BaatInbody,
+              as: 'Baat_Inbody',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+            {
+              model: BaatGripStrength,
+              as: 'Baat_GripStrength',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+            {
+              model: baat_cmj,
+              as: 'Baat_cmj',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+            {
+              model: baat_imtp,
+              as: 'Baat_imtp',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+            {
+              model: baat_wingate_test,
+              as: 'Baat_wingate_test',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+          ],
+        })
+      }
+
+      if (!traineesData) {
+        return callback(null, {
           status: 'error',
-          message: '找不到使用者',
+          message: '找不到資料或使用者',
         })
       }
       return callback(null, {
         status: 'success',
-        user: user.toJSON(),
+        data: traineesData,
       })
     } catch (err) {
+      console.log(err)
       return callback({ status: 'error', message: err })
     }
   },
