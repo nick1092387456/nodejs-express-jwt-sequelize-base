@@ -49,6 +49,11 @@ router.get(
   authenticated,
   analystController.downloadTemplate
 )
+router.post(
+  '/analyst/:id/sendSRCForm',
+  authenticated,
+  analystController.sendSRCForm
+)
 
 //coach
 router.post(
@@ -61,6 +66,11 @@ router.post(
   '/coach/:id/toggleStatus',
   authenticated,
   coachController.toggleStatus
+)
+router.post(
+  '/coach/:id/getMatchDate',
+  authenticated,
+  coachController.getMatchDate
 )
 
 //users

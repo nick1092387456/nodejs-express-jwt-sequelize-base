@@ -27,6 +27,11 @@ const analystController = {
       res.download(data.filePath)
     })
   },
+  sendSRCForm: (req, res, next) => {
+    analystServices.sendSRCForm(req, (err, data) =>
+      err ? next(err) : res.status(200).send(data)
+    )
+  },
 }
 
 module.exports = analystController

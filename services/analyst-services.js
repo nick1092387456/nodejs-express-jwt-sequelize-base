@@ -159,6 +159,20 @@ const analystServices = {
       return callback(err)
     }
   },
+  sendSRCForm: async (req, callback) => {
+    try {
+      const { json } = req.body
+      console.log('json', json)
+      return callback(null, {
+        status: 'success',
+        message: '表單上傳成功',
+        data: json,
+      })
+    } catch (err) {
+      console.log(err)
+      return callback(err)
+    }
+  },
 }
 
 module.exports = analystServices
