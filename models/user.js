@@ -59,6 +59,16 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'user_id',
       allowNull: false,
     })
+    User.belongsToMany(models.SncInbody, {
+      through: models.Baat_user_ship,
+      foreignKey: 'user_id',
+      as: 'Snc_Inbody',
+    })
+    User.belongsToMany(models.SncSuggestion, {
+      through: models.Baat_user_ship,
+      foreignKey: 'user_id',
+      as: 'Snc_Suggestion',
+    })
   }
   return User
 }
