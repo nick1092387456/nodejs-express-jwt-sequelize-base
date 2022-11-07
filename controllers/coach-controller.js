@@ -16,6 +16,11 @@ const coachController = {
       err ? next(err) : res.status(200).json(data)
     )
   },
+  getTraineesFabData: (req, res, next) => {
+    coachServices.getTraineesFabData(req, (err, data) => {
+      err ? next(err) : res.status(200).json(data)
+    })
+  },
 }
 
 module.exports = coachController

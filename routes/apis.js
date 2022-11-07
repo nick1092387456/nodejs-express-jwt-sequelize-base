@@ -68,9 +68,9 @@ router.post(
   coachController.toggleStatus
 )
 router.post(
-  '/coach/:id/getMatchDate',
+  '/coach/:id/getTraineesFabData',
   authenticated,
-  coachController.getMatchDate
+  coachController.getTraineesFabData
 )
 
 //users

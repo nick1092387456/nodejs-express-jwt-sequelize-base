@@ -50,11 +50,12 @@ const coachServices = {
       if (!user) {
         return callback(null, {
           status: 'error',
-          message: '找不到使用者',
+          message: '您目前沒有指導中的運動員',
         })
       }
       return callback(null, {
         status: 'success',
+        message: '學員資料抓取成功',
         user: result,
       })
     } catch (err) {
@@ -108,7 +109,7 @@ const coachServices = {
       return callback({ status: 'error', message: err })
     }
   },
-  
+
   getTraineesData: async (req, callback) => {
     try {
       const { athleteId, labName } = req.body
@@ -161,6 +162,57 @@ const coachServices = {
       return callback(null, {
         status: 'success',
         data: traineesData,
+      })
+    } catch (err) {
+      console.log(err)
+      return callback({ status: 'error', message: err })
+    }
+  },
+  getTraineesFabData: async (req, callback) => {
+    try {
+      const { lab, memberList } = req.body
+      //todo: 依lab篩選inlcude實驗室套組
+      console.log(lab)
+      const result = await User.findAll({
+        where: { id: memberList },
+        attributes: ['id', 'name'],
+        include: [
+          {
+            model: BaatInbody,
+            as: 'Baat_Inbody',
+            attributes: ['id', 'key', 'value', 'detect_at'],
+            through: { attributes: [] },
+          },
+          {
+            model: BaatGripStrength,
+            as: 'Baat_GripStrength',
+            attributes: ['id', 'key', 'value', 'detect_at'],
+            through: { attributes: [] },
+          },
+          {
+            model: baat_cmj,
+            as: 'Baat_cmj',
+            attributes: ['id', 'key', 'value', 'detect_at'],
+            through: { attributes: [] },
+          },
+          {
+            model: baat_imtp,
+            as: 'Baat_imtp',
+            attributes: ['id', 'key', 'value', 'detect_at'],
+            through: { attributes: [] },
+          },
+          {
+            model: baat_wingate_test,
+            as: 'Baat_wingate_test',
+            attributes: ['id', 'key', 'value', 'detect_at'],
+            through: { attributes: [] },
+          },
+        ],
+      })
+      return callback(null, {
+        status: 'success',
+        message: '成功送出',
+        data: result,
       })
     } catch (err) {
       console.log(err)
