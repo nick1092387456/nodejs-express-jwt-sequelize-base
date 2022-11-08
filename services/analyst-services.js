@@ -3,24 +3,34 @@ const path = require('path')
 const parser = require('../tools/csvParser')
 const writer = require('../tools/csvWriter')
 const db = require('../models')
-const { User, BaatUserShip } = db
-
-const directoryPath = path.resolve(process.cwd(), `./public/Labs/baat/template`)
+const { User, Role, BaatUserShip } = db
 
 const analystServices = {
   getTemplate: async (req, callback) => {
     try {
+      const analystId = req.user.id
+      const analystRole = await Role.findByPk(analystId, {
+        raw: true,
+        attributes: ['baat', 'snc', 'ssta', 'ssta2', 'src', 'spc', 'sptc'],
+      }).then((roles) => Object.entries(roles).filter((item) => item[1])[0][0])
+      const directoryPath = path.resolve(
+        process.cwd(),
+        `./public/Labs/${analystRole}/template`
+      )
       const files = await fs.readdirSync(directoryPath)
       const nameList = files.map((item) => item.split('.csv')[0])
       if (!files) {
-        throw new Error({
+        return callback(null, {
           status: 'error',
           message: '資料庫中沒有檔案，請先聯絡管理員上傳範本',
         })
       }
       const tagList = await files.reduce(async (accp, cur, idx) => {
         const fileName = nameList[idx]
-        const data = await parser(fileName, './public/Labs/baat/template/')
+        const data = await parser(
+          fileName,
+          `./public/Labs/${analystRole}/template/`
+        )
         let acc = await accp //reduce是整個函式遞迴需要使用await等待前一次的自己執行完畢
         return (acc = await { ...acc, [fileName]: data[0] })
       }, {})
@@ -33,14 +43,19 @@ const analystServices = {
       return callback(err)
     }
   },
-  postTemplate: async (req, callback) => {
+  putTemplate: async (req, callback) => {
     try {
+      const analystId = req.user.id
+      const analystRole = await Role.findByPk(analystId, {
+        raw: true,
+        attributes: ['baat', 'snc', 'ssta', 'ssta2', 'src', 'spc', 'sptc'],
+      }).then((roles) => Object.entries(roles).filter((item) => item[1])[0][0])
       const { label, fileName } = req.body
       const data = label.map((item) => ({ title: item.name }))
       const result = await writer(
         fileName,
         data,
-        './public/Labs/baat/template/'
+        `./public/Labs/${analystRole}/template/`
       )
       if (!result.success) {
         return callback(null, { status: 'error', message: '資料更新失敗' })
@@ -140,11 +155,15 @@ const analystServices = {
   },
   downloadTemplate: async (req, callback) => {
     try {
-      // const { templateName } = req.query
+      const analystId = req.user.id
+      const analystRole = await Role.findByPk(analystId, {
+        raw: true,
+        attributes: ['baat', 'snc', 'ssta', 'ssta2', 'src', 'spc', 'sptc'],
+      }).then((roles) => Object.entries(roles).filter((item) => item[1])[0][0])
       const fileName = Object.keys(req.query)[0]
       const filePath = await path.resolve(
         process.cwd(),
-        `./public/Labs/baat/template/${fileName}.csv`
+        `./public/Labs/${analystRole}/template/${fileName}.csv`
       )
       if (!filePath) {
         return callback(null, {

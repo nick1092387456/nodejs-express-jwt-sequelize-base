@@ -23,15 +23,11 @@ router.get(
 )
 
 //analyst
-router.get(
-  '/analyst/:id/getTemplate',
-  authenticated,
-  analystController.getTemplate
-)
+router.get('/analyst/getTemplate', authenticated, analystController.getTemplate)
 router.post(
-  '/analyst/:id/postTemplate',
+  '/analyst/putTemplate',
   authenticated,
-  analystController.postTemplate
+  analystController.putTemplate
 )
 router.post(
   '/analyst/:id/uploadTemplate',
@@ -45,7 +41,7 @@ router.get(
   analystController.reviewTemplate
 )
 router.get(
-  '/analyst/:id/downloadTemplate',
+  '/analyst/downloadTemplate',
   authenticated,
   analystController.downloadTemplate
 )

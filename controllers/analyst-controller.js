@@ -6,8 +6,8 @@ const analystController = {
       err ? next(err) : res.status(200).json(data)
     )
   },
-  postTemplate: (req, res, next) => {
-    analystServices.postTemplate(req, (err, data) =>
+  putTemplate: (req, res, next) => {
+    analystServices.putTemplate(req, (err, data) =>
       err ? next(err) : res.status(200).json(data)
     )
   },
