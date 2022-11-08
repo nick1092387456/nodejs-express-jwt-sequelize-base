@@ -17,9 +17,9 @@ const {
   User,
   BaatInbody,
   BaatGripStrength,
-  baat_cmj,
-  baat_imtp,
-  baat_wingate_test,
+  BaatCmj,
+  BaatImtp,
+  BaatWingateTest,
 } = db
 
 const userServices = {
@@ -174,19 +174,19 @@ const userServices = {
             through: { attributes: [] },
           },
           {
-            model: baat_cmj,
+            model: BaatCmj,
             as: 'Baat_cmj',
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },
           {
-            model: baat_imtp,
+            model: BaatImtp,
             as: 'Baat_imtp',
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },
           {
-            model: baat_wingate_test,
+            model: BaatWingateTest,
             as: 'Baat_wingate_test',
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },

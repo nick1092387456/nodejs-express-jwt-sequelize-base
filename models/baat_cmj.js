@@ -1,21 +1,8 @@
 'use strict'
-const { Model } = require('sequelize')
+
 module.exports = (sequelize, DataTypes) => {
-  class baat_cmj extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      baat_cmj.belongsToMany(models.User, {
-        through: models.Baat_user_ship,
-        foreignKey: 'baat_cmj_id',
-        as: 'baat_cmj_user',
-      })
-    }
-  }
-  baat_cmj.init(
+  const BaatCmj = sequelize.define(
+    'BaatCmj',
     {
       key: DataTypes.STRING,
       value: DataTypes.STRING,
@@ -23,10 +10,17 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'baat_cmj',
+      modelName: 'BaatCmj',
       tableName: 'Baat_cmjs',
       underscored: true,
     }
   )
-  return baat_cmj
+  BaatCmj.associate = function (models) {
+    BaatCmj.belongsToMany(models.User, {
+      through: models.BaatUserShip,
+      foreignKey: 'BaatCmjId',
+      as: 'BaatCmjUser',
+    })
+  }
+  return BaatCmj
 }

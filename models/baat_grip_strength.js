@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
   )
   BaatGripStrength.associate = function (models) {
     BaatGripStrength.belongsToMany(models.User, {
-      through: models.Baat_user_ship,
+      through: models.BaatUserShip,
       foreignKey: 'BaatGripStrengthId',
       as: 'BaatGripStrengthUser',
     })

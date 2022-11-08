@@ -17,17 +17,17 @@ module.exports = {
       detect_at: {
         type: Sequelize.DATE,
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
     })
   },
   down: async (queryInterface) => {
-    await queryInterface.dropTable('snc_inbodies')
+    await queryInterface.dropTable('Snc_inbodies')
   },
 }

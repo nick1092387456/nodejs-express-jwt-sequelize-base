@@ -1,7 +1,7 @@
 'use strict'
 module.exports = (sequelize, DataTypes) => {
-  const Snc_user_ship = sequelize.define(
-    'Snc_user_ship',
+  const SncUserShip = sequelize.define(
+    'SncUserShip',
     {
       user_id: DataTypes.INTEGER,
       snc_inbody_id: DataTypes.INTEGER,
@@ -9,10 +9,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'Snc_user_ship',
+      modelName: 'SncUserShip',
       tableName: 'Snc_user_ships',
       underscored: true,
     }
   )
-  return Snc_user_ship
+  return SncUserShip
 }

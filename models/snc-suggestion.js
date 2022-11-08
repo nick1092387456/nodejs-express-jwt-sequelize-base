@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
   )
   SncSuggestion.associate = function (models) {
     SncSuggestion.belongsToMany(models.User, {
-      through: models.Snc_user_ship,
+      through: models.SncUserShip,
       foreignKey: 'SncSuggestionId',
       as: 'SncSuggestionUser',
     })

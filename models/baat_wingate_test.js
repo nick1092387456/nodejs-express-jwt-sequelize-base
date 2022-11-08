@@ -1,16 +1,8 @@
 'use strict'
-const { Model } = require('sequelize')
+
 module.exports = (sequelize, DataTypes) => {
-  class baat_wingate_test extends Model {
-    static associate(models) {
-      baat_wingate_test.belongsToMany(models.User, {
-        through: models.Baat_user_ship,
-        foreignKey: 'baat_wingate_test_id',
-        as: 'baat_wingate_test_user',
-      })
-    }
-  }
-  baat_wingate_test.init(
+  const BaatWingateTest = sequelize.define(
+    'BaatWingateTest',
     {
       key: DataTypes.STRING,
       value: DataTypes.STRING,
@@ -18,10 +10,17 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'baat_wingate_test',
+      modelName: 'BaatWingateTest',
       tableName: 'Baat_wingate_tests',
       underscored: true,
     }
   )
-  return baat_wingate_test
+  BaatWingateTest.associate = function (models) {
+    BaatWingateTest.belongsToMany(models.User, {
+      through: models.BaatUserShip,
+      foreignKey: 'baat_wingate_test_id',
+      as: 'BaatWingateTestUser',
+    })
+  }
+  return BaatWingateTest
 }

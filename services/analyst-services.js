@@ -3,7 +3,7 @@ const path = require('path')
 const parser = require('../tools/csvParser')
 const writer = require('../tools/csvWriter')
 const db = require('../models')
-const { User, Baat_user_ship } = db
+const { User, BaatUserShip } = db
 
 const directoryPath = path.resolve(process.cwd(), `./public/Labs/baat/template`)
 
@@ -63,13 +63,13 @@ const analystServices = {
         const dbModelName = {
           body_composition: 'BaatInbody',
           grip_strength: 'BaatGripStrength',
-          CMJ: 'baat_cmj',
-          IMTP: 'baat_imtp',
-          wingate_test: 'baat_wingate_test',
+          CMJ: 'BaatCmj',
+          IMTP: 'BaatImtp',
+          wingate_test: 'BaatWingateTest',
         }
         const dbColumnName = {
-          body_composition: 'Baat_inbody_id',
-          grip_strength: 'Baat_grip_strength_id',
+          body_composition: 'baat_inbody_id',
+          grip_strength: 'baat_grip_strength_id',
           CMJ: 'baat_cmj_id',
           IMTP: 'baat_imtp_id',
           wingate_test: 'baat_wingate_test_id',
@@ -84,7 +84,7 @@ const analystServices = {
           value.map(async (_value) => {
             const id = _value[0]
             const user = await User.findOne({
-              where: { idNumber: id },
+              where: { id_number: id },
               raw: true,
             })
             for (let i = 0, j = _value.length; i < j; i++) {
@@ -95,13 +95,15 @@ const analystServices = {
                 created_at: new Date(),
                 updated_at: new Date(),
               })
-
-              await Baat_user_ship.create({
+              console.log('---------------------', result.id)
+              console.log('columnName: ', [dbColumnName[fileName]])
+              const createResult = await BaatUserShip.create({
                 [dbColumnName[fileName]]: result.id,
                 user_id: user ? user.id : id,
                 created_at: new Date(),
                 updated_at: new Date(),
               })
+              console.log('createResult: ', createResult)
             }
           })
         )
@@ -109,7 +111,7 @@ const analystServices = {
         return callback(null, { status: 'success', message: '資料上傳成功' })
       }
     } catch (err) {
-      console.log(err)
+      return callback(null, { status: 'error', message: err })
     }
   },
   reviewTemplate: async (req, callback) => {

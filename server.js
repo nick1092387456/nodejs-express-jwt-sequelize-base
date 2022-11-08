@@ -5,9 +5,11 @@ const session = require('express-session')
 const cors = require('cors')
 const passport = require('./config/passport')
 const port = process.env.PORT || 3001
+const path = require('path')
 
 app.use(cors())
-app.use('/avatars', express.static('avatars'))
+app.use('/avatars', express.static(path.join(__dirname, '/avatars')))
+// app.use('/public', express.static(__dirname + '/public'))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }))

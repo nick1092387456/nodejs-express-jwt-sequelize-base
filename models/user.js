@@ -31,27 +31,27 @@ module.exports = (sequelize, DataTypes) => {
       as: 'athlete',
     })
     User.belongsToMany(models.BaatInbody, {
-      through: models.Baat_user_ship,
+      through: models.BaatUserShip,
       foreignKey: 'user_id',
       as: 'Baat_Inbody',
     })
     User.belongsToMany(models.BaatGripStrength, {
-      through: models.Baat_user_ship,
+      through: models.BaatUserShip,
       foreignKey: 'user_id',
       as: 'Baat_GripStrength',
     })
-    User.belongsToMany(models.baat_cmj, {
-      through: models.Baat_user_ship,
+    User.belongsToMany(models.BaatCmj, {
+      through: models.BaatUserShip,
       foreignKey: 'user_id',
       as: 'Baat_cmj',
     })
-    User.belongsToMany(models.baat_imtp, {
-      through: models.Baat_user_ship,
+    User.belongsToMany(models.BaatImtp, {
+      through: models.BaatUserShip,
       foreignKey: 'user_id',
       as: 'Baat_imtp',
     })
-    User.belongsToMany(models.baat_wingate_test, {
-      through: models.Baat_user_ship,
+    User.belongsToMany(models.BaatWingateTest, {
+      through: models.BaatUserShip,
       foreignKey: 'user_id',
       as: 'Baat_wingate_test',
     })
@@ -60,14 +60,14 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     })
     User.belongsToMany(models.SncInbody, {
-      through: models.Baat_user_ship,
+      through: models.SncUserShip,
       foreignKey: 'user_id',
-      as: 'Snc_Inbody',
+      as: 'Snc_inbody',
     })
     User.belongsToMany(models.SncSuggestion, {
-      through: models.Baat_user_ship,
+      through: models.SncUserShip,
       foreignKey: 'user_id',
-      as: 'Snc_Suggestion',
+      as: 'Snc_suggestion',
     })
   }
   return User

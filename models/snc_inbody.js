@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
   )
   SncInbody.associate = function (models) {
     SncInbody.belongsToMany(models.User, {
-      through: models.Snc_user_ship,
+      through: models.SncUserShip,
       foreignKey: 'SncInbodyId',
       as: 'SncInbodyUser',
     })
