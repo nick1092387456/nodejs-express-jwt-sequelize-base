@@ -15,6 +15,7 @@ const bcrypt = require('bcryptjs')
 const db = require('../models')
 const {
   User,
+  Role,
   BaatInbody,
   BaatGripStrength,
   BaatCmj,
@@ -95,8 +96,23 @@ const userServices = {
       return callback(err)
     }
   },
-  getCurrentUsers: (req, callback) => {
+  getCurrentUsers: async (req, callback) => {
     try {
+      const roles = await Role.findByPk(req.user.id, {
+        raw: true,
+        attributes: [
+          'baat',
+          'snc',
+          'ssta',
+          'ssta2',
+          'src',
+          'spc',
+          'sptc',
+          'coach',
+          'athlete',
+          'analyst',
+        ],
+      })
       return callback(null, {
         status: 'success',
         user: {
@@ -104,10 +120,34 @@ const userServices = {
           name: req.user.name,
           email: req.user.email,
           isAdmin: req.user.isAdmin,
+          roles: roles,
         },
       })
     } catch (err) {
-      return callback({ status: 'error', message: err })
+      return callback(null, { status: 'error', message: err })
+    }
+  },
+  getUserRoles: async (req, callback) => {
+    try {
+      const id = Object.keys(req.query)[0]
+      const roles = await Role.findByPk(id, {
+        raw: true,
+        attributes: [
+          'baat',
+          'snc',
+          'ssta',
+          'ssta2',
+          'src',
+          'spc',
+          'sptc',
+          'coach',
+          'athlete',
+          'analyst',
+        ],
+      })
+      return callback(null, { status: 'success', roles: roles })
+    } catch (err) {
+      return callback(null, { status: 'error', message: err })
     }
   },
   getUser: async (req, callback) => {

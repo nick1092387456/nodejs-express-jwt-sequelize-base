@@ -70,7 +70,7 @@ router.post(
 )
 
 //users
-router.get('/get_current_user', authenticated, userController.getCurrentUsers)
+router.get('/getCurrentUser', authenticated, userController.getCurrentUsers)
 router.get('/user/:id', authenticated, userController.getUser)
 router.get(
   '/user/:id/getBaat',
@@ -99,6 +99,7 @@ router.post(
 )
 router.post('/signup', userController.signUp)
 router.post('/signin', userController.signIn)
+router.get('/getUserRoles', userController.getUserRoles)
 
 //error handle
 router.use('/', generalErrorHandler)
