@@ -1,11 +1,19 @@
 const multer = require('multer')
+const db = require('../models')
+const { Role } = db
 
 //multer setting
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, './public/Labs/baat/')
+  destination: async function (req, file, cb) {
+    const analystId = req.user.id
+    const analystRole = await Role.findByPk(analystId, {
+      raw: true,
+      attributes: ['baat', 'snc', 'ssta', 'ssta2', 'src', 'spc', 'sptc'],
+    }).then((roles) => Object.entries(roles).filter((item) => item[1])[0][0])
+    req.lab = analystRole
+    cb(null, `./public/Labs/${analystRole}/`)
   },
-  filename: function (req, file, cb) {
+  filename: async function (req, file, cb) {
     try {
       const obj = Object.assign({}, req.body)
       cb(null, obj.fileName + '.csv')

@@ -113,6 +113,22 @@ const userServices = {
           'analyst',
         ],
       })
+      const entriesRoles = Object.entries(roles)
+      const rolesFormatted = entriesRoles.reduce(
+        (acc, cur) => {
+          if (
+            cur[0] === 'coach' ||
+            cur[0] === 'athlete' ||
+            cur[0] === 'analyst'
+          ) {
+            Object.assign(acc.duty, Object.fromEntries([cur]))
+            return acc
+          } else {
+            return Object.assign(acc, Object.fromEntries([cur]))
+          }
+        },
+        { duty: {} }
+      )
       return callback(null, {
         status: 'success',
         user: {
@@ -120,7 +136,7 @@ const userServices = {
           name: req.user.name,
           email: req.user.email,
           isAdmin: req.user.isAdmin,
-          roles: roles,
+          roles: rolesFormatted,
         },
       })
     } catch (err) {
@@ -145,7 +161,24 @@ const userServices = {
           'analyst',
         ],
       })
-      return callback(null, { status: 'success', roles: roles })
+      const entriesRoles = Object.entries(roles)
+      const rolesFormatted = entriesRoles.reduce(
+        (acc, cur) => {
+          if (
+            cur[0] === 'coach' ||
+            cur[0] === 'athlete' ||
+            cur[0] === 'analyst'
+          ) {
+            Object.assign(acc.duty, Object.fromEntries([cur]))
+            return acc
+          } else {
+            return Object.assign(acc, Object.fromEntries([cur]))
+          }
+        },
+        { duty: {} }
+      )
+
+      return callback(null, { status: 'success', roles: rolesFormatted })
     } catch (err) {
       return callback(null, { status: 'error', message: err })
     }

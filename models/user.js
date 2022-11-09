@@ -64,11 +64,6 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'user_id',
       as: 'Snc_inbody',
     })
-    User.belongsToMany(models.SncSuggestion, {
-      through: models.SncUserShip,
-      foreignKey: 'user_id',
-      as: 'Snc_suggestion',
-    })
   }
   return User
 }

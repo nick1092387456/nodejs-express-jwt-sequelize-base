@@ -30,7 +30,7 @@ router.post(
   analystController.putTemplate
 )
 router.post(
-  '/analyst/:id/uploadTemplate',
+  '/analyst/uploadTemplate',
   authenticated,
   csvUpload.single('file'),
   analystController.uploadTemplate

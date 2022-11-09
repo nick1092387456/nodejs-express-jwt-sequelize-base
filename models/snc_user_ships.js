@@ -5,7 +5,6 @@ module.exports = (sequelize, DataTypes) => {
     {
       user_id: DataTypes.INTEGER,
       snc_inbody_id: DataTypes.INTEGER,
-      snc_suggestion_id: DataTypes.INTEGER,
     },
     {
       sequelize,

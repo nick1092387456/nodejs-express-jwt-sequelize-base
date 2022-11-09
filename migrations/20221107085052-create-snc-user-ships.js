@@ -14,9 +14,6 @@ module.exports = {
       snc_inbody_id: {
         type: Sequelize.INTEGER,
       },
-      snc_suggestion_id: {
-        type: Sequelize.INTEGER,
-      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,

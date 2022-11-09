@@ -3,7 +3,7 @@ const path = require('path')
 const parser = require('../tools/csvParser')
 const writer = require('../tools/csvWriter')
 const db = require('../models')
-const { User, Role, BaatUserShip } = db
+const { User, Role } = db
 
 const analystServices = {
   getTemplate: async (req, callback) => {
@@ -67,6 +67,7 @@ const analystServices = {
   },
   uploadTemplate: async (req, callback) => {
     try {
+      const { lab } = req
       if (!req.body.fileName || !req.file || !req.body.detect_at) {
         return callback(null, {
           status: 'error',
@@ -75,24 +76,40 @@ const analystServices = {
       }
 
       if (req.file) {
-        const dbModelName = {
-          body_composition: 'BaatInbody',
-          grip_strength: 'BaatGripStrength',
-          CMJ: 'BaatCmj',
-          IMTP: 'BaatImtp',
-          wingate_test: 'BaatWingateTest',
-        }
-        const dbColumnName = {
-          body_composition: 'baat_inbody_id',
-          grip_strength: 'baat_grip_strength_id',
-          CMJ: 'baat_cmj_id',
-          IMTP: 'baat_imtp_id',
-          wingate_test: 'baat_wingate_test_id',
+        let dbModelName = {}
+        let dbColumnName = {}
+        let dbRelateShipName = {}
+        if (lab === 'baat') {
+          dbModelName = {
+            body_composition: 'BaatInbody',
+            grip_strength: 'BaatGripStrength',
+            CMJ: 'BaatCmj',
+            IMTP: 'BaatImtp',
+            wingate_test: 'BaatWingateTest',
+          }
+          dbColumnName = {
+            body_composition: 'baat_inbody_id',
+            grip_strength: 'baat_grip_strength_id',
+            CMJ: 'baat_cmj_id',
+            IMTP: 'baat_imtp_id',
+            wingate_test: 'baat_wingate_test_id',
+          }
+          dbRelateShipName = {
+            body_composition: 'BaatUserShip',
+            grip_strength: 'BaatUserShip',
+            CMJ: 'BaatUserShip',
+            IMTP: 'BaatUserShip',
+            wingate_test: 'BaatUserShip',
+          }
+        } else if (lab === 'snc') {
+          dbModelName = { Snc_inbodies: 'SncInbody' }
+          dbColumnName = { Snc_inbodies: 'SncInbodyId' }
+          dbRelateShipName = { Snc_inbodies: 'SncUserShip' }
         }
 
         const { fileName, detect_at } = req.body
         const date = new Date(detect_at)
-        const csvData = await parser(fileName, './public/Labs/baat/')
+        const csvData = await parser(fileName, `./public/Labs/${lab}/`)
         const key = csvData[0]
         const value = csvData.slice(1)
         await Promise.all(
@@ -110,15 +127,12 @@ const analystServices = {
                 created_at: new Date(),
                 updated_at: new Date(),
               })
-              console.log('---------------------', result.id)
-              console.log('columnName: ', [dbColumnName[fileName]])
-              const createResult = await BaatUserShip.create({
-                [dbColumnName[fileName]]: result.id,
+              await db[dbRelateShipName[fileName]].create({
                 user_id: user ? user.id : id,
+                [dbColumnName[fileName]]: result.id,
                 created_at: new Date(),
                 updated_at: new Date(),
               })
-              console.log('createResult: ', createResult)
             }
           })
         )
@@ -177,7 +191,7 @@ const analystServices = {
         fileName,
       })
     } catch (err) {
-      return callback(err)
+      return callback(null, { status: 'success', message: err })
     }
   },
   sendSRCForm: async (req, callback) => {
