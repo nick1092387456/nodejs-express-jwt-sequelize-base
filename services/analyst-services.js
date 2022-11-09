@@ -145,8 +145,13 @@ const analystServices = {
   },
   reviewTemplate: async (req, callback) => {
     try {
+      const analystId = req.user.id
+      const analystRole = await Role.findByPk(analystId, {
+        raw: true,
+        attributes: ['baat', 'snc', 'ssta', 'ssta2', 'src', 'spc', 'sptc'],
+      }).then((roles) => Object.entries(roles).filter((item) => item[1])[0][0])
       const fileName = Object.keys(req.query)[0]
-      const data = await parser(fileName, './public/Labs/baat/')
+      const data = await parser(fileName, `./public/Labs/${analystRole}/`)
 
       const header = data[0]
       const content = data.slice(1)

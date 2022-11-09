@@ -36,7 +36,7 @@ router.post(
   analystController.uploadTemplate
 )
 router.get(
-  '/analyst/:id/reviewTemplate',
+  '/analyst/reviewTemplate',
   authenticated,
   analystController.reviewTemplate
 )
