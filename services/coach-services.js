@@ -152,6 +152,19 @@ const coachServices = {
           ],
         })
       }
+      if (labName === 'snc') {
+        traineesData = await User.findByPk(athleteId, {
+          attributes: [],
+          include: [
+            {
+              model: db.SncInbody,
+              as: 'Snc_inbody',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+          ],
+        })
+      }
 
       if (!traineesData) {
         return callback(null, {

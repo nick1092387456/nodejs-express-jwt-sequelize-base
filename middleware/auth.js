@@ -4,7 +4,7 @@ const authenticated = (req, res, next) => {
   try {
     passport.authenticate('jwt', { session: false }, (err, user) => {
       if (err || !user)
-        throw new Error({ status: 'error', message: '請先登入再使用' })
+        return res.json({ status: 'error', message: '請先登入再使用' })
       if (user) {
         req.user = user
         return next()

@@ -21,6 +21,7 @@ const {
   BaatCmj,
   BaatImtp,
   BaatWingateTest,
+  SncInbody,
 } = db
 
 const userServices = {
@@ -231,7 +232,7 @@ const userServices = {
   },
   getBaat: async (req, callback) => {
     try {
-      let userData = await User.findByPk(req.params.id, {
+      const userData = await User.findByPk(req.params.id, {
         attributes: [],
         include: [
           {
@@ -270,7 +271,7 @@ const userServices = {
       if (!userData) {
         return callback(null, {
           status: 'error',
-          message: '找不到使用者,已返回至您的個人檔案！',
+          message: '找不到使用者資料',
         })
       }
 
@@ -279,7 +280,29 @@ const userServices = {
         data: userData,
       })
     } catch (err) {
-      return callback({ status: 'error', message: err })
+      return callback(null, { status: 'error', message: err })
+    }
+  },
+  getSnc: async (req, callback) => {
+    try {
+      const userData = await User.findByPk(req.params.id, {
+        attributes: [],
+        include: [
+          {
+            model: SncInbody,
+            as: 'Snc_inbody',
+            attributes: ['id', 'key', 'value', 'detect_at'],
+            through: { attributes: [] },
+          },
+        ],
+      })
+      if (!userData) {
+        return callback(null, { status: 'error', message: '找不到使用者資料' })
+      }
+      return callback(null, { status: 'success', data: userData })
+    } catch (err) {
+      console.log('error in getSnc services: ', err)
+      return callback(null, { status: 'error', message: err })
     }
   },
   putUser: async (req, callback) => {

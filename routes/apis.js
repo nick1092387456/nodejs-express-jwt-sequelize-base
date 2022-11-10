@@ -53,7 +53,7 @@ router.post(
 
 //coach
 router.post(
-  '/coach/:id/getTraineesData',
+  '/coach/getTraineesData',
   authenticated,
   coachController.getTraineesData
 )
@@ -78,6 +78,7 @@ router.get(
   isSelfUser,
   userController.getBaat
 )
+router.get('/user/:id/getSnc', authenticated, isSelfUser, userController.getSnc)
 router.put(
   '/user/:id',
   authenticated,
