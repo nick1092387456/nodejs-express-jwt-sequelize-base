@@ -19,7 +19,8 @@ const analystServices = {
       )
       const files = await fs.readdirSync(directoryPath)
       const nameList = files.map((item) => item.split('.csv')[0])
-      if (!files) {
+
+      if (!files.length) {
         return callback(null, {
           status: 'error',
           message: '資料庫中沒有檔案，請先聯絡管理員上傳範本',
@@ -40,7 +41,11 @@ const analystServices = {
         data: { filesList: nameList, tagsList: tagList },
       })
     } catch (err) {
-      return callback(err)
+      console.log('getTemplate error: ', err)
+      return callback(null, {
+        status: 'error',
+        message: err,
+      })
     }
   },
   putTemplate: async (req, callback) => {
