@@ -69,6 +69,46 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'user_id',
       as: 'Spc',
     })
+    User.belongsToMany(models.SstaBoat2km, {
+      through: models.SstaUserShip,
+      foreignKey: 'user_id',
+      as: 'Ssta_boat_2km',
+    })
+    User.belongsToMany(models.SstaBoat30, {
+      through: models.SstaUserShip,
+      foreignKey: 'user_id',
+      as: 'Ssta_boat_30',
+    })
+    User.belongsToMany(models.SstaBw, {
+      through: models.SstaUserShip,
+      foreignKey: 'user_id',
+      as: 'Ssta_bw',
+    })
+    User.belongsToMany(models.SstaCyclingVo2, {
+      through: models.SstaUserShip,
+      foreignKey: 'user_id',
+      as: 'Ssta_cycling_vo2',
+    })
+    User.belongsToMany(models.SstaFootball20m, {
+      through: models.SstaUserShip,
+      foreignKey: 'user_id',
+      as: 'Ssta_football_20m',
+    })
+    User.belongsToMany(models.SstaFootball505, {
+      through: models.SstaUserShip,
+      foreignKey: 'user_id',
+      as: 'Ssta_football_505',
+    })
+    User.belongsToMany(models.SstaFootBallLight, {
+      through: models.SstaUserShip,
+      foreignKey: 'user_id',
+      as: 'Ssta_football_light',
+    })
+    User.belongsToMany(models.SstaInbody, {
+      through: models.SstaUserShip,
+      foreignKey: 'user_id',
+      as: 'Ssta_inbody',
+    })
   }
   return User
 }
