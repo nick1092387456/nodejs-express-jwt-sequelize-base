@@ -301,7 +301,27 @@ const userServices = {
       }
       return callback(null, { status: 'success', data: userData })
     } catch (err) {
-      console.log('error in getSnc services: ', err)
+      return callback(null, { status: 'error', message: err })
+    }
+  },
+  getSpc: async (req, callback) => {
+    try {
+      const userData = await User.findByPk(req.params.id, {
+        attributes: [],
+        include: [
+          {
+            model: db.Spc,
+            as: 'Spc',
+            attributes: ['id', 'key', 'value', 'detect_at'],
+            through: { attributes: [] },
+          },
+        ],
+      })
+      if (!userData) {
+        return callback(null, { status: 'error', message: '找不到使用者資料' })
+      }
+      return callback(null, { status: 'success', data: userData })
+    } catch (err) {
       return callback(null, { status: 'error', message: err })
     }
   },

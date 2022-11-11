@@ -79,6 +79,7 @@ router.get(
   userController.getBaat
 )
 router.get('/user/:id/getSnc', authenticated, isSelfUser, userController.getSnc)
+router.get('/user/:id/getSpc', authenticated, isSelfUser, userController.getSpc)
 router.put(
   '/user/:id',
   authenticated,

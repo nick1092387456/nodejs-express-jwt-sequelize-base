@@ -105,6 +105,10 @@ const analystServices = {
           dbModelName = { Snc_inbodies: 'SncInbody' }
           dbColumnName = { Snc_inbodies: 'SncInbodyId' }
           dbRelateShipName = { Snc_inbodies: 'SncUserShip' }
+        } else if (lab === 'spc') {
+          dbModelName = { Spcs: 'Spc' }
+          dbColumnName = { Spcs: 'SpcId' }
+          dbRelateShipName = { Spcs: 'SpcUserShip' }
         }
 
         const { fileName, detect_at } = req.body

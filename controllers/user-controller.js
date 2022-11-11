@@ -32,8 +32,12 @@ const userController = {
     )
   },
   getSnc: (req, res, next) => {
-    console.log('----------------------------------------------------')
     userServices.getSnc(req, (err, data) =>
+      err ? next(err) : res.status(200).json(data)
+    )
+  },
+  getSpc: (req, res, next) => {
+    userServices.getSpc(req, (err, data) =>
       err ? next(err) : res.status(200).json(data)
     )
   },

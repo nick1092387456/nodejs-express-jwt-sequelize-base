@@ -166,6 +166,20 @@ const coachServices = {
         })
       }
 
+      if (labName === 'spc') {
+        traineesData = await User.findByPk(athleteId, {
+          attributes: [],
+          include: [
+            {
+              model: db.Spc,
+              as: 'Spc',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+          ],
+        })
+      }
+
       if (!traineesData) {
         return callback(null, {
           status: 'error',
