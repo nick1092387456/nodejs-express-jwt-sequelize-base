@@ -114,6 +114,37 @@ const analystServices = {
           dbModelName = { Spcs: 'Spc' }
           dbColumnName = { Spcs: 'SpcId' }
           dbRelateShipName = { Spcs: 'SpcUserShip' }
+        } else if (lab === 'ssta') {
+          dbModelName = {
+            Ssta_inbodies: 'SstaInbody',
+            Ssta_boat_2kms: 'SstaBoat2km',
+            Ssta_boat_30s: 'SstaBoat30',
+            Ssta_Bw: 'SstaBw',
+            Ssta_football_20ms: 'SstaFootball20m',
+            Ssta_Football_505: 'SstaFootball505',
+            Ssta_football_lights: 'SstaFootBallLight',
+            Ssta_cycling_vo2s: 'SstaCyclingVo2',
+          }
+          dbColumnName = {
+            Ssta_inbodies: 'SstaInbodyId',
+            Ssta_boat_2kms: 'SstaBoat2kmId',
+            Ssta_boat_30s: 'SstaBoat30Id',
+            Ssta_Bw: 'SstaBwId',
+            Ssta_football_20ms: 'SstaFootball20mId',
+            Ssta_football_505s: 'SstaFootball505Id',
+            Ssta_football_lights: 'SstaFootBallLightId',
+            Ssta_cycling_vo2s: 'SstaCyclingVo2Id',
+          }
+          dbRelateShipName = {
+            Ssta_inbodies: 'SstaUserShip',
+            Ssta_boat_2kms: 'SstaUserShip',
+            Ssta_boat_30s: 'SstaUserShip',
+            Ssta_Bw: 'SstaUserShip',
+            Ssta_football_20ms: 'SstaUserShip',
+            Ssta_football_505s: 'SstaUserShip',
+            Ssta_football_lights: 'SstaUserShip',
+            Ssta_cycling_vo2s: 'SstaUserShip',
+          }
         }
 
         const { fileName, detect_at } = req.body

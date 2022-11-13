@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: 'SstaFootBallLight',
-      tableName: 'SstaFootBallLights',
+      tableName: 'Ssta_footBall_lights',
       underscored: true,
     }
   )
