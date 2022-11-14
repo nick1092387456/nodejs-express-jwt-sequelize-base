@@ -305,6 +305,20 @@ const coachServices = {
           ],
         })
       }
+      if (lab === 'spc') {
+        result = await User.findAll({
+          where: { id: memberList },
+          attributes: ['id', 'name'],
+          include: [
+            {
+              model: db.Spc,
+              as: 'Spc',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+          ],
+        })
+      }
 
       return callback(null, {
         status: 'success',
