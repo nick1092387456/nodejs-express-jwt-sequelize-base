@@ -80,6 +80,12 @@ router.get(
 )
 router.get('/user/:id/getSnc', authenticated, isSelfUser, userController.getSnc)
 router.get('/user/:id/getSpc', authenticated, isSelfUser, userController.getSpc)
+router.get(
+  '/user/:id/getSsta',
+  authenticated,
+  isSelfUser,
+  userController.getSsta
+)
 router.put(
   '/user/:id',
   authenticated,

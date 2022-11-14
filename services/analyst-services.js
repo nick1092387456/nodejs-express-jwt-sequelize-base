@@ -122,18 +122,18 @@ const analystServices = {
             Ssta_Bw: 'SstaBw',
             Ssta_football_20ms: 'SstaFootball20m',
             Ssta_Football_505: 'SstaFootball505',
-            Ssta_football_lights: 'SstaFootBallLight',
+            Ssta_football_lights: 'SstaFootballLight',
             Ssta_cycling_vo2s: 'SstaCyclingVo2',
           }
           dbColumnName = {
             Ssta_inbodies: 'SstaInbodyId',
-            Ssta_boat_2kms: 'SstaBoat2kmId',
-            Ssta_boat_30s: 'SstaBoat30Id',
-            Ssta_Bw: 'SstaBwId',
-            Ssta_football_20ms: 'SstaFootball20mId',
-            Ssta_football_505s: 'SstaFootball505Id',
-            Ssta_football_lights: 'SstaFootBallLightId',
-            Ssta_cycling_vo2s: 'SstaCyclingVo2Id',
+            Ssta_boat_2kms: 'ssta_boat_2km_id',
+            Ssta_boat_30s: 'ssta_boat_30_id',
+            Ssta_Bw: 'ssta_bw_id',
+            Ssta_football_20ms: 'ssta_football_20m_id',
+            Ssta_football_505s: 'ssta_football_505_id',
+            Ssta_football_lights: 'ssta_football_light_id',
+            Ssta_cycling_vo2s: 'ssta_cycling_vo2_id',
           }
           dbRelateShipName = {
             Ssta_inbodies: 'SstaUserShip',

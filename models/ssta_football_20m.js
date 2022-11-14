@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
   SstaFootball20m.associate = function (models) {
     SstaFootball20m.belongsToMany(models.User, {
       through: models.SstaUserShip,
-      foreignKey: 'SstaFootball20mId',
+      foreignKey: 'Ssta_football_20m_id',
       as: 'SstaFootball20mUser',
     })
   }

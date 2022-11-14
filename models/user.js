@@ -99,7 +99,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'user_id',
       as: 'Ssta_football_505',
     })
-    User.belongsToMany(models.SstaFootBallLight, {
+    User.belongsToMany(models.SstaFootballLight, {
       through: models.SstaUserShip,
       foreignKey: 'user_id',
       as: 'Ssta_football_light',

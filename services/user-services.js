@@ -274,7 +274,6 @@ const userServices = {
           message: '找不到使用者資料',
         })
       }
-
       return callback(null, {
         status: 'success',
         data: userData,
@@ -291,6 +290,69 @@ const userServices = {
           {
             model: SncInbody,
             as: 'Snc_inbody',
+            attributes: ['id', 'key', 'value', 'detect_at'],
+            through: { attributes: [] },
+          },
+        ],
+      })
+      if (!userData) {
+        return callback(null, { status: 'error', message: '找不到使用者資料' })
+      }
+      return callback(null, { status: 'success', data: userData })
+    } catch (err) {
+      return callback(null, { status: 'error', message: err })
+    }
+  },
+  getSsta: async (req, callback) => {
+    try {
+      const userData = await User.findByPk(req.params.id, {
+        attributes: [],
+        include: [
+          {
+            model: db.SstaInbody,
+            as: 'Ssta_inbody',
+            attributes: ['id', 'key', 'value', 'detect_at'],
+            through: { attributes: [] },
+          },
+          {
+            model: db.SstaBoat2km,
+            as: 'Ssta_boat_2km',
+            attributes: ['id', 'key', 'value', 'detect_at'],
+            through: { attributes: [] },
+          },
+          {
+            model: db.SstaBoat30,
+            as: 'Ssta_boat_30',
+            attributes: ['id', 'key', 'value', 'detect_at'],
+            through: { attributes: [] },
+          },
+          {
+            model: db.SstaBw,
+            as: 'Ssta_bw',
+            attributes: ['id', 'key', 'value', 'detect_at'],
+            through: { attributes: [] },
+          },
+          {
+            model: db.SstaCyclingVo2,
+            as: 'Ssta_cycling_vo2',
+            attributes: ['id', 'key', 'value', 'detect_at'],
+            through: { attributes: [] },
+          },
+          {
+            model: db.SstaFootball20m,
+            as: 'Ssta_football_20m',
+            attributes: ['id', 'key', 'value', 'detect_at'],
+            through: { attributes: [] },
+          },
+          {
+            model: db.SstaFootball505,
+            as: 'Ssta_football_505',
+            attributes: ['id', 'key', 'value', 'detect_at'],
+            through: { attributes: [] },
+          },
+          {
+            model: db.SstaFootballLight,
+            as: 'Ssta_football_light',
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },

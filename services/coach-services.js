@@ -165,7 +165,6 @@ const coachServices = {
           ],
         })
       }
-
       if (labName === 'spc') {
         traineesData = await User.findByPk(athleteId, {
           attributes: [],
@@ -173,6 +172,61 @@ const coachServices = {
             {
               model: db.Spc,
               as: 'Spc',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+          ],
+        })
+      }
+      if (labName === 'ssta') {
+        traineesData = await User.findByPk(athleteId, {
+          attributes: [],
+          include: [
+            {
+              model: db.SstaInbody,
+              as: 'Ssta_inbody',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+            {
+              model: db.SstaBoat2km,
+              as: 'Ssta_boat_2km',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+            {
+              model: db.SstaBoat30,
+              as: 'Ssta_boat_30',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+            {
+              model: db.SstaBw,
+              as: 'Ssta_bw',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+            {
+              model: db.SstaCyclingVo2,
+              as: 'Ssta_cycling_vo2',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+            {
+              model: db.SstaFootball20m,
+              as: 'Ssta_football_20m',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+            {
+              model: db.SstaFootball505,
+              as: 'Ssta_football_505',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+            {
+              model: db.SstaFootballLight,
+              as: 'Ssta_football_light',
               attributes: ['id', 'key', 'value', 'detect_at'],
               through: { attributes: [] },
             },

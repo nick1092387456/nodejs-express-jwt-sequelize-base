@@ -1,8 +1,8 @@
 'use strict'
 
 module.exports = (sequelize, DataTypes) => {
-  const SstaFootBallLight = sequelize.define(
-    'SstaFootBallLight',
+  const SstaFootballLight = sequelize.define(
+    'SstaFootballLight',
     {
       key: DataTypes.STRING,
       value: DataTypes.STRING,
@@ -10,17 +10,17 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'SstaFootBallLight',
-      tableName: 'Ssta_footBall_lights',
+      modelName: 'SstaFootballLight',
+      tableName: 'Ssta_football_lights',
       underscored: true,
     }
   )
-  SstaFootBallLight.associate = function (models) {
-    SstaFootBallLight.belongsToMany(models.User, {
+  SstaFootballLight.associate = function (models) {
+    SstaFootballLight.belongsToMany(models.User, {
       through: models.SstaUserShip,
-      foreignKey: 'SstaFootBallLightId',
-      as: 'SstaFootBallLightUser',
+      foreignKey: 'SstaFootballLightId',
+      as: 'SstaFootballLightUser',
     })
   }
-  return SstaFootBallLight
+  return SstaFootballLight
 }

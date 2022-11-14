@@ -41,6 +41,11 @@ const userController = {
       err ? next(err) : res.status(200).json(data)
     )
   },
+  getSsta: (req, res, next) => {
+    userServices.getSsta(req, (err, data) =>
+      err ? next(err) : res.status(200).json(data)
+    )
+  },
   putUser: (req, res, next) => {
     userServices.putUser(req, (err, data) =>
       err ? next(err) : res.status(200).json(data)
