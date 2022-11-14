@@ -252,44 +252,60 @@ const coachServices = {
   getTraineesFabData: async (req, callback) => {
     try {
       const { lab, memberList } = req.body
-      //todo: 依lab篩選inlcude實驗室套組
-      console.log(lab)
-      const result = await User.findAll({
-        where: { id: memberList },
-        attributes: ['id', 'name'],
-        include: [
-          {
-            model: BaatInbody,
-            as: 'Baat_Inbody',
-            attributes: ['id', 'key', 'value', 'detect_at'],
-            through: { attributes: [] },
-          },
-          {
-            model: BaatGripStrength,
-            as: 'Baat_GripStrength',
-            attributes: ['id', 'key', 'value', 'detect_at'],
-            through: { attributes: [] },
-          },
-          {
-            model: BaatCmj,
-            as: 'Baat_cmj',
-            attributes: ['id', 'key', 'value', 'detect_at'],
-            through: { attributes: [] },
-          },
-          {
-            model: BaatImtp,
-            as: 'Baat_imtp',
-            attributes: ['id', 'key', 'value', 'detect_at'],
-            through: { attributes: [] },
-          },
-          {
-            model: BaatWingateTest,
-            as: 'Baat_wingate_test',
-            attributes: ['id', 'key', 'value', 'detect_at'],
-            through: { attributes: [] },
-          },
-        ],
-      })
+      let result = null
+      if (lab === 'baat') {
+        result = await User.findAll({
+          where: { id: memberList },
+          attributes: ['id', 'name'],
+          include: [
+            {
+              model: db.BaatInbody,
+              as: 'Baat_Inbody',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+            {
+              model: db.BaatGripStrength,
+              as: 'Baat_GripStrength',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+            {
+              model: db.BaatCmj,
+              as: 'Baat_cmj',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+            {
+              model: db.BaatImtp,
+              as: 'Baat_imtp',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+            {
+              model: db.BaatWingateTest,
+              as: 'Baat_wingate_test',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+          ],
+        })
+      }
+      if (lab === 'snc') {
+        result = await User.findAll({
+          where: { id: memberList },
+          attributes: ['id', 'name'],
+          include: [
+            {
+              model: db.SncInbody,
+              as: 'Snc_inbody',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+          ],
+        })
+      }
+
       return callback(null, {
         status: 'success',
         message: '成功送出',
