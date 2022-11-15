@@ -147,6 +147,7 @@ const userServices = {
   getUserRoles: async (req, callback) => {
     try {
       const id = Object.keys(req.query)[0]
+      console.log('getUserRoles: ', id)
       const roles = await Role.findByPk(id, {
         raw: true,
         attributes: [
@@ -186,7 +187,7 @@ const userServices = {
   },
   getUser: async (req, callback) => {
     try {
-      const { id } = req.params
+      const { id } = req.user
       const user = await User.findByPk(id, {
         attributes: [
           'id',
@@ -232,7 +233,7 @@ const userServices = {
   },
   getBaat: async (req, callback) => {
     try {
-      const userData = await User.findByPk(req.params.id, {
+      const userData = await User.findByPk(req.user.id, {
         attributes: [],
         include: [
           {
@@ -284,7 +285,7 @@ const userServices = {
   },
   getSnc: async (req, callback) => {
     try {
-      const userData = await User.findByPk(req.params.id, {
+      const userData = await User.findByPk(req.user.id, {
         attributes: [],
         include: [
           {
@@ -305,7 +306,7 @@ const userServices = {
   },
   getSsta: async (req, callback) => {
     try {
-      const userData = await User.findByPk(req.params.id, {
+      const userData = await User.findByPk(req.user.id, {
         attributes: [],
         include: [
           {
@@ -368,7 +369,7 @@ const userServices = {
   },
   getSpc: async (req, callback) => {
     try {
-      const userData = await User.findByPk(req.params.id, {
+      const userData = await User.findByPk(req.user.id, {
         attributes: [],
         include: [
           {
@@ -399,7 +400,7 @@ const userServices = {
       }
       //更新文字資料
       const { name, gender, sport, birthday, description } = req.body
-      const user = await User.findByPk(req.params.id)
+      const user = await User.findByPk(req.user.id)
       const genderENG = translateGender(gender)
       const sportENG = translateSport(sport)
       await user.update({
@@ -422,7 +423,8 @@ const userServices = {
   },
   passwordEdit: async (req, callback) => {
     try {
-      const { userId, password } = req.body
+      const { password } = req.body
+      const userId = req.user.id
       const result = await passwordEditValidation(req.body)
       if (!result.success) {
         return callback(null, { status: 'error', message: result.message })

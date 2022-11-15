@@ -65,7 +65,8 @@ const coachServices = {
   },
   toggleStatus: async (req, callback) => {
     try {
-      const { coachId, id, start_at, stop_at, status } = req.body
+      const { id, start_at, stop_at, status } = req.body
+      const coachId = req.user.id
       const athleteId = id
       const relation = await CoachAthleteShip.findOne({
         where: { [Op.and]: [{ coach_id: coachId }, { athlete_id: athleteId }] },
