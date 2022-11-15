@@ -64,7 +64,7 @@ router.post(
   coachController.toggleStatus
 )
 router.post(
-  '/coach/:id/getTraineesFabData',
+  '/coach/getTraineesFabData',
   authenticated,
   coachController.getTraineesFabData
 )

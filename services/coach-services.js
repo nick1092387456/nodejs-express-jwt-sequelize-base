@@ -251,6 +251,7 @@ const coachServices = {
   },
   getTraineesFabData: async (req, callback) => {
     try {
+      //todo:增加一個檢查memberList是否是req.user(coach)下的學生才能查資料
       const { lab, memberList } = req.body
       let result = null
       if (lab === 'baat') {
@@ -319,6 +320,62 @@ const coachServices = {
           ],
         })
       }
+      if (lab === 'ssta') {
+        result = await User.findAll({
+          where: { id: memberList },
+          attributes: ['id', 'name'],
+          include: [
+            {
+              model: db.SstaInbody,
+              as: 'Ssta_inbody',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+            {
+              model: db.SstaBoat2km,
+              as: 'Ssta_boat_2km',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+            {
+              model: db.SstaBoat30,
+              as: 'Ssta_boat_30',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+            {
+              model: db.SstaBw,
+              as: 'Ssta_bw',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+            {
+              model: db.SstaCyclingVo2,
+              as: 'Ssta_cycling_vo2',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+            {
+              model: db.SstaFootball20m,
+              as: 'Ssta_football_20m',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+            {
+              model: db.SstaFootball505,
+              as: 'Ssta_football_505',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+            {
+              model: db.SstaFootballLight,
+              as: 'Ssta_football_light',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+          ],
+        })
+      }
 
       return callback(null, {
         status: 'success',
@@ -326,7 +383,6 @@ const coachServices = {
         data: result,
       })
     } catch (err) {
-      console.log(err)
       return callback({ status: 'error', message: err })
     }
   },
