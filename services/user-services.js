@@ -426,22 +426,50 @@ const userServices = {
     }
   },
   downloadUserFile: async (req, callback) => {
-    const fileName = Object.values(req.query)[0]
-    const { id } = req.user
-    const isExists = fs.existsSync(
-      path.resolve(process.cwd(), `./public/Users/${id}/${fileName}`)
-    )
-    if (!isExists) {
-      return callback(null, { status: 'error', message: '找不到此檔案!' })
+    try {
+      const fileName = Object.values(req.query)[0]
+      const { id } = req.user
+      const isExists = fs.existsSync(
+        path.resolve(process.cwd(), `./public/Users/${id}/${fileName}`)
+      )
+      if (!isExists) {
+        return callback(null, { status: 'error', message: '找不到此檔案!' })
+      }
+      const filePath = await path.resolve(
+        process.cwd(),
+        `./public/Users/${id}/${fileName}`
+      )
+      return callback(null, {
+        status: 'success',
+        filePath,
+      })
+    } catch (err) {
+      return callback({ status: 'error', message: err })
     }
-    const filePath = await path.resolve(
-      process.cwd(),
-      `./public/Users/${id}/${fileName}`
-    )
-    return callback(null, {
-      status: 'success',
-      filePath,
-    })
+  },
+  editUserFileName: async (req, callback) => {
+    try {
+      const { fileName, editName } = req.body
+      const { id } = req.user
+      const isExists = fs.existsSync(
+        path.resolve(process.cwd(), `./public/Users/${id}/${fileName}`)
+      )
+      if (!isExists) {
+        return callback(null, { status: 'error', message: '找不到此檔案!' })
+      }
+      const oldPath = await path.resolve(
+        process.cwd(),
+        `./public/Users/${id}/${fileName}`
+      )
+      const newPath = path.resolve(
+        process.cwd(),
+        `./public/Users/${id}/${editName}`
+      )
+      await fs.renameSync(oldPath, newPath)
+      return callback(null, { status: 'success', message: '更新完成' })
+    } catch (err) {
+      return callback({ source: 'editUserFileName', message: err })
+    }
   },
   putUser: async (req, callback) => {
     try {

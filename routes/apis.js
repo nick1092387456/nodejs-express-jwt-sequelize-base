@@ -84,6 +84,11 @@ router.get(
   authenticated,
   userController.downloadUserFile
 )
+router.put(
+  '/user/editUserFileName',
+  authenticated,
+  userController.editUserFileName
+)
 
 router.put('/user/passwordEdit', authenticated, userController.passwordEdit)
 router.post(
