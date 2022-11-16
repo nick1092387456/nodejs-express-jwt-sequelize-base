@@ -26,6 +26,11 @@ const userController = {
       err ? next(err) : res.status(200).json(data)
     )
   },
+  putUser: (req, res, next) => {
+    userServices.putUser(req, (err, data) =>
+      err ? next(err) : res.status(200).json(data)
+    )
+  },
   getBaat: (req, res, next) => {
     userServices.getBaat(req, (err, data) =>
       err ? next(err) : res.status(200).json(data)
@@ -46,10 +51,17 @@ const userController = {
       err ? next(err) : res.status(200).json(data)
     )
   },
-  putUser: (req, res, next) => {
-    userServices.putUser(req, (err, data) =>
+  getUserFileList: (req, res, next) => {
+    userServices.getUserFileList(req, (err, data) =>
       err ? next(err) : res.status(200).json(data)
     )
+  },
+  downloadUserFile: (req, res, next) => {
+    userServices.downloadUserFile(req, (err, data) => {
+      if (err) next(err)
+      if (data.status === 'error') res.status(200).json(data)
+      res.download(data.filePath)
+    })
   },
   passwordEdit: (req, res, next) => {
     userServices.passwordEdit(req, (err, data) =>

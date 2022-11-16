@@ -23,6 +23,8 @@ const {
   BaatWingateTest,
   SncInbody,
 } = db
+const fs = require('fs')
+const path = require('path')
 
 const userServices = {
   signUp: async (req, callback) => {
@@ -387,6 +389,59 @@ const userServices = {
     } catch (err) {
       return callback(null, { status: 'error', message: err })
     }
+  },
+  getUserFileList: async (req, callback) => {
+    try {
+      const { id } = req.user
+      const isExists = fs.existsSync(
+        path.resolve(process.cwd(), `./public/Users/${id}/`)
+      )
+      if (!isExists) {
+        await fs.mkdirSync(path.resolve(process.cwd(), `./public/Users/${id}/`))
+      }
+      const directoryPath = path.resolve(process.cwd(), `./public/Users/${id}`)
+      const fileList = await fs.readdirSync(directoryPath)
+
+      const result = await Promise.all(
+        fileList.map(async (file) => {
+          const filePath = directoryPath + `\\${file}`
+          const fileStat = await fs.statSync(filePath)
+          const fileName = file.slice(0, -4)
+          const fileExt = path.extname(filePath).slice(1)
+          const fileSize = fileStat.size //bytes
+          const fileCreateAt = fileStat.birthtimeMs //millisecond
+          const fileUpdateAt = fileStat.ctimeMs //millisecond
+          return {
+            name: fileName,
+            ext: fileExt,
+            size: fileSize,
+            createAt: fileCreateAt,
+            updateAt: fileUpdateAt,
+          }
+        })
+      )
+      return callback(null, { status: 'success', data: result })
+    } catch (err) {
+      return callback({ status: 'error', message: err })
+    }
+  },
+  downloadUserFile: async (req, callback) => {
+    const fileName = Object.values(req.query)[0]
+    const { id } = req.user
+    const isExists = fs.existsSync(
+      path.resolve(process.cwd(), `./public/Users/${id}/${fileName}`)
+    )
+    if (!isExists) {
+      return callback(null, { status: 'error', message: '找不到此檔案!' })
+    }
+    const filePath = await path.resolve(
+      process.cwd(),
+      `./public/Users/${id}/${fileName}`
+    )
+    return callback(null, {
+      status: 'success',
+      filePath,
+    })
   },
   putUser: async (req, callback) => {
     try {

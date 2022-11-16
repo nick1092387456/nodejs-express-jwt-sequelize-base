@@ -74,6 +74,16 @@ router.get('/user/getBaat', authenticated, userController.getBaat)
 router.get('/user/getSnc', authenticated, userController.getSnc)
 router.get('/user/getSpc', authenticated, userController.getSpc)
 router.get('/user/getSsta', authenticated, userController.getSsta)
+router.get(
+  '/user/getUserFileList',
+  authenticated,
+  userController.getUserFileList
+)
+router.get(
+  '/user/downloadUserFile',
+  authenticated,
+  userController.downloadUserFile
+)
 
 router.put('/user/passwordEdit', authenticated, userController.passwordEdit)
 router.post(
