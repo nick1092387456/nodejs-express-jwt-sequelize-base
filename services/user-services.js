@@ -393,7 +393,7 @@ const userServices = {
   getUserFileList: async (req, callback) => {
     try {
       const { id } = req.user
-      const isExists = fs.existsSync(
+      const isExists = await fs.existsSync(
         path.resolve(process.cwd(), `./public/Users/${id}/`)
       )
       if (!isExists) {
@@ -429,7 +429,7 @@ const userServices = {
     try {
       const fileName = Object.values(req.query)[0]
       const { id } = req.user
-      const isExists = fs.existsSync(
+      const isExists = await fs.existsSync(
         path.resolve(process.cwd(), `./public/Users/${id}/${fileName}`)
       )
       if (!isExists) {
@@ -451,7 +451,7 @@ const userServices = {
     try {
       const { fileName, editName } = req.body
       const { id } = req.user
-      const isExists = fs.existsSync(
+      const isExists = await fs.existsSync(
         path.resolve(process.cwd(), `./public/Users/${id}/${fileName}`)
       )
       if (!isExists) {
@@ -468,7 +468,28 @@ const userServices = {
       await fs.renameSync(oldPath, newPath)
       return callback(null, { status: 'success', message: '更新完成' })
     } catch (err) {
-      return callback({ source: 'editUserFileName', message: err })
+      return callback(err)
+    }
+  },
+  deleteUserFile: async (req, callback) => {
+    try {
+      const { fileName } = req.params
+      const { id } = req.user
+      const isExists = await fs.existsSync(
+        path.resolve(process.cwd(), `./public/Users/${id}/${fileName}`)
+      )
+      if (!isExists) {
+        return callback(null, { status: 'error', message: '找不到此檔案!' })
+      }
+      const filePath = await path.resolve(
+        process.cwd(),
+        `./public/Users/${id}/${fileName}`
+      )
+      console.log('filePath: ', filePath)
+      await fs.unlinkSync(filePath)
+      return callback(null, { status: 'success', message: '刪除完成' })
+    } catch (err) {
+      return callback(err)
     }
   },
   putUser: async (req, callback) => {

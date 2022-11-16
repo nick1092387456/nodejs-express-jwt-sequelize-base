@@ -89,6 +89,11 @@ router.put(
   authenticated,
   userController.editUserFileName
 )
+router.delete(
+  '/user/deleteUserFile/:fileName',
+  authenticated,
+  userController.deleteUserFile
+)
 
 router.put('/user/passwordEdit', authenticated, userController.passwordEdit)
 router.post(
