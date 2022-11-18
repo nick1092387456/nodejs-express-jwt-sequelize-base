@@ -73,6 +73,11 @@ const userController = {
       err ? next(err) : res.status(200).json(data)
     )
   },
+  uploadUserFile: (req, res, next) => {
+    userServices.uploadUserFile(req, res, (err, data) => {
+      err ? next(err) : res.status(200).json(data)
+    })
+  },
   passwordEdit: (req, res, next) => {
     userServices.passwordEdit(req, (err, data) =>
       err ? next(err) : res.status(200).json(data)

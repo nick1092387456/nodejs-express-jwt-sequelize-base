@@ -3,11 +3,11 @@ const multer = require('multer')
 //multer setting
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, './avatars/')
+    cb(null, './avatars')
   },
   filename: function (req, file, cb) {
     try {
-      cb(null, req.params.id + '_avatar.' + file.mimetype.split('/')[1])
+      cb(null, req.user.id + '_avatar.' + file.mimetype.split('/')[1])
     } catch (err) {
       cb({ status: 'error', message: err })
     }
@@ -19,7 +19,7 @@ const fileFilter = (req, file, cb) => {
   if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
     cb(null, true)
   } else {
-    cb({ status: 'error', message: '僅接受Jpeg、png圖檔' })
+    cb({ status: 'error', message: '僅接受Jpeg、Png圖檔' })
   }
 }
 

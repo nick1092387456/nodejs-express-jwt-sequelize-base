@@ -25,6 +25,7 @@ const {
 } = db
 const fs = require('fs')
 const path = require('path')
+const upload = require('../middleware/userFileUpload')
 
 const userServices = {
   signUp: async (req, callback) => {
@@ -490,6 +491,16 @@ const userServices = {
       return callback(null, { status: 'success', message: '刪除完成' })
     } catch (err) {
       return callback(err)
+    }
+  },
+  uploadUserFile: async (req, res, callback) => {
+    try {
+      await upload(req, res)
+      if (req.files.length)
+        return callback(null, { status: 'success', message: '檔案上傳成功' })
+      else return callback(null, { status: 'error', message: '檔案上傳失敗' })
+    } catch (err) {
+      return callback(null, { status: 'error', message: err })
     }
   },
   putUser: async (req, callback) => {

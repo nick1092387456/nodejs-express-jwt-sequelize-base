@@ -4,7 +4,7 @@ module.exports = {
       res.status(401).json(err)
       return
     } else {
-      console.log(err)
+      console.log('Error Handle', err)
       res.status(500).end()
       return
     }

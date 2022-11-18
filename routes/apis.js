@@ -8,6 +8,7 @@ const coachController = require('../controllers/coach-controller')
 const { generalErrorHandler } = require('../middleware/error-handler')
 const { avatarUpload } = require('../middleware/avatarUpload')
 const { csvUpload } = require('../middleware/csvUpload')
+// const { userFileUpload } = require('../middleware/userFileUpload')
 
 //admin
 router.post('/admin/signin', adminController.signIn)
@@ -93,6 +94,17 @@ router.delete(
   '/user/deleteUserFile/:fileName',
   authenticated,
   userController.deleteUserFile
+)
+// router.post(
+//   '/user/uploadUserFile',
+//   authenticated,
+//   userFileUpload.array('myFiles'),
+//   userController.uploadUserFile
+// )
+router.post(
+  '/user/uploadUserFile',
+  authenticated,
+  userController.uploadUserFile
 )
 
 router.put('/user/passwordEdit', authenticated, userController.passwordEdit)
