@@ -395,17 +395,17 @@ const userServices = {
     try {
       const { id } = req.user
       const isExists = await fs.existsSync(
-        path.resolve(process.cwd(), `./public/Users/${id}/`)
+        path.resolve(process.cwd(), `./public/Users/${id}`)
       )
       if (!isExists) {
-        await fs.mkdirSync(path.resolve(process.cwd(), `./public/Users/${id}/`))
+        await fs.mkdirSync(path.resolve(process.cwd(), `./public/Users/${id}`))
       }
       const directoryPath = path.resolve(process.cwd(), `./public/Users/${id}`)
       const fileList = await fs.readdirSync(directoryPath)
 
       const result = await Promise.all(
         fileList.map(async (file) => {
-          const filePath = directoryPath + `\\${file}`
+          const filePath = directoryPath + `/${file}`
           const fileStat = await fs.statSync(filePath)
           const fileName = file.slice(0, -4)
           const fileExt = path.extname(filePath).slice(1)
@@ -527,8 +527,8 @@ const userServices = {
       })
       //如果有上傳檔案，更新上傳檔案
       if (req.file) {
-        const filePath = req.file.path.split('\\')[1]
-        const avatar = `${req.protocol}://${req.headers.host}/avatars/${filePath}`
+        const filePath = req.file.path
+        const avatar = `${req.protocol}://${req.headers.host}/${filePath}`
         await user.update({ avatar })
       }
       return callback(null, { status: 'success', message: '更新完成' })
