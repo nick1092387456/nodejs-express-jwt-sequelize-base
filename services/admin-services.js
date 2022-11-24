@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken')
 const { signInValidation } = require('../tools/validator')
 const db = require('../models')
-const { User, Role } = db
 
 const adminServices = {
   signIn: async (req, callback) => {
@@ -24,11 +23,35 @@ const adminServices = {
   },
   getUsers: async (req, callback) => {
     try {
-      const result = await User.findAll({
-        attributes: ['id', 'name', 'email', 'duty', 'sport', 'privateCheck'],
+      const result = await db.User.findAll({
+        attributes: ['id', 'name', 'email', 'duty', 'sport'],
+        joinTableAttributes: [],
         include: [
           {
-            model: Role,
+            model: db.Role,
+            attributes: {
+              exclude: [
+                'UserId',
+                'userId',
+                'user_id',
+                'id',
+                'createdAt',
+                'updatedAt',
+              ],
+            },
+          },
+          {
+            model: db.Privacy_consent_status,
+            attributes: {
+              exclude: [
+                'UserId',
+                'userId',
+                'user_id',
+                'id',
+                'createdAt',
+                'updatedAt',
+              ],
+            },
           },
         ],
       })
@@ -37,6 +60,7 @@ const adminServices = {
         data: result,
       })
     } catch (err) {
+      console.log(err)
       return callback({ status: '400', message: err })
     }
   },

@@ -6,7 +6,16 @@ module.exports = {
       'Privacy_consent_statuses',
       [
         {
-          id: 1,
+          user_id: 1,
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          user_id: 2,
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
           user_id: 3,
           baat_root: true,
           snc_root: true,
@@ -26,7 +35,6 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 2,
           user_id: 4,
           baat_root: true,
           snc_root: true,
@@ -42,6 +50,46 @@ module.exports = {
           src_coach: true,
           spc_coach: true,
           sptc_coach: true,
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          user_id: 5,
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          user_id: 6,
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          user_id: 7,
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          user_id: 8,
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          user_id: 9,
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          user_id: 10,
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          user_id: 11,
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          user_id: 12,
           created_at: new Date(),
           updated_at: new Date(),
         },
