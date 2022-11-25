@@ -18,7 +18,12 @@ router.get(
   authenticatedAdmin,
   adminController.getUsers
 )
-
+router.put(
+  '/admin/users',
+  authenticated,
+  authenticatedAdmin,
+  adminController.putUser
+)
 //analyst
 router.get('/analyst/getTemplate', authenticated, analystController.getTemplate)
 router.post(

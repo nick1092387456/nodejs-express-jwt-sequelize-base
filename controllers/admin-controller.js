@@ -11,6 +11,11 @@ const adminController = {
       err ? next(err) : res.status(200).json(data)
     )
   },
+  putUser: (req, res, next) => {
+    adminServices.putUser(req, (err, data) =>
+      err ? next(err) : res.status(200).json(data)
+    )
+  },
 }
 
 module.exports = adminController
