@@ -25,7 +25,6 @@ const coachServices = {
           'gender',
           'birthday',
           'sport',
-          'privateCheck',
         ],
         raw: true,
       })

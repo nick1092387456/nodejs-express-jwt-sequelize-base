@@ -9,7 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       user_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
       },
       snc_inbody_id: {
         type: Sequelize.INTEGER,

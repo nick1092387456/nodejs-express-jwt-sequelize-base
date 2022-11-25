@@ -9,7 +9,7 @@ module.exports = {
       'Users',
       [
         {
-          id: 1,
+          id: '12345678-1234-1234-1234-123456789001',
           email: 'root@example.com',
           password: bcrypt.hashSync('12345678', bcrypt.genSaltSync(10), null),
           is_admin: true,
@@ -26,7 +26,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 2,
+          id: '12345678-1234-1234-1234-123456789002',
           email: 'coach1@example.com',
           password: bcrypt.hashSync('12345678', bcrypt.genSaltSync(10), null),
           is_admin: false,
@@ -43,7 +43,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 3,
+          id: '12345678-1234-1234-1234-123456789003',
           email: 'athlete1@example.com',
           password: bcrypt.hashSync('12345678', bcrypt.genSaltSync(10), null),
           is_admin: false,
@@ -60,7 +60,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 4,
+          id: '12345678-1234-1234-1234-123456789004',
           email: 'athlete2@example.com',
           password: bcrypt.hashSync('12345678', bcrypt.genSaltSync(10), null),
           is_admin: false,
@@ -77,7 +77,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 5,
+          id: '12345678-1234-1234-1234-123456789005',
           email: 'coach2@example.com',
           password: bcrypt.hashSync('12345678', bcrypt.genSaltSync(10), null),
           is_admin: false,
@@ -94,7 +94,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 6,
+          id: '12345678-1234-1234-1234-123456789006',
           email: 'analyst1@example.com',
           password: bcrypt.hashSync('12345678', bcrypt.genSaltSync(10), null),
           is_admin: false,
@@ -111,7 +111,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 7,
+          id: '12345678-1234-1234-1234-123456789007',
           email: 'analyst2@example.com',
           password: bcrypt.hashSync('12345678', bcrypt.genSaltSync(10), null),
           is_admin: false,
@@ -128,7 +128,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 8,
+          id: '12345678-1234-1234-1234-123456789008',
           email: 'analyst3@example.com',
           password: bcrypt.hashSync('12345678', bcrypt.genSaltSync(10), null),
           is_admin: false,
@@ -145,7 +145,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 9,
+          id: '12345678-1234-1234-1234-123456789009',
           email: 'analyst4@example.com',
           password: bcrypt.hashSync('12345678', bcrypt.genSaltSync(10), null),
           is_admin: false,
@@ -162,7 +162,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 10,
+          id: '12345678-1234-1234-1234-123456789010',
           email: 'analyst5@example.com',
           password: bcrypt.hashSync('12345678', bcrypt.genSaltSync(10), null),
           is_admin: false,
@@ -179,7 +179,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 11,
+          id: '12345678-1234-1234-1234-123456789011',
           email: 'analyst6@example.com',
           password: bcrypt.hashSync('12345678', bcrypt.genSaltSync(10), null),
           is_admin: false,
@@ -196,7 +196,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          id: 12,
+          id: '12345678-1234-1234-1234-123456789012',
           email: 'analyst7@example.com',
           password: bcrypt.hashSync('12345678', bcrypt.genSaltSync(10), null),
           is_admin: false,
@@ -220,14 +220,14 @@ module.exports = {
       'Coach_athlete_ships',
       [
         {
-          coach_id: 2,
-          athlete_id: 3,
+          coach_id: '12345678-1234-1234-1234-123456789002',
+          athlete_id: '12345678-1234-1234-1234-123456789003',
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
-          coach_id: 2,
-          athlete_id: 4,
+          coach_id: '12345678-1234-1234-1234-123456789002',
+          athlete_id: '12345678-1234-1234-1234-123456789004',
           created_at: new Date(),
           updated_at: new Date(),
         },

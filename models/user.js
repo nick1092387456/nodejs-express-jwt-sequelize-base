@@ -57,11 +57,11 @@ module.exports = (sequelize, DataTypes) => {
     })
     User.hasOne(models.Role, {
       foreignKey: 'user_id',
-      allowNull: false,
+      // allowNull: false,
     })
     User.hasOne(models.Privacy_consent_status, {
       foreignKey: 'user_id',
-      allowNull: false,
+      // allowNull: false,
     })
     User.belongsToMany(models.SncInbody, {
       through: models.SncUserShip,

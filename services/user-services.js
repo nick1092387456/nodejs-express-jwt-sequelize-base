@@ -26,6 +26,7 @@ const {
 const fs = require('fs')
 const path = require('path')
 const upload = require('../middleware/userFileUpload')
+const { uuid } = require('uuidv4')
 
 const userServices = {
   signUp: async (req, callback) => {
@@ -43,8 +44,9 @@ const userServices = {
           birthday,
           duty,
           sport,
-          privateCheck,
+          privacyAgreement,
         } = req.body
+        console.log('-------------', privacyAgreement)
         const genderENG = translateGender(gender)
         if (!genderENG)
           return callback(null, { status: 'error', message: '無效的性別輸入!' })
@@ -58,6 +60,7 @@ const userServices = {
             message: '無效的運動項目輸入!',
           })
         await User.create({
+          id: uuid(),
           email,
           password: bcrypt.hashSync(password, bcrypt.genSaltSync(10), null),
           name,
@@ -68,7 +71,6 @@ const userServices = {
           birthday,
           duty: dutyENG,
           sport: sportENG,
-          privateCheck,
         })
         return callback(null, { status: 'success', message: '註冊成功!' })
       } else {
@@ -78,6 +80,7 @@ const userServices = {
         })
       }
     } catch (err) {
+      console.log(err)
       return callback(err)
     }
   },
@@ -203,7 +206,6 @@ const userServices = {
           'birthday',
           'duty',
           'sport',
-          'privateCheck',
         ],
         include: [
           {

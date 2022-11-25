@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
   const SncUserShip = sequelize.define(
     'SncUserShip',
     {
-      user_id: DataTypes.INTEGER,
+      user_id: DataTypes.UUID,
       snc_inbody_id: DataTypes.INTEGER,
     },
     {

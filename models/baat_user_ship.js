@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       baat_cmj_id: DataTypes.INTEGER,
       baat_imtp_id: DataTypes.INTEGER,
       baat_wingate_test_id: DataTypes.INTEGER,
-      user_id: DataTypes.INTEGER,
+      user_id: DataTypes.UUID,
     },
     {
       sequelize,

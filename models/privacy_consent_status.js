@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Privacy_consent_status.init(
     {
-      user_id: DataTypes.INTEGER,
+      user_id: DataTypes.UUID,
       baat_root: DataTypes.BOOLEAN,
       snc_root: DataTypes.BOOLEAN,
       ssta_root: DataTypes.BOOLEAN,

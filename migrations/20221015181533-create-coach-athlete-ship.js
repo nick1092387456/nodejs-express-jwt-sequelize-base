@@ -10,11 +10,11 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       coach_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         references: { model: 'Users', key: 'id' },
       },
       athlete_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         references: { model: 'Users', key: 'id' },
       },
       created_at: {
