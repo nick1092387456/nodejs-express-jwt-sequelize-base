@@ -9,9 +9,10 @@ const analystServices = {
   getTemplate: async (req, callback) => {
     try {
       const analystId = req.user.id
-      const analystRole = await Role.findByPk(analystId, {
-        raw: true,
+      const analystRole = await Role.findOne({
+        where: { user_id: analystId },
         attributes: ['baat', 'snc', 'ssta', 'ssta2', 'src', 'spc', 'sptc'],
+        raw: true,
       }).then((roles) => Object.entries(roles).filter((item) => item[1])[0][0])
       const directoryPath = path.resolve(
         process.cwd(),

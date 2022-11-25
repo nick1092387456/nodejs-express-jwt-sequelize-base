@@ -48,7 +48,7 @@ const userServices = {
             status: 'error',
             message: '無效的運動項目輸入!',
           })
-          
+
         const userId = uuid()
         await db.User.create({
           id: userId,
@@ -76,7 +76,6 @@ const userServices = {
         })
       }
     } catch (err) {
-      console.log(err)
       return callback(err)
     }
   },
@@ -149,9 +148,8 @@ const userServices = {
   getUserRoles: async (req, callback) => {
     try {
       const id = Object.keys(req.query)[0]
-      console.log('getUserRoles: ', id)
-      const roles = await db.Role.findByPk(id, {
-        raw: true,
+      const roles = await db.Role.findOne({
+        where: { user_id: id },
         attributes: [
           'baat',
           'snc',
@@ -164,6 +162,7 @@ const userServices = {
           'athlete',
           'analyst',
         ],
+        raw: true,
       })
       const entriesRoles = Object.entries(roles)
       const rolesFormatted = entriesRoles.reduce(

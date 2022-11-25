@@ -32,6 +32,5 @@ module.exports = (sequelize, DataTypes) => {
       underscored: true,
     }
   )
-  Role.sync()
   return Role
 }
