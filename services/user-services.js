@@ -13,16 +13,6 @@ const {
 } = require('../tools/translator')
 const bcrypt = require('bcryptjs')
 const db = require('../models')
-const {
-  User,
-  Role,
-  BaatInbody,
-  BaatGripStrength,
-  BaatCmj,
-  BaatImtp,
-  BaatWingateTest,
-  SncInbody,
-} = db
 const fs = require('fs')
 const path = require('path')
 const upload = require('../middleware/userFileUpload')
@@ -46,7 +36,6 @@ const userServices = {
           sport,
           privacyAgreement,
         } = req.body
-        console.log('-------------', privacyAgreement)
         const genderENG = translateGender(gender)
         if (!genderENG)
           return callback(null, { status: 'error', message: '無效的性別輸入!' })
@@ -59,8 +48,10 @@ const userServices = {
             status: 'error',
             message: '無效的運動項目輸入!',
           })
-        await User.create({
-          id: uuid(),
+          
+        const userId = uuid()
+        await db.User.create({
+          id: userId,
           email,
           password: bcrypt.hashSync(password, bcrypt.genSaltSync(10), null),
           name,
@@ -72,6 +63,11 @@ const userServices = {
           duty: dutyENG,
           sport: sportENG,
         })
+
+        Object.assign(privacyAgreement, { user_id: userId })
+        await db.Role.create({ user_id: userId })
+        await db.Privacy_consent_status.create(privacyAgreement)
+
         return callback(null, { status: 'success', message: '註冊成功!' })
       } else {
         return callback(null, {
@@ -105,7 +101,7 @@ const userServices = {
   },
   getCurrentUsers: async (req, callback) => {
     try {
-      const roles = await Role.findByPk(req.user.id, {
+      const roles = await db.Role.findByPk(req.user.id, {
         raw: true,
         attributes: [
           'baat',
@@ -154,7 +150,7 @@ const userServices = {
     try {
       const id = Object.keys(req.query)[0]
       console.log('getUserRoles: ', id)
-      const roles = await Role.findByPk(id, {
+      const roles = await db.Role.findByPk(id, {
         raw: true,
         attributes: [
           'baat',
@@ -194,7 +190,7 @@ const userServices = {
   getUser: async (req, callback) => {
     try {
       const { id } = req.user
-      const user = await User.findByPk(id, {
+      const user = await db.User.findByPk(id, {
         attributes: [
           'id',
           'name',
@@ -209,13 +205,13 @@ const userServices = {
         ],
         include: [
           {
-            model: User,
+            model: db.User,
             as: 'coach',
             attributes: ['id', 'name', 'avatar'],
             through: { attributes: [] },
           },
           {
-            model: User,
+            model: db.User,
             as: 'athlete',
             attributes: ['id', 'name', 'avatar'],
             through: { attributes: [] },
@@ -238,35 +234,35 @@ const userServices = {
   },
   getBaat: async (req, callback) => {
     try {
-      const userData = await User.findByPk(req.user.id, {
+      const userData = await db.User.findByPk(req.user.id, {
         attributes: [],
         include: [
           {
-            model: BaatInbody,
+            model: db.BaatInbody,
             as: 'Baat_Inbody',
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },
           {
-            model: BaatGripStrength,
+            model: db.BaatGripStrength,
             as: 'Baat_GripStrength',
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },
           {
-            model: BaatCmj,
+            model: db.BaatCmj,
             as: 'Baat_cmj',
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },
           {
-            model: BaatImtp,
+            model: db.BaatImtp,
             as: 'Baat_imtp',
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },
           {
-            model: BaatWingateTest,
+            model: db.BaatWingateTest,
             as: 'Baat_wingate_test',
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
@@ -290,11 +286,11 @@ const userServices = {
   },
   getSnc: async (req, callback) => {
     try {
-      const userData = await User.findByPk(req.user.id, {
+      const userData = await db.User.findByPk(req.user.id, {
         attributes: [],
         include: [
           {
-            model: SncInbody,
+            model: db.SncInbody,
             as: 'Snc_inbody',
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
@@ -311,7 +307,7 @@ const userServices = {
   },
   getSsta: async (req, callback) => {
     try {
-      const userData = await User.findByPk(req.user.id, {
+      const userData = await db.User.findByPk(req.user.id, {
         attributes: [],
         include: [
           {
@@ -374,7 +370,7 @@ const userServices = {
   },
   getSpc: async (req, callback) => {
     try {
-      const userData = await User.findByPk(req.user.id, {
+      const userData = await db.User.findByPk(req.user.id, {
         attributes: [],
         include: [
           {
@@ -517,7 +513,7 @@ const userServices = {
       }
       //更新文字資料
       const { name, gender, sport, birthday, description } = req.body
-      const user = await User.findByPk(req.user.id)
+      const user = await db.User.findByPk(req.user.id)
       const genderENG = translateGender(gender)
       const sportENG = translateSport(sport)
       await user.update({
@@ -546,7 +542,7 @@ const userServices = {
       if (!result.success) {
         return callback(null, { status: 'error', message: result.message })
       }
-      const user = await User.findByPk(userId)
+      const user = await db.User.findByPk(userId)
       await user.update({
         password: bcrypt.hashSync(password, bcrypt.genSaltSync(10), null),
       })

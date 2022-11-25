@@ -6,17 +6,17 @@ module.exports = {
       'Privacy_consent_statuses',
       [
         {
-          user_id: 1,
+          user_id: '12345678-1234-1234-1234-123456789001',
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
-          user_id: 2,
+          user_id: '12345678-1234-1234-1234-123456789002',
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
-          user_id: 3,
+          user_id: '12345678-1234-1234-1234-123456789003',
           baat_root: true,
           snc_root: true,
           ssta_root: true,
@@ -35,7 +35,7 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          user_id: 4,
+          user_id: '12345678-1234-1234-1234-123456789004',
           baat_root: true,
           snc_root: true,
           ssta_root: true,
@@ -54,42 +54,42 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          user_id: 5,
+          user_id: '12345678-1234-1234-1234-123456789005',
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
-          user_id: 6,
+          user_id: '12345678-1234-1234-1234-123456789006',
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
-          user_id: 7,
+          user_id: '12345678-1234-1234-1234-123456789007',
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
-          user_id: 8,
+          user_id: '12345678-1234-1234-1234-123456789008',
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
-          user_id: 9,
+          user_id: '12345678-1234-1234-1234-123456789009',
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
-          user_id: 10,
+          user_id: '12345678-1234-1234-1234-123456789010',
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
-          user_id: 11,
+          user_id: '12345678-1234-1234-1234-123456789011',
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
-          user_id: 12,
+          user_id: '12345678-1234-1234-1234-123456789012',
           created_at: new Date(),
           updated_at: new Date(),
         },

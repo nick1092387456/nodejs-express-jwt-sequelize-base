@@ -10,7 +10,6 @@ module.exports = {
       },
       user_id: {
         type: Sequelize.UUID,
-        allowNull: false,
       },
       baat: {
         type: Sequelize.BOOLEAN,

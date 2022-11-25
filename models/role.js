@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Role.init(
     {
-      userId: DataTypes.INTEGER,
+      user_id: DataTypes.UUID,
       baat: DataTypes.BOOLEAN,
       snc: DataTypes.BOOLEAN,
       ssta: DataTypes.BOOLEAN,
