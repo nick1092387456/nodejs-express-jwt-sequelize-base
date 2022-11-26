@@ -525,7 +525,8 @@ const userServices = {
       //如果有上傳檔案，更新上傳檔案
       if (req.file) {
         const filePath = req.file.path
-        const avatar = `${req.protocol}://${req.headers.host}/${filePath}`
+        const host = process.env.HOST
+        const avatar = `${host}${filePath}`
         await user.update({ avatar })
       }
       return callback(null, { status: 'success', message: '更新完成' })
