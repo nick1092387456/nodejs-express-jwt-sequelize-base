@@ -1,7 +1,7 @@
 node_modules/
-temp/
-upload/
 .DS_Store
 .env
-public/Users
-avatars/
+public/Users/*
+!public/Users/.gitkeep
+avatars/*
+!avatars/.gitkeep
