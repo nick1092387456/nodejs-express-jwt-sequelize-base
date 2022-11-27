@@ -113,7 +113,7 @@ router.post(
 )
 
 router.put('/user/passwordEdit', authenticated, userController.passwordEdit)
-router.post(
+router.put(
   '/user/passwordInputCheck',
   authenticated,
   userController.passwordInputCheck

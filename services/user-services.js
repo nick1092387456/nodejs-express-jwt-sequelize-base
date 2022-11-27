@@ -553,13 +553,14 @@ const userServices = {
   },
   passwordInputCheck: async (req, callback) => {
     try {
-      const result = await passwordCheck(req.body)
+      const result = await passwordCheck(req)
       if (result.success) {
         return callback(null, { status: 'success', message: '密碼驗證成功' })
       } else {
         return callback(null, { status: 'error', message: result.message })
       }
     } catch (err) {
+      console.log(err)
       return callback({ status: 'error', message: '密碼驗證錯誤' })
     }
   },

@@ -127,9 +127,11 @@ async function signInValidation(body) {
   }
 }
 
-async function passwordCheck(body) {
+async function passwordCheck(req) {
   try {
-    const { userId, password } = body
+    const userId = req.user.id
+    const password = req.body.password
+
     if (!userId || !password) {
       return {
         success: false,
