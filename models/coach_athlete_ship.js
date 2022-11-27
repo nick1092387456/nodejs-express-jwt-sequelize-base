@@ -4,8 +4,8 @@ module.exports = (sequelize, DataTypes) => {
   const CoachAthleteShip = sequelize.define(
     'CoachAthleteShip',
     {
-      coachId: DataTypes.INTEGER,
-      athleteId: DataTypes.INTEGER,
+      coachId: DataTypes.UUID,
+      athleteId: DataTypes.UUID,
       startAt: DataTypes.DATE,
       stopAt: DataTypes.DATE,
       status: DataTypes.STRING,

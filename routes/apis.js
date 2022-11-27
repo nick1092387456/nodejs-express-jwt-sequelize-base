@@ -52,6 +52,11 @@ router.post(
   authenticated,
   analystController.sendSRCForm
 )
+router.post(
+  '/analyst/reviewSRCForm',
+  authenticated,
+  analystController.reviewSRCForm
+)
 
 //coach
 router.post(

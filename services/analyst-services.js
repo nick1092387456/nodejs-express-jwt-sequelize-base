@@ -82,7 +82,6 @@ const analystServices = {
           message: '請選擇要上傳的CSV資料、類型、檢測日期',
         })
       }
-
       if (req.file) {
         let dbModelName = {}
         let dbColumnName = {}
@@ -158,10 +157,7 @@ const analystServices = {
         await Promise.all(
           value.map(async (_value) => {
             const id = _value[0]
-            const user = await db.User.findOne({
-              where: { id_number: id },
-              raw: true,
-            })
+            const user_id = await getUserId(id)
             for (let i = 0, j = _value.length; i < j; i++) {
               const result = await db[dbModelName[fileName]].create({
                 key: key[i],
@@ -171,7 +167,7 @@ const analystServices = {
                 updated_at: new Date(),
               })
               await db[dbRelateShipName[fileName]].create({
-                user_id: user ? user.id : id,
+                user_id,
                 [dbColumnName[fileName]]: result.id,
                 created_at: new Date(),
                 updated_at: new Date(),
@@ -183,6 +179,7 @@ const analystServices = {
         return callback(null, { status: 'success', message: '資料上傳成功' })
       }
     } catch (err) {
+      console.log(err)
       return callback(null, { status: 'error', message: err })
     }
   },
@@ -300,10 +297,38 @@ const analystServices = {
         })
       }
     } catch (err) {
-      console.log(err)
       return callback(null, {
         status: 'success',
         message: '表單上傳失敗，請稍後再試',
+      })
+    }
+  },
+  reviewSRCForm: async (req, callback) => {
+    try {
+      const { dbName, id_number, detect_at } = req.body
+      const result = await db.SrcUserShip.findOne({
+        where: {
+          [Op.and]: [{ id_number }, { detect_at: { [Op.gte]: detect_at } }],
+        },
+      })
+      if (result) {
+        const srcData = await db[dbName].findByPk(result.src_id, { raw: true })
+        return callback(null, {
+          status: 'success',
+          data: srcData.data,
+          message: '查詢成功',
+        })
+      } else {
+        return callback(null, {
+          status: 'success',
+          message: '查無此資料',
+        })
+      }
+    } catch (err) {
+      console.log(err)
+      return callback(null, {
+        status: 'success',
+        message: '查詢錯誤，請稍後再試',
       })
     }
   },

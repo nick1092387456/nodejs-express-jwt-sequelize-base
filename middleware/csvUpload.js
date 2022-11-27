@@ -6,7 +6,8 @@ const { Role } = db
 const storage = multer.diskStorage({
   destination: async function (req, file, cb) {
     const analystId = req.user.id
-    const analystRole = await Role.findByPk(analystId, {
+    const analystRole = await Role.findOne({
+      where: { user_id: analystId },
       raw: true,
       attributes: ['baat', 'snc', 'ssta', 'ssta2', 'src', 'spc', 'sptc'],
     }).then((roles) => Object.entries(roles).filter((item) => item[1])[0][0])

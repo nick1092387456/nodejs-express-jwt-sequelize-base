@@ -32,6 +32,11 @@ const analystController = {
       err ? next(err) : res.status(200).send(data)
     )
   },
+  reviewSRCForm: (req, res, next) => {
+    analystServices.reviewSRCForm(req, (err, data) =>
+      err ? next(err) : res.status(200).send(data)
+    )
+  },
 }
 
 module.exports = analystController
