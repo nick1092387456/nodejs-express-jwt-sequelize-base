@@ -388,6 +388,28 @@ const userServices = {
       return callback(null, { status: 'error', message: err })
     }
   },
+  getSrc: async (req, callback) => {
+    try {
+      const userData = await db.User.findByPk(req.user.id, {
+        attributes: [],
+        include: [
+          {
+            model: db.Src,
+            as: 'Src',
+            attributes: ['id', 'data'],
+            through: { attributes: [] },
+          },
+        ],
+      })
+      if (!userData) {
+        return callback(null, { status: 'error', message: '找不到使用者資料' })
+      }
+      return callback(null, { status: 'success', data: userData })
+    } catch (err) {
+      console.log(err)
+      return callback(null, { status: 'error', message: err })
+    }
+  },
   getUserFileList: async (req, callback) => {
     try {
       const { id } = req.user

@@ -51,6 +51,11 @@ const userController = {
       err ? next(err) : res.status(200).json(data)
     )
   },
+  getSrc: (req, res, next) => {
+    userServices.getSrc(req, (err, data) =>
+      err ? next(err) : res.status(200).json(data)
+    )
+  },
   getUserFileList: (req, res, next) => {
     userServices.getUserFileList(req, (err, data) =>
       err ? next(err) : res.status(200).json(data)
