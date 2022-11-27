@@ -2,14 +2,15 @@ const fs = require('fs')
 const path = require('path')
 const parser = require('../tools/csvParser')
 const writer = require('../tools/csvWriter')
+const { getUserId } = require('../tools/getUserId')
 const db = require('../models')
-const { User, Role } = db
+const { Op } = require('sequelize')
 
 const analystServices = {
   getTemplate: async (req, callback) => {
     try {
       const analystId = req.user.id
-      const analystRole = await Role.findOne({
+      const analystRole = await db.Role.findOne({
         where: { user_id: analystId },
         attributes: ['baat', 'snc', 'ssta', 'ssta2', 'src', 'spc', 'sptc'],
         raw: true,
@@ -52,7 +53,8 @@ const analystServices = {
   putTemplate: async (req, callback) => {
     try {
       const analystId = req.user.id
-      const analystRole = await Role.findByPk(analystId, {
+      const analystRole = await db.Role.findOne({
+        where: { user_id: analystId },
         raw: true,
         attributes: ['baat', 'snc', 'ssta', 'ssta2', 'src', 'spc', 'sptc'],
       }).then((roles) => Object.entries(roles).filter((item) => item[1])[0][0])
@@ -156,7 +158,7 @@ const analystServices = {
         await Promise.all(
           value.map(async (_value) => {
             const id = _value[0]
-            const user = await User.findOne({
+            const user = await db.User.findOne({
               where: { id_number: id },
               raw: true,
             })
@@ -187,7 +189,8 @@ const analystServices = {
   reviewTemplate: async (req, callback) => {
     try {
       const analystId = req.user.id
-      const analystRole = await Role.findByPk(analystId, {
+      const analystRole = await db.Role.findOne({
+        where: { user_id: analystId },
         raw: true,
         attributes: ['baat', 'snc', 'ssta', 'ssta2', 'src', 'spc', 'sptc'],
       }).then((roles) => Object.entries(roles).filter((item) => item[1])[0][0])
@@ -216,7 +219,8 @@ const analystServices = {
   downloadTemplate: async (req, callback) => {
     try {
       const analystId = req.user.id
-      const analystRole = await Role.findByPk(analystId, {
+      const analystRole = await db.Role.findOne({
+        where: { user_id: analystId },
         raw: true,
         attributes: ['baat', 'snc', 'ssta', 'ssta2', 'src', 'spc', 'sptc'],
       }).then((roles) => Object.entries(roles).filter((item) => item[1])[0][0])
@@ -242,16 +246,65 @@ const analystServices = {
   },
   sendSRCForm: async (req, callback) => {
     try {
-      const { json } = req.body
-      console.log('json', json)
-      return callback(null, {
-        status: 'success',
-        message: '表單上傳成功',
-        data: json,
+      const srcJSON = req.body.srcData
+      const srcData = JSON.parse(srcJSON)
+      const id_number = srcData.id
+      const user_id = await getUserId(id_number)
+      const detect_at = new Date(srcData.testDate)
+      const foundData = await db.SrcUserShip.findOne({
+        where: {
+          [Op.and]: [
+            { id_number: id_number },
+            { detect_at: { [Op.gte]: detect_at } },
+          ],
+        },
       })
+      if (!foundData) {
+        const result = await db.Src.create({
+          data: srcData,
+          created_at: new Date(),
+          updated_at: new Date(),
+        })
+
+        await db.SrcUserShip.create({
+          user_id,
+          src_id: result.id,
+          id_number,
+          detect_at,
+          created_at: new Date(),
+          updated_at: new Date(),
+        })
+
+        return callback(null, {
+          status: 'success',
+          message: '表單上傳成功',
+        })
+      } else {
+        await db.Src.update(
+          {
+            data: srcData,
+            updated_at: new Date(),
+          },
+          { where: { id: foundData.src_id } }
+        )
+        db.SrcUserShip.update(
+          {
+            updated_at: new Date(),
+          },
+          { where: { id: foundData.id } }
+        )
+
+        return callback(null, {
+          status: 'success',
+          message: '表單更新成功',
+        })
+      }
     } catch (err) {
       console.log(err)
-      return callback(err)
+      return callback(null, {
+        status: 'success',
+        message: '表單上傳失敗，請稍後再試',
+      })
     }
   },
 }

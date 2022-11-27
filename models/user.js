@@ -113,7 +113,8 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'user_id',
       as: 'Ssta_inbody',
     })
-    User.hasMany(models.Src, {
+    User.belongsToMany(models.Src, {
+      through: models.SrcUserShip,
       foreignKey: 'user_id',
       as: 'Src',
     })
