@@ -11,8 +11,18 @@ const userController = {
       err ? next(err) : res.status(200).json(data)
     )
   },
+  sendResetEmail: (req, res, next) => {
+    userServices.sendResetEmail(req, (err, data) =>
+      err ? next(err) : res.status(200).json(data)
+    )
+  },
   verifyEmail: (req, res, next) => {
     userServices.verifyEmail(req, (err, data) =>
+      err ? next(err) : res.status(200).json(data)
+    )
+  },
+  resetPassword: (req, res, next) => {
+    userServices.resetPassword(req, (err, data) =>
       err ? next(err) : res.status(200).json(data)
     )
   },

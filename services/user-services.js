@@ -18,6 +18,7 @@ const path = require('path')
 const upload = require('../middleware/userFileUpload')
 const { v4: uuidv4 } = require('uuid')
 const nodemailer = require('nodemailer')
+const { Op } = require('sequelize')
 
 const userServices = {
   signUp: async (req, callback) => {
@@ -104,14 +105,10 @@ const userServices = {
         html: `<p>請點擊連結完成認證 ${link} </p>`,
       }
       const checkEmailIsExist = await db.EmailStatus.findOne({
-        where: { email },
+        where: {
+          [Op.and]: [{ email }, { state: 'verifying' }],
+        },
       })
-      if (checkEmailIsExist.state === 'verified') {
-        return callback(null, {
-          status: 'error',
-          message: '信箱已註冊',
-        })
-      }
       if (!checkEmailIsExist) {
         await db.EmailStatus.create({
           email,
@@ -124,7 +121,7 @@ const userServices = {
           } else {
             return callback(null, {
               status: 'success',
-              message: '確認信件已寄出，請檢查您的信箱',
+              message: '信箱認證信件已寄出，請檢查您的信箱',
             })
           }
         })
@@ -132,9 +129,82 @@ const userServices = {
         await db.EmailStatus.update(
           {
             verify_code: verifyCode,
-            state: 'verifying',
           },
-          { where: { email } }
+          {
+            where: {
+              [Op.and]: [{ email }, { state: 'verifying' }],
+            },
+          }
+        )
+        await smtpTransport.sendMail(mailOptions, function (error) {
+          if (error) {
+            throw new Error(error)
+          } else {
+            return callback(null, {
+              status: 'success',
+              message: '信箱認證信件已寄出，請檢查您的信箱',
+            })
+          }
+        })
+      }
+    } catch (err) {
+      console.log(err)
+      return callback(null, {
+        status: 'error',
+        message: '寄送失敗，請稍後再試',
+      })
+    }
+  },
+  sendResetEmail: async (req, callback) => {
+    try {
+      const { email } = req.body
+      const verifyCode = uuidv4()
+      const smtpTransport = nodemailer.createTransport({
+        service: 'gmail',
+        port: 25,
+        secure: false,
+        auth: {
+          user: process.env.EMAIL_AC,
+          pass: process.env.EMAIL_PS,
+        },
+      })
+      const link = `${process.env.HOST}ResetPassword?${verifyCode}`
+      const mailOptions = {
+        to: email,
+        subject: '國立體育大學運動資料平台密碼重設信件',
+        html: `<p>請點擊連結重設您的密碼 ${link} </p>`,
+      }
+      const checkEmailStatus = await db.ResetPasswordStatus.findOne({
+        where: {
+          [Op.and]: [{ email }, { state: 'verifying' }],
+        },
+      })
+      if (!checkEmailStatus) {
+        await db.ResetPasswordStatus.create({
+          email,
+          verify_code: verifyCode,
+          state: 'verifying',
+        })
+        await smtpTransport.sendMail(mailOptions, function (error) {
+          if (error) {
+            throw new Error(error)
+          } else {
+            return callback(null, {
+              status: 'success',
+              message: '重設信件已寄出，請檢查您的信箱',
+            })
+          }
+        })
+      } else {
+        await db.ResetPasswordStatus.update(
+          {
+            verify_code: verifyCode,
+          },
+          {
+            where: {
+              [Op.and]: [{ email }, { state: 'verifying' }],
+            },
+          }
         )
         await smtpTransport.sendMail(mailOptions, function (error) {
           if (error) {
@@ -158,10 +228,14 @@ const userServices = {
   verifyEmail: async (req, callback) => {
     try {
       const verifyCode = Object.keys(req.query)[0]
-      const data = await db.EmailStatus.findOne({
+      const registerVerifyCodeIsExist = await db.EmailStatus.findOne({
         where: { verify_code: verifyCode },
       })
-      if (data) {
+      const resetVerifyCodeIsExist = await db.ResetPasswordStatus.findOne({
+        where: { verify_code: verifyCode },
+      })
+
+      if (registerVerifyCodeIsExist) {
         await db.EmailStatus.update(
           {
             state: 'verified',
@@ -173,16 +247,67 @@ const userServices = {
           data: verifyCode,
           message: '信箱驗證成功，已導向註冊頁',
         })
-      } else {
+      }
+
+      if (resetVerifyCodeIsExist) {
+        const { email } = resetVerifyCodeIsExist
+        await db.ResetPasswordStatus.update(
+          {
+            state: 'verified',
+          },
+          { where: { verify_code: verifyCode } }
+        )
         return callback(null, {
-          status: 'error',
-          message: '連結失效，請重新申請',
+          status: 'success',
+          data: { verifyCode, email },
+          message: '連結驗證成功，已導向重設頁面',
         })
       }
-    } catch (err) {
+
       return callback(null, {
         status: 'error',
-        message: err,
+        message: '連結失效，請重新申請',
+      })
+    } catch (err) {
+      console.log(err)
+      return callback(null, {
+        status: 'error',
+        message: '操作失敗，請重新申請',
+      })
+    }
+  },
+  resetPassword: async (req, callback) => {
+    try {
+      const { email, password, verifyCode } = req.body
+      const permissionIsValid = await db.ResetPasswordStatus.findOne({
+        where: { verify_code: verifyCode },
+      })
+      if (!permissionIsValid) {
+        return callback(null, {
+          status: 'error',
+          message: '權限失效',
+        })
+      }
+      const user = await db.User.findOne({ where: { email } })
+      if (user) {
+        await user.update(
+          { password: bcrypt.hashSync(password, bcrypt.genSaltSync(10), null) },
+          { where: { email } }
+        )
+        return callback(null, {
+          status: 'success',
+          message: '密碼已重設，請重新登入',
+        })
+      }
+      return callback(null, {
+        status: 'error',
+        message: '找不到使用者',
+      })
+    } catch (err) {
+      console.log(err)
+      return callback(null, {
+        status: 'error',
+        message: '操作失敗，請重新申請',
       })
     }
   },
