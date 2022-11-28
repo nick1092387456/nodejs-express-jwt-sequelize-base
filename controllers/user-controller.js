@@ -6,6 +6,16 @@ const userController = {
       err ? next(err) : res.status(200).json(data)
     )
   },
+  sendVerifyEmail: (req, res, next) => {
+    userServices.sendVerifyEmail(req, (err, data) =>
+      err ? next(err) : res.status(200).json(data)
+    )
+  },
+  verifyEmail: (req, res, next) => {
+    userServices.verifyEmail(req, (err, data) =>
+      err ? next(err) : res.status(200).json(data)
+    )
+  },
   signIn: (req, res, next) => {
     userServices.signIn(req, (err, data) =>
       err ? next(err) : res.status(200).json(data)

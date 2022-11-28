@@ -16,13 +16,18 @@ const db = require('../models')
 const fs = require('fs')
 const path = require('path')
 const upload = require('../middleware/userFileUpload')
-const { uuid } = require('uuidv4')
+const { v4: uuidv4 } = require('uuid')
+const nodemailer = require('nodemailer')
 
 const userServices = {
   signUp: async (req, callback) => {
     try {
+      const verifyCode = Object.keys(req.query)[0]
+      const emailStatus = await db.EmailStatus.findOne({
+        where: { verify_code: verifyCode },
+      })
       const result = await signUpValidation(req.body)
-      if (result.success) {
+      if (result.success && emailStatus.state === 'verified') {
         const {
           email,
           password,
@@ -48,10 +53,10 @@ const userServices = {
             status: 'error',
             message: '無效的運動項目輸入!',
           })
-
-        const userId = uuid()
+        console.log('------------------------------------')
+        const userId = uuidv4()
+        console.log('--------------------------------uuid: ', userId)
         await db.User.create({
-          id: userId,
           email,
           password: bcrypt.hashSync(password, bcrypt.genSaltSync(10), null),
           name,
@@ -76,7 +81,110 @@ const userServices = {
         })
       }
     } catch (err) {
+      console.log(err)
       return callback(err)
+    }
+  },
+  sendVerifyEmail: async (req, callback) => {
+    try {
+      const { email } = req.body
+      const verifyCode = uuidv4()
+      const smtpTransport = nodemailer.createTransport({
+        service: 'gmail',
+        port: 25,
+        secure: false,
+        auth: {
+          user: process.env.EMAIL_AC,
+          pass: process.env.EMAIL_PS,
+        },
+      })
+      const link = `${process.env.HOST}VerifyEmail?${verifyCode}`
+      const mailOptions = {
+        to: email,
+        subject: '國立體育大學運動資料平台註冊信箱驗證信',
+        html: `<p>請點擊連結完成認證 ${link} </p>`,
+      }
+      const checkEmailIsExist = await db.EmailStatus.findOne({
+        where: { email },
+      })
+      if (checkEmailIsExist.state === 'verified') {
+        return callback(null, {
+          status: 'error',
+          message: '信箱已註冊',
+        })
+      }
+      if (!checkEmailIsExist) {
+        await db.EmailStatus.create({
+          email,
+          verify_code: verifyCode,
+          state: 'verifying',
+        })
+        await smtpTransport.sendMail(mailOptions, function (error) {
+          if (error) {
+            throw new Error(error)
+          } else {
+            return callback(null, {
+              status: 'success',
+              message: '確認信件已寄出，請檢查您的信箱',
+            })
+          }
+        })
+      } else {
+        await db.EmailStatus.update(
+          {
+            verify_code: verifyCode,
+            state: 'verifying',
+          },
+          { where: { email } }
+        )
+        await smtpTransport.sendMail(mailOptions, function (error) {
+          if (error) {
+            throw new Error(error)
+          } else {
+            return callback(null, {
+              status: 'success',
+              message: '確認信件已寄出，請檢查您的信箱',
+            })
+          }
+        })
+      }
+    } catch (err) {
+      console.log(err)
+      return callback(null, {
+        status: 'error',
+        message: '寄送失敗，請稍後再試',
+      })
+    }
+  },
+  verifyEmail: async (req, callback) => {
+    try {
+      const verifyCode = Object.keys(req.query)[0]
+      const data = await db.EmailStatus.findOne({
+        where: { verify_code: verifyCode },
+      })
+      if (data) {
+        await db.EmailStatus.update(
+          {
+            state: 'verified',
+          },
+          { where: { verify_code: verifyCode } }
+        )
+        return callback(null, {
+          status: 'success',
+          data: verifyCode,
+          message: '信箱驗證成功，已導向註冊頁',
+        })
+      } else {
+        return callback(null, {
+          status: 'error',
+          message: '連結失效，請重新申請',
+        })
+      }
+    } catch (err) {
+      return callback(null, {
+        status: 'error',
+        message: err,
+      })
     }
   },
   signIn: async (req, callback) => {

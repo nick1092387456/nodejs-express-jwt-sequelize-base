@@ -125,6 +125,8 @@ router.put(
   userController.passwordInputCheck
 )
 router.post('/signup', userController.signUp)
+router.post('/sendVerifyEmail', userController.sendVerifyEmail)
+router.get('/verifyEmail', userController.verifyEmail)
 router.post('/signin', userController.signIn)
 router.get('/getUserRoles', userController.getUserRoles)
 
