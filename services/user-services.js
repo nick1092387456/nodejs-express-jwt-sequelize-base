@@ -53,10 +53,9 @@ const userServices = {
             status: 'error',
             message: '無效的運動項目輸入!',
           })
-        console.log('------------------------------------')
         const userId = uuidv4()
-        console.log('--------------------------------uuid: ', userId)
         await db.User.create({
+          id: userId,
           email,
           password: bcrypt.hashSync(password, bcrypt.genSaltSync(10), null),
           name,
