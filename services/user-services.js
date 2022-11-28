@@ -158,7 +158,7 @@ const userServices = {
   sendResetEmail: async (req, callback) => {
     try {
       const { email } = req.body
-      const userIsExist = db.User.findOne({ where: { email } })
+      const userIsExist = await db.User.findOne({ where: { email } })
       if (!userIsExist) {
         return callback(null, {
           status: 'error',
