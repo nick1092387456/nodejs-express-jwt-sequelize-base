@@ -158,6 +158,13 @@ const userServices = {
   sendResetEmail: async (req, callback) => {
     try {
       const { email } = req.body
+      const userIsExist = db.User.findOne({ where: { email } })
+      if (!userIsExist) {
+        return callback(null, {
+          status: 'error',
+          message: '使用者不存在',
+        })
+      }
       const verifyCode = uuidv4()
       const smtpTransport = nodemailer.createTransport({
         service: 'gmail',
