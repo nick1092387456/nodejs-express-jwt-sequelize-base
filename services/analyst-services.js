@@ -151,19 +151,22 @@ const analystServices = {
           dbModelName = {
             Ssta2_lest: 'Ssta2LEST',
             Ssta2_uest: 'Ssta2UEST',
-            Ssta2_sebt: 'Ssta2SEBT',
+            Ssta2_sebt_l: 'Ssta2SEBT_L',
+            Ssta2_sebt_r: 'Ssta2SEBT_R',
             Ssta2_fms: 'Ssta2FMS',
           }
           dbColumnName = {
             Ssta2_lest: 'ssta2_lest_id',
             Ssta2_uest: 'ssta2_uest_id',
-            Ssta2_sebt: 'ssta2_sebt_id',
+            Ssta2_sebt_l: 'ssta2_sebt_l_id',
+            Ssta2_sebt_r: 'ssta2_sebt_r_id',
             Ssta2_fms: 'ssta2_fms_id',
           }
           dbRelateShipName = {
             Ssta2_lest: 'Ssta2UserShip',
             Ssta2_uest: 'Ssta2UserShip',
-            Ssta2_sebt: 'Ssta2UserShip',
+            Ssta2_sebt_l: 'Ssta2UserShip',
+            Ssta2_sebt_r: 'Ssta2UserShip',
             Ssta2_fms: 'Ssta2UserShip',
           }
         }
