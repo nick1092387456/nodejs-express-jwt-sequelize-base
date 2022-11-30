@@ -1,33 +1,21 @@
 'use strict'
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Ssta2_user_ships', {
+    await queryInterface.createTable('Ssta2_sebt_ls', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      id_number: {
+      key: {
         type: Sequelize.STRING,
       },
-      user_id: {
-        type: Sequelize.UUID,
+      value: {
+        type: Sequelize.STRING,
       },
       detect_at: {
         type: Sequelize.DATE,
-      },
-      ssta2_lest_id: {
-        type: Sequelize.INTEGER,
-      },
-      ssta2_uest_id: {
-        type: Sequelize.INTEGER,
-      },
-      ssta2_sebt_id: {
-        type: Sequelize.INTEGER,
-      },
-      ssta2_fms_id: {
-        type: Sequelize.INTEGER,
       },
       created_at: {
         allowNull: false,
@@ -40,6 +28,6 @@ module.exports = {
     })
   },
   down: async (queryInterface) => {
-    await queryInterface.dropTable('Ssta2_user_ships')
+    await queryInterface.dropTable('Ssta2_sebt_ls')
   },
 }

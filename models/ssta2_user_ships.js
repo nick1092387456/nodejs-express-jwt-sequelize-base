@@ -9,7 +9,8 @@ module.exports = (sequelize, DataTypes) => {
       detect_at: DataTypes.DATE,
       ssta2_lest_id: DataTypes.INTEGER,
       ssta2_uest_id: DataTypes.INTEGER,
-      ssta2_sebt_id: DataTypes.INTEGER,
+      ssta2_sebt_l_id: DataTypes.INTEGER,
+      ssta2_sebt_r_id: DataTypes.INTEGER,
       ssta2_fms_id: DataTypes.INTEGER,
     },
     {
