@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       key: DataTypes.STRING,
       value: DataTypes.STRING,
+      detect_at: DataTypes.DATE,
     },
     {
       sequelize,

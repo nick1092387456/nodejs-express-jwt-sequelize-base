@@ -147,7 +147,7 @@ const analystServices = {
             Ssta_football_lights: 'SstaUserShip',
             Ssta_cycling_vo2s: 'SstaUserShip',
           }
-        }
+        } 
 
         const { fileName, detect_at } = req.body
         const date = new Date(detect_at)
@@ -329,6 +329,21 @@ const analystServices = {
       return callback(null, {
         status: 'success',
         message: '查詢錯誤，請稍後再試',
+      })
+    }
+  },
+  uploadSsta2Template: async (req, callback) => {
+    try {
+      const {}
+      return callback(null, {
+        status: 'success',
+        message: '表單上傳成功',
+      })
+    } catch (err) {
+      console.log(err)
+      return callback(null, {
+        status: 'success',
+        message: '表單上傳失敗，請稍後再試',
       })
     }
   },
