@@ -17,7 +17,7 @@ module.exports = {
       detect_at: {
         type: Sequelize.DATE,
       },
-      create_at: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },

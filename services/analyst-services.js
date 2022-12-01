@@ -178,27 +178,68 @@ const analystServices = {
         const value = csvData.slice(1)
         await Promise.all(
           value.map(async (_value) => {
-            const id = _value[0]
-            const user_id = await getUserId(id)
-            for (let i = 0, j = _value.length; i < j; i++) {
-              const result = await db[dbModelName[fileName]].create({
-                key: key[i],
-                value: _value[i],
-                detect_at: date,
-                created_at: new Date(),
-                updated_at: new Date(),
+            const id_number = _value[0]
+            const user_id = await getUserId(id_number)
+            const data = await db[dbRelateShipName[fileName]].findOne({
+              where: {
+                [Op.and]: [
+                  { id_number: id_number },
+                  { detect_at: { [Op.gte]: detect_at } },
+                ],
+              },
+            })
+            if (!data) {
+              for (let i = 0, j = _value.length; i < j; i++) {
+                const result = await db[dbModelName[fileName]].create({
+                  key: key[i],
+                  value: _value[i],
+                  detect_at: date,
+                  created_at: new Date(),
+                  updated_at: new Date(),
+                })
+                await db[dbRelateShipName[fileName]].create({
+                  id_number,
+                  user_id,
+                  detect_at: date,
+                  [dbColumnName[fileName]]: result.id,
+                  created_at: new Date(),
+                  updated_at: new Date(),
+                })
+              }
+              return callback(null, {
+                status: 'success',
+                message: '資料上傳成功',
               })
-              await db[dbRelateShipName[fileName]].create({
-                user_id,
-                [dbColumnName[fileName]]: result.id,
-                created_at: new Date(),
-                updated_at: new Date(),
+            } else {
+              for (let i = 0, j = _value.length; i < j; i++) {
+                const result = await db[dbRelateShipName[fileName]].findAll({
+                  where: {
+                    [Op.and]: [
+                      { id_number: id_number },
+                      { detect_at: { [Op.gte]: detect_at } },
+                    ],
+                  },
+                  raw: true,
+                })
+                await db[dbModelName[fileName]].update(
+                  {
+                    key: key[i],
+                    value: _value[i],
+                    detect_at: date,
+                    updated_at: new Date(),
+                  },
+                  {
+                    where: { id: result[i][dbColumnName[fileName]] },
+                  }
+                )
+              }
+              return callback(null, {
+                status: 'success',
+                message: '資料更新成功',
               })
             }
           })
         )
-
-        return callback(null, { status: 'success', message: '資料上傳成功' })
       }
     } catch (err) {
       console.log(err)
@@ -351,20 +392,6 @@ const analystServices = {
       return callback(null, {
         status: 'success',
         message: '查詢錯誤，請稍後再試',
-      })
-    }
-  },
-  uploadSsta2Template: async (req, callback) => {
-    try {
-      return callback(null, {
-        status: 'success',
-        message: '表單上傳成功',
-      })
-    } catch (err) {
-      console.log(err)
-      return callback(null, {
-        status: 'success',
-        message: '表單上傳失敗，請稍後再試',
       })
     }
   },

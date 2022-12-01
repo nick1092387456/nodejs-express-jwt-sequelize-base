@@ -118,6 +118,11 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'user_id',
       as: 'Src',
     })
+    User.belongsToMany(models.Ssta2LEST, {
+      through: models.Ssta2UserShip,
+      foreignKey: 'user_id',
+      as: 'Ssta2_lest',
+    })
   }
   return User
 }
