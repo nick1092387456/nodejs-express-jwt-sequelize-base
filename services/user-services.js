@@ -477,13 +477,13 @@ const userServices = {
         include: [
           {
             model: db.BaatInbody,
-            as: 'Baat_Inbody',
+            as: 'Baat_inbodies',
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },
           {
             model: db.BaatGripStrength,
-            as: 'Baat_GripStrength',
+            as: 'Baat_grip_strengths',
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },

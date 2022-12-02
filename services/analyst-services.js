@@ -88,86 +88,86 @@ const analystServices = {
         let dbRelateShipName = {}
         if (lab === 'baat') {
           dbModelName = {
-            body_composition: 'BaatInbody',
-            grip_strength: 'BaatGripStrength',
-            CMJ: 'BaatCmj',
-            IMTP: 'BaatImtp',
-            wingate_test: 'BaatWingateTest',
+            身體組成: 'BaatInbody',
+            雙手握力: 'BaatGripStrength',
+            垂直爆發力: 'BaatCmj',
+            等長肌爆發力: 'BaatImtp',
+            '30秒無氧動力': 'BaatWingateTest',
           }
           dbColumnName = {
-            body_composition: 'baat_inbody_id',
-            grip_strength: 'baat_grip_strength_id',
-            CMJ: 'baat_cmj_id',
-            IMTP: 'baat_imtp_id',
-            wingate_test: 'baat_wingate_test_id',
+            身體組成: 'baat_inbody_id',
+            雙手握力: 'baat_grip_strength_id',
+            垂直爆發力: 'baat_cmj_id',
+            等長肌爆發力: 'baat_imtp_id',
+            '30秒無氧動力': 'baat_wingate_test_id',
           }
           dbRelateShipName = {
-            body_composition: 'BaatUserShip',
-            grip_strength: 'BaatUserShip',
-            CMJ: 'BaatUserShip',
-            IMTP: 'BaatUserShip',
-            wingate_test: 'BaatUserShip',
+            身體組成: 'BaatUserShip',
+            雙手握力: 'BaatUserShip',
+            垂直爆發力: 'BaatUserShip',
+            等長肌爆發力: 'BaatUserShip',
+            '30秒無氧動力': 'BaatUserShip',
           }
         } else if (lab === 'snc') {
-          dbModelName = { Snc_inbodies: 'SncInbody' }
-          dbColumnName = { Snc_inbodies: 'SncInbodyId' }
-          dbRelateShipName = { Snc_inbodies: 'SncUserShip' }
+          dbModelName = { 身體組成: 'SncInbody' }
+          dbColumnName = { 身體組成: 'SncInbodyId' }
+          dbRelateShipName = { 身體組成: 'SncUserShip' }
         } else if (lab === 'spc') {
-          dbModelName = { Spcs: 'Spc' }
-          dbColumnName = { Spcs: 'SpcId' }
-          dbRelateShipName = { Spcs: 'SpcUserShip' }
+          dbModelName = { 運動心理諮商: 'Spc' }
+          dbColumnName = { 運動心理諮商: 'SpcId' }
+          dbRelateShipName = { 運動心理諮商: 'SpcUserShip' }
         } else if (lab === 'ssta') {
           dbModelName = {
-            Ssta_inbodies: 'SstaInbody',
-            Ssta_boat_2kms: 'SstaBoat2km',
-            Ssta_boat_30s: 'SstaBoat30',
-            Ssta_Bw: 'SstaBw',
-            Ssta_football_20ms: 'SstaFootball20m',
-            Ssta_Football_505: 'SstaFootball505',
-            Ssta_football_lights: 'SstaFootballLight',
-            Ssta_cycling_vo2s: 'SstaCyclingVo2',
+            身體組成: 'SstaInbody',
+            '2000公尺划船衝刺': 'SstaBoat2km',
+            '30秒反向划船動作': 'SstaBoat30',
+            爆發力蹲踞跳: 'SstaBw',
+            '20公尺衝刺': 'SstaFootball20m',
+            '5-0-5改變方向能力': 'SstaFootball505',
+            燈光敏捷能力: 'SstaFootballLight',
+            最大攝氧量: 'SstaCyclingVo2',
           }
           dbColumnName = {
-            Ssta_inbodies: 'SstaInbodyId',
-            Ssta_boat_2kms: 'ssta_boat_2km_id',
-            Ssta_boat_30s: 'ssta_boat_30_id',
-            Ssta_Bw: 'ssta_bw_id',
-            Ssta_football_20ms: 'ssta_football_20m_id',
-            Ssta_football_505s: 'ssta_football_505_id',
-            Ssta_football_lights: 'ssta_football_light_id',
-            Ssta_cycling_vo2s: 'ssta_cycling_vo2_id',
+            身體組成: 'SstaInbodyId',
+            '2000公尺划船衝刺': 'ssta_boat_2km_id',
+            '30秒反向划船動作': 'ssta_boat_30_id',
+            爆發力蹲踞跳: 'ssta_bw_id',
+            '20公尺衝刺': 'ssta_football_20m_id',
+            '5-0-5改變方向能力': 'ssta_football_505_id',
+            燈光敏捷能力: 'ssta_football_light_id',
+            最大攝氧量: 'ssta_cycling_vo2_id',
           }
           dbRelateShipName = {
-            Ssta_inbodies: 'SstaUserShip',
-            Ssta_boat_2kms: 'SstaUserShip',
-            Ssta_boat_30s: 'SstaUserShip',
-            Ssta_Bw: 'SstaUserShip',
-            Ssta_football_20ms: 'SstaUserShip',
-            Ssta_football_505s: 'SstaUserShip',
-            Ssta_football_lights: 'SstaUserShip',
-            Ssta_cycling_vo2s: 'SstaUserShip',
+            身體組成: 'SstaUserShip',
+            '2000公尺划船衝刺': 'SstaUserShip',
+            '30秒反向划船動作': 'SstaUserShip',
+            爆發力蹲踞跳: 'SstaUserShip',
+            '20公尺衝刺': 'SstaUserShip',
+            '5-0-5改變方向能力': 'SstaUserShip',
+            燈光敏捷能力: 'SstaUserShip',
+            最大攝氧量: 'SstaUserShip',
           }
         } else if (lab === 'ssta2') {
           dbModelName = {
-            Ssta2_lest: 'Ssta2LEST',
-            Ssta2_uest: 'Ssta2UEST',
-            Ssta2_sebt_l: 'Ssta2SEBT_L',
-            Ssta2_sebt_r: 'Ssta2SEBT_R',
-            Ssta2_fms: 'Ssta2FMS',
+            下肢肌力: 'Ssta2LEST',
+            上肢肌力: 'Ssta2UEST',
+            星狀偏移平衡_左: 'Ssta2SEBT_L',
+            星狀偏移平衡_右: 'Ssta2SEBT_R',
+            功能性動作: 'Ssta2FMS',
           }
           dbColumnName = {
-            Ssta2_lest: 'ssta2_lest_id',
-            Ssta2_uest: 'ssta2_uest_id',
-            Ssta2_sebt_l: 'ssta2_sebt_l_id',
-            Ssta2_sebt_r: 'ssta2_sebt_r_id',
-            Ssta2_fms: 'ssta2_fms_id',
+            下肢肌力: 'ssta2_lest_id',
+            上肢肌力: 'ssta2_uest_id',
+            星狀偏移平衡_左: 'ssta2_sebt_l_id',
+            星狀偏移平衡_右: 'ssta2_sebt_r_id',
+            功能性動作: 'ssta2_fms_id',
           }
           dbRelateShipName = {
-            Ssta2_lest: 'Ssta2UserShip',
-            Ssta2_uest: 'Ssta2UserShip',
-            Ssta2_sebt_l: 'Ssta2UserShip',
-            Ssta2_sebt_r: 'Ssta2UserShip',
-            Ssta2_fms: 'Ssta2UserShip',
+            下肢肌力: 'Ssta2UserShip',
+            上肢肌力: 'Ssta2UserShip',
+            星狀偏移平衡_左: 'Ssta2UserShip',
+            星狀偏移平衡_右: 'Ssta2UserShip',
+            功能性動作: 'Ssta2UserShip',
           }
         }
 
