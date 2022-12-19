@@ -327,11 +327,13 @@ const analystServices = {
       const id_number = srcData.id
       const user_id = await getUserId(id_number)
       const detect_at = new Date(srcData.testDate)
+      const date = new Date(detect_at).toISOString().substring(0, 10)
       const foundData = await db.SrcUserShip.findOne({
         where: {
           [Op.and]: [
+            { src_id: { [Op.ne]: null } },
             { id_number: id_number },
-            { detect_at: { [Op.gte]: detect_at } },
+            { detect_at: { [Op.eq]: new Date(date) } },
           ],
         },
       })
@@ -346,7 +348,7 @@ const analystServices = {
           user_id,
           src_id: result.id,
           id_number,
-          detect_at,
+          detect_at: date,
           created_at: new Date(),
           updated_at: new Date(),
         })
@@ -363,7 +365,7 @@ const analystServices = {
           },
           { where: { id: foundData.src_id } }
         )
-        db.SrcUserShip.update(
+        await db.SrcUserShip.update(
           {
             updated_at: new Date(),
           },
@@ -384,14 +386,17 @@ const analystServices = {
   },
   reviewSRCForm: async (req, callback) => {
     try {
-      const { dbName, id_number, detect_at } = req.body
+      const { id_number, detect_at } = req.body
+
       const result = await db.SrcUserShip.findOne({
         where: {
           [Op.and]: [{ id_number }, { detect_at: { [Op.gte]: detect_at } }],
         },
       })
       if (result) {
-        const srcData = await db[dbName].findByPk(result.src_id, { raw: true })
+        const srcData = await db.Src.findByPk(result.src_id, {
+          raw: true,
+        })
         return callback(null, {
           status: 'success',
           data: srcData.data,
