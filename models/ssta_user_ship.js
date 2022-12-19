@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       ssta_football_505_id: DataTypes.INTEGER,
       ssta_football_light_id: DataTypes.INTEGER,
       ssta_cycling_vo2_id: DataTypes.INTEGER,
+      detect_at: DataTypes.DATE,
     },
     {
       sequelize,

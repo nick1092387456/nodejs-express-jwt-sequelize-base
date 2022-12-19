@@ -9,6 +9,8 @@ module.exports = (sequelize, DataTypes) => {
       baat_imtp_id: DataTypes.INTEGER,
       baat_wingate_test_id: DataTypes.INTEGER,
       user_id: DataTypes.UUID,
+      id_number: DataTypes.STRING,
+      detect_at: DataTypes.DATE,
     },
     {
       sequelize,

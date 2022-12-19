@@ -5,6 +5,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       user_id: DataTypes.UUID,
       snc_inbody_id: DataTypes.INTEGER,
+      id_number: DataTypes.STRING,
+      detect_at: DataTypes.DATE,
     },
     {
       sequelize,

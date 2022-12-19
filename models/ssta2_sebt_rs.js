@@ -1,16 +1,16 @@
 'use strict'
 const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
-  class Ssta2SebtR extends Model {
+  class Ssta2SEBT_R extends Model {
     static associate(models) {
-      Ssta2SebtR.belongsToMany(models.User, {
+      Ssta2SEBT_R.belongsToMany(models.User, {
         through: models.Ssta2UserShip,
         foreignKey: 'ssta2_sebt_r_id',
         as: 'Ssta2_sebt_r_user',
       })
     }
   }
-  Ssta2SebtR.init(
+  Ssta2SEBT_R.init(
     {
       key: DataTypes.STRING,
       value: DataTypes.STRING,
@@ -18,10 +18,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'Ssta2SebtR',
+      modelName: 'Ssta2SEBT_R',
       tableName: 'Ssta2_sebt_rs',
       underscored: true,
     }
   )
-  return Ssta2SebtR
+  return Ssta2SEBT_R
 }

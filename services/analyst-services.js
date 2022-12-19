@@ -113,9 +113,9 @@ const analystServices = {
           dbColumnName = { 身體組成: 'SncInbodyId' }
           dbRelateShipName = { 身體組成: 'SncUserShip' }
         } else if (lab === 'spc') {
-          dbModelName = { 運動心理諮商: 'Spc' }
-          dbColumnName = { 運動心理諮商: 'SpcId' }
-          dbRelateShipName = { 運動心理諮商: 'SpcUserShip' }
+          dbModelName = { 諮商向度評分量表: 'Spc' }
+          dbColumnName = { 諮商向度評分量表: 'SpcId' }
+          dbRelateShipName = { 諮商向度評分量表: 'SpcUserShip' }
         } else if (lab === 'ssta') {
           dbModelName = {
             身體組成: 'SstaInbody',
@@ -172,7 +172,7 @@ const analystServices = {
         }
 
         const { fileName, detect_at } = req.body
-        const date = new Date(detect_at)
+        const date = new Date(detect_at).toISOString().substring(0, 10)
         const csvData = await parser(fileName, `./public/Labs/${lab}/`)
         const key = csvData[0]
         const value = csvData.slice(1)
@@ -180,15 +180,23 @@ const analystServices = {
           value.map(async (_value) => {
             const id_number = _value[0]
             const user_id = await getUserId(id_number)
+            //查詢資料
             const data = await db[dbRelateShipName[fileName]].findOne({
               where: {
                 [Op.and]: [
+                  { [dbColumnName[fileName]]: { [Op.ne]: null } },
                   { id_number: id_number },
-                  { detect_at: { [Op.gte]: detect_at } },
+                  {
+                    detect_at: {
+                      [Op.eq]: new Date(date),
+                    },
+                  },
                 ],
               },
             })
+
             if (!data) {
+              //"新增"資料
               for (let i = 0, j = _value.length; i < j; i++) {
                 const result = await db[dbModelName[fileName]].create({
                   key: key[i],
@@ -211,16 +219,23 @@ const analystServices = {
                 message: '資料上傳成功',
               })
             } else {
+              //"更新"資料
               for (let i = 0, j = _value.length; i < j; i++) {
                 const result = await db[dbRelateShipName[fileName]].findAll({
                   where: {
                     [Op.and]: [
+                      { [dbColumnName[fileName]]: { [Op.ne]: null } },
                       { id_number: id_number },
-                      { detect_at: { [Op.gte]: detect_at } },
+                      {
+                        detect_at: {
+                          [Op.eq]: new Date(date),
+                        },
+                      },
                     ],
                   },
                   raw: true,
                 })
+
                 await db[dbModelName[fileName]].update(
                   {
                     key: key[i],
@@ -233,6 +248,7 @@ const analystServices = {
                   }
                 )
               }
+
               return callback(null, {
                 status: 'success',
                 message: '資料更新成功',
