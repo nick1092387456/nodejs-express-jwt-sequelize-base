@@ -6,11 +6,7 @@ const { Role } = db
 const storage = multer.diskStorage({
   destination: async function (req, file, cb) {
     const analystId = req.user.id
-    const analystRole = await Role.findOne({
-      where: { user_id: analystId },
-      raw: true,
-      attributes: ['baat', 'snc', 'ssta', 'ssta2', 'src', 'spc', 'sptc'],
-    }).then((roles) => Object.entries(roles).filter((item) => item[1])[0][0])
+    const analystRole = await getRole(analystId)
     req.lab = analystRole
     cb(null, `./public/Labs/${analystRole}/`)
   },
@@ -24,13 +20,28 @@ const storage = multer.diskStorage({
   },
 })
 
-//reject a file
-const fileFilter = (req, file, cb) => {
-  if (file.mimetype === 'text/csv') {
+//reject file role
+const fileFilter = async (req, file, cb) => {
+  //檢查檔案類型
+  try {
+    if (file.mimetype !== 'text/csv') {
+      // throw new Error({ status: 'error', message: '僅接受CSV類型檔案' })
+      return cb({ status: 'error', message: '僅接受CSV類型檔案' })
+    }
     cb(null, true)
-  } else {
-    cb({ status: 'error', message: '僅接受CSV類型檔案' })
+  } catch (err) {
+    console.log('你好你好你好你好')
+    cb(err)
   }
+}
+
+async function getRole(analystId) {
+  const analystRole = await Role.findOne({
+    where: { user_id: analystId },
+    raw: true,
+    attributes: ['baat', 'snc', 'ssta', 'ssta2', 'spc', 'sptc'],
+  }).then((roles) => Object.entries(roles).filter((item) => item[1])[0][0])
+  return analystRole
 }
 
 const csvUpload = multer({

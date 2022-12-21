@@ -31,10 +31,15 @@ router.post(
   authenticated,
   analystController.putTemplate
 )
+const upload = csvUpload.single('file')
 router.post(
   '/analyst/uploadTemplate',
   authenticated,
-  csvUpload.single('file'),
+  function (req, res, next) {
+    upload(req, res, (err) => {
+      return err ? res.status(200).json(err) : next()
+    })
+  },
   analystController.uploadTemplate
 )
 router.get(

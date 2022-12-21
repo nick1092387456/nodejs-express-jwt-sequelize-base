@@ -1,10 +1,29 @@
 const fs = require('fs')
 const path = require('path')
-const parser = require('../tools/csvParser')
-const writer = require('../tools/csvWriter')
+const { parser, writer } = require('../tools/csvProcessor')
 const { getUserId } = require('../tools/getUserId')
 const db = require('../models')
 const { Op } = require('sequelize')
+
+async function getRole(analystId) {
+  const analystRole = await db.Role.findOne({
+    where: { user_id: analystId },
+    raw: true,
+    attributes: ['baat', 'snc', 'ssta', 'ssta2', 'spc', 'sptc'],
+  }).then((roles) => Object.entries(roles).filter((item) => item[1])[0][0])
+  return analystRole
+}
+
+async function compareLabel(analystRole, fileName) {
+  const templatePath = `./public/Labs/${analystRole}/template/`
+  const uploadFilePath = `./public/Labs/${analystRole}/`
+  const templateLabel = (await parser(fileName, templatePath))[0]
+  const fileLabel = (await parser(fileName, uploadFilePath))[0]
+
+  return templateLabel.every((label) => {
+    return fileLabel.includes(label)
+  })
+}
 
 const analystServices = {
   getTemplate: async (req, callback) => {
@@ -171,7 +190,20 @@ const analystServices = {
           }
         }
 
+        //檢查欄位名稱
         const { fileName, detect_at } = req.body
+        const analystId = req.user.id
+        const analystRole = await getRole(analystId)
+        const compareLabelResult = await compareLabel(analystRole, fileName)
+        if (compareLabelResult === false) {
+          return callback(null, {
+            status: 'error',
+            message: '欄位名稱不一致，請下載並使用標準模板',
+          })
+        }
+
+        //資料上傳至資料庫
+        let dataIsExist = false
         const date = new Date(detect_at).toISOString().substring(0, 10)
         const csvData = await parser(fileName, `./public/Labs/${lab}/`)
         const key = csvData[0]
@@ -214,12 +246,9 @@ const analystServices = {
                   updated_at: new Date(),
                 })
               }
-              return callback(null, {
-                status: 'success',
-                message: '資料上傳成功',
-              })
             } else {
               //"更新"資料
+              dataIsExist = true
               for (let i = 0, j = _value.length; i < j; i++) {
                 const result = await db[dbRelateShipName[fileName]].findAll({
                   where: {
@@ -248,18 +277,24 @@ const analystServices = {
                   }
                 )
               }
-
-              return callback(null, {
-                status: 'success',
-                message: '資料更新成功',
-              })
             }
           })
         )
+        if (dataIsExist) {
+          return callback(null, {
+            status: 'success',
+            message: '資料更新成功',
+          })
+        } else {
+          return callback(null, {
+            status: 'success',
+            message: '資料上傳成功',
+          })
+        }
       }
     } catch (err) {
-      console.log(err)
-      return callback(null, { status: 'error', message: err })
+      console.log('uploadTemplate error: ', err)
+      return callback(err)
     }
   },
   reviewTemplate: async (req, callback) => {

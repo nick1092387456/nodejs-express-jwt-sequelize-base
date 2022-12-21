@@ -1,5 +1,5 @@
 'use strict'
-const parser = require('../tools/csvParser')
+const { parser } = require('../tools/csvProcessor')
 const db = require('../models')
 const { User } = db
 
