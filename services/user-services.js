@@ -11,6 +11,7 @@ const {
   translateDuty,
   translateSport,
 } = require('../tools/translator')
+const { syncUserData } = require('../tools/syncUserData')
 const bcrypt = require('bcryptjs')
 const db = require('../models')
 const fs = require('fs')
@@ -72,6 +73,7 @@ const userServices = {
         Object.assign(privacyAgreement, { user_id: userId })
         await db.Role.create({ user_id: userId })
         await db.Privacy_consent_status.create(privacyAgreement)
+        await syncUserData(idNumber, userId)
 
         return callback(null, { status: 'success', message: '註冊成功!' })
       } else {
