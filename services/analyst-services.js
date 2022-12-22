@@ -71,13 +71,22 @@ const analystServices = {
   },
   putTemplate: async (req, callback) => {
     try {
+      const { label, fileName } = req.body
+      const idTagExist = label.some((item) => item.name.includes('ID'))
+      if (!idTagExist) {
+        return callback(null, {
+          status: 'error',
+          message: '表單一定要有ID欄位',
+        })
+      }
+
       const analystId = req.user.id
       const analystRole = await db.Role.findOne({
         where: { user_id: analystId },
         raw: true,
         attributes: ['baat', 'snc', 'ssta', 'ssta2', 'src', 'spc', 'sptc'],
       }).then((roles) => Object.entries(roles).filter((item) => item[1])[0][0])
-      const { label, fileName } = req.body
+
       const data = label.map((item) => ({ title: item.name }))
       const result = await writer(
         fileName,
