@@ -11,8 +11,18 @@ const coachController = {
       err ? next(err) : res.status(200).json(data)
     )
   },
-  toggleStatus: (req, res, next) => {
-    coachServices.toggleStatus(req, (err, data) =>
+  getTrainees2: (req, res, next) => {
+    coachServices.getTrainees2(req, (err, data) =>
+      err ? next(err) : res.status(200).json(data)
+    )
+  },
+  addTrainees: (req, res, next) => {
+    coachServices.addTrainees(req, (err, data) =>
+      err ? next(err) : res.status(200).json(data)
+    )
+  },
+  setStopTraining: (req, res, next) => {
+    coachServices.setStopTraining(req, (err, data) =>
       err ? next(err) : res.status(200).json(data)
     )
   },

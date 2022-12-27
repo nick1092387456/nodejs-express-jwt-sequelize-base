@@ -1,57 +1,41 @@
 const db = require('../models')
 const { Op } = require('sequelize')
 
-const {
-  User,
-  BaatInbody,
-  BaatGripStrength,
-  BaatCmj,
-  BaatImtp,
-  BaatWingateTest,
-  CoachAthleteShip,
-} = db
-
 const coachServices = {
   getTrainees: async (req, callback) => {
     try {
-      const { sport } = req.user
-      const user = await User.findAll({
-        where: { [Op.and]: [{ sport: sport }, { duty: 'Athlete' }] },
-        attributes: [
-          'id',
-          'name',
-          'email',
-          'avatar',
-          'gender',
-          'birthday',
-          'sport',
-        ],
+      const { id } = req.user
+
+      const data = await db.CoachAthleteShip.findAll({
+        where: { coach_id: id },
+        attributes: ['athlete_id', 'start_at', 'stop_at', 'status', 'sport'],
         raw: true,
       })
 
-      const memberList = user.map((item) => item.id)
-
-      const careerData = await CoachAthleteShip.findAll({
-        where: { athlete_id: memberList },
-        attributes: ['athlete_id', 'start_at', 'stop_at', 'status'],
-        raw: true,
-      })
-
-      const result = user.reduce((acc, cur) => {
-        for (let i = 0, j = careerData.length; i < j; i++) {
-          if (cur.id === careerData[i].athlete_id) {
-            return acc.concat({ ...cur, ...careerData[i] })
-          }
-        }
-        return acc.concat({ ...cur })
-      }, [])
-
-      if (!user) {
+      if (!data) {
         return callback(null, {
           status: 'error',
           message: '您目前沒有指導中的運動員',
         })
       }
+
+      const result = await Promise.all(
+        data.map(async (student) => {
+          const studentData = await db.User.findByPk(student.athlete_id, {
+            attributes: [
+              'name',
+              'email',
+              'avatar',
+              'gender',
+              'birthday',
+              'sport',
+            ],
+            raw: true,
+          })
+          return { ...student, ...studentData }
+        })
+      )
+
       return callback(null, {
         status: 'success',
         message: '學員資料抓取成功',
@@ -62,89 +46,150 @@ const coachServices = {
       return callback({ status: 'error', message: err })
     }
   },
-  toggleStatus: async (req, callback) => {
+  getTrainees2: async (req, callback) => {
     try {
-      const { id, start_at, stop_at, status } = req.body
-      const coachId = req.user.id
-      const athleteId = id
-      const relation = await CoachAthleteShip.findOne({
-        where: { [Op.and]: [{ coach_id: coachId }, { athlete_id: athleteId }] },
+      const { sport } = req.user
+      const date = Object.keys(req.query)[0]
+      const user = await db.User.findAll({
+        where: {
+          [Op.and]: [
+            { sport: sport },
+            { duty: 'Athlete' },
+            { created_at: { [Op.gte]: date } },
+          ],
+        },
+        attributes: ['id', 'name', 'avatar'],
+        raw: true,
       })
-      if (relation === null) {
-        CoachAthleteShip.create({
-          coachId: coachId,
-          athleteId: athleteId,
-          start_at: new Date(start_at),
-          stop_at: new Date(stop_at),
-          status: 'onTraining',
-        })
-        return callback(null, { status: 'success', message: '學員已新增' })
-      }
 
-      if (status === 'onTraining') {
-        const updateResult = await relation.update({
-          startAt: new Date(start_at),
-          stopAt: new Date(stop_at),
-          status: 'stopTraining',
-        })
+      if (!user) {
         return callback(null, {
-          status: 'success',
-          message: '狀態已更新成停止訓練',
-          data: updateResult.status,
-        })
-      } else {
-        const updateResult = await relation.update({
-          startAt: new Date(start_at),
-          stopAt: new Date(stop_at),
-          status: 'onTraining',
-        })
-        return callback(null, {
-          status: 'success',
-          message: '狀態已更新成訓練中',
-          data: updateResult.status,
+          status: 'error',
+          message: '您目前沒有指導中的運動員',
         })
       }
+      return callback(null, {
+        status: 'success',
+        message: '學員資料抓取成功',
+        user: user,
+      })
     } catch (err) {
-      console.log('toggleStatus err: ', err)
+      console.log(err)
       return callback({ status: 'error', message: err })
     }
   },
+  addTrainees: async (req, callback) => {
+    try {
+      const athlete_id_list = req.body.athletes
+      const coach_id = req.user.id
+      const sport = req.user.sport
 
+      const recordExist = await Promise.all(
+        athlete_id_list.map(async (athlete_id) => {
+          const record = await db.CoachAthleteShip.findOne({
+            where: {
+              [Op.and]: [
+                {
+                  coach_id,
+                  athlete_id,
+                  stop_at: { [Op.is]: null },
+                },
+              ],
+            },
+            raw: true,
+          })
+          if (record) return record
+
+          if (!record) {
+            await db.CoachAthleteShip.create({
+              coachId: coach_id,
+              athleteId: athlete_id,
+              start_at: new Date(),
+              status: 'onTraining',
+              sport,
+            })
+          }
+        })
+      )
+
+      if (!recordExist.includes(undefined)) {
+        return callback(null, {
+          status: 'error',
+          message: '新增清單中有已在受訓中的運動員',
+          data: recordExist,
+        })
+      }
+
+      return callback(null, {
+        status: 'success',
+        message: '運動員新增完畢',
+        data: '',
+      })
+    } catch (err) {
+      return callback({ status: 'error', message: err })
+    }
+  },
+  setStopTraining: async (req, callback) => {
+    try {
+      const { athlete_id } = req.body
+      const coach_id = req.user.id
+      await db.CoachAthleteShip.update(
+        { status: 'stopTraining', stop_at: new Date() },
+        {
+          where: {
+            [Op.and]: [
+              {
+                athleteId: athlete_id,
+                coachId: coach_id,
+                status: 'onTraining',
+              },
+            ],
+          },
+        }
+      )
+      return callback(null, {
+        status: 'success',
+        message: '學員狀態已切換成停止訓練',
+      })
+    } catch (err) {
+      return callback({ status: 'error', message: err })
+    }
+  },
   getTraineesData: async (req, callback) => {
     try {
       const { athleteId, labName } = req.body
       let traineesData = null
 
       if (labName === 'baat') {
-        traineesData = await User.findByPk(athleteId, {
+        traineesData = await db.User.findByPk(athleteId, {
           attributes: [],
           include: [
             {
-              model: BaatInbody,
-              as: 'Baat_Inbody',
+              model: db.BaatInbody,
+              as: 'Baat_inbodies',
               attributes: ['id', 'key', 'value', 'detect_at'],
               through: { attributes: [] },
             },
             {
-              model: BaatGripStrength,
-              as: 'Baat_GripStrength',
+              model: db.BaatGripStrength,
+              as: 'Baat_grip_strengths',
               attributes: ['id', 'key', 'value', 'detect_at'],
               through: { attributes: [] },
             },
             {
-              model: BaatCmj,
+              model: db.BaatCmj,
               as: 'Baat_cmj',
               attributes: ['id', 'key', 'value', 'detect_at'],
               through: { attributes: [] },
             },
             {
-              model: BaatImtp,
+              model: db.BaatImtp,
               as: 'Baat_imtp',
               attributes: ['id', 'key', 'value', 'detect_at'],
               through: { attributes: [] },
             },
             {
-              model: BaatWingateTest,
+              model: db.BaatWingateTest,
               as: 'Baat_wingate_test',
               attributes: ['id', 'key', 'value', 'detect_at'],
               through: { attributes: [] },
@@ -153,7 +198,7 @@ const coachServices = {
         })
       }
       if (labName === 'snc') {
-        traineesData = await User.findByPk(athleteId, {
+        traineesData = await db.User.findByPk(athleteId, {
           attributes: [],
           include: [
             {
@@ -166,7 +211,7 @@ const coachServices = {
         })
       }
       if (labName === 'spc') {
-        traineesData = await User.findByPk(athleteId, {
+        traineesData = await db.User.findByPk(athleteId, {
           attributes: [],
           include: [
             {
@@ -179,7 +224,7 @@ const coachServices = {
         })
       }
       if (labName === 'ssta') {
-        traineesData = await User.findByPk(athleteId, {
+        traineesData = await db.User.findByPk(athleteId, {
           attributes: [],
           include: [
             {
@@ -255,7 +300,7 @@ const coachServices = {
       const { lab, memberList } = req.body
       let result = null
       if (lab === 'baat') {
-        result = await User.findAll({
+        result = await db.User.findAll({
           where: { id: memberList },
           attributes: ['id', 'name'],
           include: [
@@ -293,7 +338,7 @@ const coachServices = {
         })
       }
       if (lab === 'snc') {
-        result = await User.findAll({
+        result = await db.User.findAll({
           where: { id: memberList },
           attributes: ['id', 'name'],
           include: [
@@ -307,7 +352,7 @@ const coachServices = {
         })
       }
       if (lab === 'spc') {
-        result = await User.findAll({
+        result = await db.User.findAll({
           where: { id: memberList },
           attributes: ['id', 'name'],
           include: [
@@ -321,7 +366,7 @@ const coachServices = {
         })
       }
       if (lab === 'ssta') {
-        result = await User.findAll({
+        result = await db.User.findAll({
           where: { id: memberList },
           attributes: ['id', 'name'],
           include: [

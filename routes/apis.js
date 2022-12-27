@@ -69,8 +69,14 @@ router.post(
   authenticated,
   coachController.getTraineesData
 )
+router.get('/coach/getTrainees2', authenticated, coachController.getTrainees2)
 router.get('/coach/getTrainees', authenticated, coachController.getTrainees)
-router.post('/coach/toggleStatus', authenticated, coachController.toggleStatus)
+router.post('/coach/addTrainees', authenticated, coachController.addTrainees)
+router.put(
+  '/coach/setStopTraining',
+  authenticated,
+  coachController.setStopTraining
+)
 router.post(
   '/coach/getTraineesFabData',
   authenticated,

@@ -28,8 +28,8 @@ function parseCSV(input, options) {
   return new Promise((resolve, reject) => {
     parse(input, options, (error, output) => {
       if (error) {
-        console.error('[ERROR] parseCSV: ', error.message)
-        reject('[ERROR] parseCSV: ', error.message)
+        console.error('[ERROR] parseCSV: ', error)
+        reject('[ERROR] parseCSV: ', error)
       }
 
       resolve(output)
