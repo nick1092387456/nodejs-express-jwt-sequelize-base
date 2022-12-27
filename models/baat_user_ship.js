@@ -8,6 +8,8 @@ module.exports = (sequelize, DataTypes) => {
       baat_cmj_id: DataTypes.INTEGER,
       baat_imtp_id: DataTypes.INTEGER,
       baat_wingate_test_id: DataTypes.INTEGER,
+      baat_static_balance_id: DataTypes.INTEGER,
+      baat_dynamic_balance_id: DataTypes.INTEGER,
       user_id: DataTypes.UUID,
       id_number: DataTypes.STRING,
       detect_at: DataTypes.DATE,

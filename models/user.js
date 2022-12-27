@@ -123,6 +123,16 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'user_id',
       as: 'Ssta2_lest',
     })
+    User.belongsToMany(models.BaatStaticBalance, {
+      through: models.BaatUserShip,
+      foreignKey: 'user_id',
+      as: 'Baat_static_balances',
+    })
+    User.belongsToMany(models.BaatDynamicBalance, {
+      through: models.BaatUserShip,
+      foreignKey: 'user_id',
+      as: 'Baat_dynamic_balances',
+    })
   }
   return User
 }
