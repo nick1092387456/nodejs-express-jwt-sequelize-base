@@ -507,9 +507,20 @@ const userServices = {
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },
+          {
+            model: db.BaatStaticBalance,
+            as: 'Baat_static_balance',
+            attributes: ['id', 'key', 'value', 'detect_at'],
+            through: { attributes: [] },
+          },
+          {
+            model: db.BaatDynamicBalance,
+            as: 'Baat_dynamic_balance',
+            attributes: ['id', 'key', 'value', 'detect_at'],
+            through: { attributes: [] },
+          },
         ],
       })
-
       if (!userData) {
         return callback(null, {
           status: 'error',

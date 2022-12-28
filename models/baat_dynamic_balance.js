@@ -11,14 +11,14 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: 'BaatDynamicBalance',
-      tableName: 'Baat_Dynamic_balances',
+      tableName: 'Baat_dynamic_balances',
       underscored: true,
     }
   )
   BaatDynamicBalance.associate = function (models) {
     BaatDynamicBalance.belongsToMany(models.User, {
       through: models.BaatUserShip,
-      foreignKey: 'BaatDynamicBalanceId',
+      foreignKey: 'baat_dynamic_balance_id',
       as: 'BaatDynamicBalanceUser',
     })
   }
