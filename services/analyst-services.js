@@ -121,6 +121,8 @@ const analystServices = {
             垂直爆發力: 'BaatCmj',
             等長肌爆發力: 'BaatImtp',
             '30秒無氧動力': 'BaatWingateTest',
+            靜態平衡能力: 'BaatStaticBalance',
+            動態平衡能力: 'BaatDynamicBalance',
           }
           dbColumnName = {
             身體組成: 'baat_inbody_id',
@@ -128,6 +130,8 @@ const analystServices = {
             垂直爆發力: 'baat_cmj_id',
             等長肌爆發力: 'baat_imtp_id',
             '30秒無氧動力': 'baat_wingate_test_id',
+            靜態平衡能力: 'baat_static_balance_id',
+            動態平衡能力: 'baat_dynamic_balance_id',
           }
           dbRelateShipName = {
             身體組成: 'BaatUserShip',
@@ -135,6 +139,8 @@ const analystServices = {
             垂直爆發力: 'BaatUserShip',
             等長肌爆發力: 'BaatUserShip',
             '30秒無氧動力': 'BaatUserShip',
+            靜態平衡能力: 'BaatUserShip',
+            動態平衡能力: 'BaatUserShip',
           }
         } else if (lab === 'snc') {
           dbModelName = { 身體組成: 'SncInbody' }
@@ -274,6 +280,26 @@ const analystServices = {
                   raw: true,
                 })
 
+                //更新時，若資料欄位數比原本欄位數多的狀況
+                if (i + 1 > result.length) {
+                  const result = await db[dbModelName[fileName]].create({
+                    key: key[i],
+                    value: _value[i],
+                    detect_at: date,
+                    created_at: new Date(),
+                    updated_at: new Date(),
+                  })
+                  await db[dbRelateShipName[fileName]].create({
+                    id_number,
+                    user_id,
+                    detect_at: date,
+                    [dbColumnName[fileName]]: result.id,
+                    created_at: new Date(),
+                    updated_at: new Date(),
+                  })
+                  return
+                }
+                //更新資料
                 await db[dbModelName[fileName]].update(
                   {
                     key: key[i],
