@@ -118,10 +118,30 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'user_id',
       as: 'Src',
     })
+    User.belongsToMany(models.Ssta2FMS, {
+      through: models.Ssta2UserShip,
+      foreignKey: 'user_id',
+      as: 'Ssta2_fms',
+    })
     User.belongsToMany(models.Ssta2LEST, {
       through: models.Ssta2UserShip,
       foreignKey: 'user_id',
       as: 'Ssta2_lest',
+    })
+    User.belongsToMany(models.Ssta2SEBT_L, {
+      through: models.Ssta2UserShip,
+      foreignKey: 'user_id',
+      as: 'Ssta2_sebt_l',
+    })
+    User.belongsToMany(models.Ssta2SEBT_R, {
+      through: models.Ssta2UserShip,
+      foreignKey: 'user_id',
+      as: 'Ssta2_sebt_r',
+    })
+    User.belongsToMany(models.Ssta2UEST, {
+      through: models.Ssta2UserShip,
+      foreignKey: 'user_id',
+      as: 'Ssta2_uest',
     })
     User.belongsToMany(models.BaatStaticBalance, {
       through: models.BaatUserShip,

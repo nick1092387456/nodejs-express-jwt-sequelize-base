@@ -264,22 +264,21 @@ const analystServices = {
             } else {
               //"更新"資料
               dataIsExist = true
-              for (let i = 0, j = _value.length; i < j; i++) {
-                const result = await db[dbRelateShipName[fileName]].findAll({
-                  where: {
-                    [Op.and]: [
-                      { [dbColumnName[fileName]]: { [Op.ne]: null } },
-                      { id_number: id_number },
-                      {
-                        detect_at: {
-                          [Op.eq]: new Date(date),
-                        },
+              const result = await db[dbRelateShipName[fileName]].findAll({
+                where: {
+                  [Op.and]: [
+                    { [dbColumnName[fileName]]: { [Op.ne]: null } },
+                    { id_number: id_number },
+                    {
+                      detect_at: {
+                        [Op.eq]: new Date(date),
                       },
-                    ],
-                  },
-                  raw: true,
-                })
-
+                    },
+                  ],
+                },
+                raw: true,
+              })
+              for (let i = 0, j = _value.length; i < j; i++) {
                 //更新時，若資料欄位數比原本欄位數多的狀況
                 if (i + 1 > result.length) {
                   const result = await db[dbModelName[fileName]].create({

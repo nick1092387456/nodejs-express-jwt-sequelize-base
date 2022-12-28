@@ -532,7 +532,6 @@ const userServices = {
         data: userData,
       })
     } catch (err) {
-      console.log(err)
       return callback(null, { status: 'error', message: err })
     }
   },
@@ -627,49 +626,31 @@ const userServices = {
         include: [
           {
             model: db.Ssta2FMS,
-            as: 'Ssta_inbody',
+            as: 'Ssta2_fms',
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },
           {
-            model: db.SstaBoat2km,
-            as: 'Ssta_boat_2km',
+            model: db.Ssta2LEST,
+            as: 'Ssta2_lest',
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },
           {
-            model: db.SstaBoat30,
-            as: 'Ssta_boat_30',
+            model: db.Ssta2SEBT_L,
+            as: 'Ssta2_sebt_l',
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },
           {
-            model: db.SstaBw,
-            as: 'Ssta_bw',
+            model: db.Ssta2SEBT_R,
+            as: 'Ssta2_sebt_r',
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },
           {
-            model: db.SstaCyclingVo2,
-            as: 'Ssta_cycling_vo2',
-            attributes: ['id', 'key', 'value', 'detect_at'],
-            through: { attributes: [] },
-          },
-          {
-            model: db.SstaFootball20m,
-            as: 'Ssta_football_20m',
-            attributes: ['id', 'key', 'value', 'detect_at'],
-            through: { attributes: [] },
-          },
-          {
-            model: db.SstaFootball505,
-            as: 'Ssta_football_505',
-            attributes: ['id', 'key', 'value', 'detect_at'],
-            through: { attributes: [] },
-          },
-          {
-            model: db.SstaFootballLight,
-            as: 'Ssta_football_light',
+            model: db.Ssta2UEST,
+            as: 'Ssta2_uest',
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },
@@ -680,6 +661,7 @@ const userServices = {
       }
       return callback(null, { status: 'success', data: userData })
     } catch (err) {
+      console.log(err)
       return callback(null, { status: 'error', message: err })
     }
   },
