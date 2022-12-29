@@ -6,13 +6,13 @@ const coachController = {
       err ? next(err) : res.status(200).json(data)
     )
   },
-  getTrainees: (req, res, next) => {
-    coachServices.getTrainees(req, (err, data) =>
+  getTraineesShip: (req, res, next) => {
+    coachServices.getTraineesShip(req, (err, data) =>
       err ? next(err) : res.status(200).json(data)
     )
   },
-  getTrainees2: (req, res, next) => {
-    coachServices.getTrainees2(req, (err, data) =>
+  getTraineesByDate: (req, res, next) => {
+    coachServices.getTraineesByDate(req, (err, data) =>
       err ? next(err) : res.status(200).json(data)
     )
   },

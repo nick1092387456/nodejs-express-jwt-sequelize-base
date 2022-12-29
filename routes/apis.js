@@ -69,8 +69,16 @@ router.post(
   authenticated,
   coachController.getTraineesData
 )
-router.get('/coach/getTrainees2', authenticated, coachController.getTrainees2)
-router.get('/coach/getTrainees', authenticated, coachController.getTrainees)
+router.get(
+  '/coach/getTraineesByDate',
+  authenticated,
+  coachController.getTraineesByDate
+)
+router.get(
+  '/coach/getTraineesShip',
+  authenticated,
+  coachController.getTraineesShip
+)
 router.post('/coach/addTrainees', authenticated, coachController.addTrainees)
 router.put(
   '/coach/setStopTraining',

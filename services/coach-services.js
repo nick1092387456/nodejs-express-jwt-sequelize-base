@@ -2,7 +2,7 @@ const db = require('../models')
 const { Op } = require('sequelize')
 
 const coachServices = {
-  getTrainees: async (req, callback) => {
+  getTraineesShip: async (req, callback) => {
     try {
       const { id } = req.user
 
@@ -46,10 +46,11 @@ const coachServices = {
       return callback({ status: 'error', message: err })
     }
   },
-  getTrainees2: async (req, callback) => {
+  getTraineesByDate: async (req, callback) => {
     try {
       const { sport } = req.user
       const date = Object.keys(req.query)[0]
+
       const user = await db.User.findAll({
         where: {
           [Op.and]: [
@@ -61,7 +62,6 @@ const coachServices = {
         attributes: ['id', 'name', 'avatar'],
         raw: true,
       })
-
       if (!user) {
         return callback(null, {
           status: 'error',
