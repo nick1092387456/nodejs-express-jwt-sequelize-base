@@ -69,6 +69,11 @@ router.post(
   authenticated,
   coachController.getTraineesData
 )
+router.post(
+  '/coach/getTraineesDate',
+  authenticated,
+  coachController.getTraineesDate
+)
 router.get(
   '/coach/getTraineesByDate',
   authenticated,

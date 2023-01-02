@@ -1,6 +1,16 @@
 const db = require('../models')
 const { Op } = require('sequelize')
 
+const lab_correspondence_ship = {
+  baat: 'BaatUserShip',
+  snc: 'SncUserShip',
+  ssta: 'SstaUserShip',
+  ssta2: 'Ssta2UserShip',
+  src: 'SrcUserShip',
+  spc: 'SpcUserShip',
+  sptc: 'SptcUserShip',
+}
+
 const coachServices = {
   getTraineesShip: async (req, callback) => {
     try {
@@ -86,7 +96,8 @@ const coachServices = {
 
       const recordExist = await Promise.all(
         athlete_id_list.map(async (athlete_id) => {
-          const record = await db.CoachAthleteShip.findOne({
+          //檢查是否受訓中
+          const exist = await db.CoachAthleteShip.findOne({
             where: {
               [Op.and]: [
                 {
@@ -98,13 +109,40 @@ const coachServices = {
             },
             raw: true,
           })
-          if (record) return record
+          if (exist) return exist
 
-          if (!record) {
+          //檢查是否有受訓紀錄，有的話會抓停訓日為開訓日
+          const record = await db.CoachAthleteShip.findOne({
+            where: {
+              [Op.and]: [
+                {
+                  coach_id,
+                  athlete_id,
+                  stop_at: { [Op.not]: null },
+                },
+              ],
+            },
+            order: [['created_at', 'DESC']],
+            raw: true,
+          })
+
+          if (record) {
             await db.CoachAthleteShip.create({
               coachId: coach_id,
               athleteId: athlete_id,
-              start_at: new Date(),
+              start_at: record.stop_at,
+              status: 'onTraining',
+              sport,
+            })
+            return
+          }
+
+          if (!exist) {
+            const thisYear = new Date().getFullYear()
+            await db.CoachAthleteShip.create({
+              coachId: coach_id,
+              athleteId: athlete_id,
+              start_at: new Date(thisYear, 0, 1),
               status: 'onTraining',
               sport,
             })
@@ -278,6 +316,43 @@ const coachServices = {
           ],
         })
       }
+      if (labName === 'ssta2') {
+        traineesData = await db.User.findByPk(athleteId, {
+          attributes: [],
+          include: [
+            {
+              model: db.Ssta2FMS,
+              as: 'Ssta2_fm',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+            {
+              model: db.Ssta2LEST,
+              as: 'Ssta2_lest',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+            {
+              model: db.Ssta2SEBT_L,
+              as: 'Ssta2_sebt_l',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+            {
+              model: db.Ssta2SEBT_R,
+              as: 'Ssta2_sebt_r',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+            {
+              model: db.Ssta2UEST,
+              as: 'Ssta2_uest',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+            },
+          ],
+        })
+      }
 
       if (!traineesData) {
         return callback(null, {
@@ -288,6 +363,32 @@ const coachServices = {
       return callback(null, {
         status: 'success',
         data: traineesData,
+      })
+    } catch (err) {
+      console.log(err)
+      return callback({ status: 'error', message: err })
+    }
+  },
+  getTraineesDate: async (req, callback) => {
+    try {
+      let { labName, athlete_id, start_at, stop_at } = req.body
+      stop_at = stop_at.map((_stop_at) => {
+        if (!_stop_at) return new Date()
+      })
+      const dateList = await db[lab_correspondence_ship[labName]].findAll({
+        where: {
+          [Op.and]: [
+            { user_id: athlete_id },
+            { created_at: { [Op.gte]: start_at[0] } },
+            { created_at: { [Op.lte]: stop_at[0] } },
+          ],
+        },
+        attributes: ['detect_at'],
+        raw: true,
+      })
+      return callback(null, {
+        status: 'success',
+        data: dateList,
       })
     } catch (err) {
       console.log(err)
