@@ -196,10 +196,20 @@ const coachServices = {
   getTraineesData: async (req, callback) => {
     try {
       const { athleteId, labName } = req.body
+      const coachId = req.user.id
+      const athleteRecord = await db.CoachAthleteShip.findOne({
+        where: { [Op.and]: [{ athleteId: athleteId }, { coachId: coachId }] },
+        order: [['created_at', 'DESC']],
+        limit: 1,
+        raw: true,
+      })
+      let { start_at, stop_at } = athleteRecord
+      if (!stop_at) stop_at = new Date()
       let traineesData = null
 
       if (labName === 'baat') {
-        traineesData = await db.User.findByPk(athleteId, {
+        traineesData = await db.User.findOne({
+          where: { id: athleteId },
           attributes: [],
           include: [
             {
@@ -207,30 +217,59 @@ const coachServices = {
               as: 'Baat_inbodies',
               attributes: ['id', 'key', 'value', 'detect_at'],
               through: { attributes: [] },
+              where: {
+                created_at: {
+                  [Op.and]: [{ [Op.gte]: start_at }, { [Op.lte]: stop_at }],
+                },
+                // [Op.and]: [
+                //   { created_at: { [Op.gte]: start_at } },
+                //   { created_at: { [Op.lte]: stop_at } },
+                // ],
+              },
             },
             {
               model: db.BaatGripStrength,
               as: 'Baat_grip_strengths',
               attributes: ['id', 'key', 'value', 'detect_at'],
               through: { attributes: [] },
+              where: {
+                created_at: {
+                  [Op.and]: [{ [Op.gte]: start_at }, { [Op.lte]: stop_at }],
+                },
+              },
             },
             {
               model: db.BaatCmj,
               as: 'Baat_cmj',
               attributes: ['id', 'key', 'value', 'detect_at'],
               through: { attributes: [] },
+              where: {
+                created_at: {
+                  [Op.and]: [{ [Op.gte]: start_at }, { [Op.lte]: stop_at }],
+                },
+              },
             },
             {
               model: db.BaatImtp,
               as: 'Baat_imtp',
               attributes: ['id', 'key', 'value', 'detect_at'],
               through: { attributes: [] },
+              where: {
+                created_at: {
+                  [Op.and]: [{ [Op.gte]: start_at }, { [Op.lte]: stop_at }],
+                },
+              },
             },
             {
               model: db.BaatWingateTest,
               as: 'Baat_wingate_test',
               attributes: ['id', 'key', 'value', 'detect_at'],
               through: { attributes: [] },
+              where: {
+                created_at: {
+                  [Op.and]: [{ [Op.gte]: start_at }, { [Op.lte]: stop_at }],
+                },
+              },
             },
           ],
         })
@@ -379,8 +418,11 @@ const coachServices = {
         where: {
           [Op.and]: [
             { user_id: athlete_id },
-            { created_at: { [Op.gte]: start_at[0] } },
-            { created_at: { [Op.lte]: stop_at[0] } },
+            {
+              created_at: {
+                [Op.and]: [{ [Op.gte]: start_at[0] }, { [Op.lte]: stop_at[0] }],
+              },
+            },
           ],
         },
         attributes: ['detect_at'],
