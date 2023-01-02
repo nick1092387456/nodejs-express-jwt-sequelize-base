@@ -216,24 +216,24 @@ module.exports = {
       {}
     )
     // generate Coach_athlete_ships seed
-    return queryInterface.bulkInsert(
-      'Coach_athlete_ships',
-      [
-        {
-          coach_id: '12345678-1234-1234-1234-123456789002',
-          athlete_id: '12345678-1234-1234-1234-123456789003',
-          created_at: new Date(),
-          updated_at: new Date(),
-        },
-        {
-          coach_id: '12345678-1234-1234-1234-123456789002',
-          athlete_id: '12345678-1234-1234-1234-123456789004',
-          created_at: new Date(),
-          updated_at: new Date(),
-        },
-      ],
-      {}
-    )
+    // return queryInterface.bulkInsert(
+    //   'Coach_athlete_ships',
+    //   [
+    //     {
+    //       coach_id: '12345678-1234-1234-1234-123456789002',
+    //       athlete_id: '12345678-1234-1234-1234-123456789003',
+    //       created_at: new Date(),
+    //       updated_at: new Date(),
+    //     },
+    //     {
+    //       coach_id: '12345678-1234-1234-1234-123456789002',
+    //       athlete_id: '12345678-1234-1234-1234-123456789004',
+    //       created_at: new Date(),
+    //       updated_at: new Date(),
+    //     },
+    //   ],
+    //   {}
+    // )
   },
 
   // 把 Users Table 中的資料清空，並且寫入 null

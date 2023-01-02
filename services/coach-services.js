@@ -305,6 +305,11 @@ const coachServices = {
               as: 'Snc_inbody',
               attributes: ['id', 'key', 'value', 'detect_at'],
               through: { attributes: [] },
+              where: {
+                created_at: {
+                  [Op.and]: [{ [Op.gte]: start_at }, { [Op.lte]: stop_at }],
+                },
+              },
             },
           ],
         })
@@ -318,6 +323,11 @@ const coachServices = {
               as: 'Spc',
               attributes: ['id', 'key', 'value', 'detect_at'],
               through: { attributes: [] },
+              where: {
+                created_at: {
+                  [Op.and]: [{ [Op.gte]: start_at }, { [Op.lte]: stop_at }],
+                },
+              },
             },
           ],
         })
@@ -331,48 +341,88 @@ const coachServices = {
               as: 'Ssta_inbody',
               attributes: ['id', 'key', 'value', 'detect_at'],
               through: { attributes: [] },
+              where: {
+                created_at: {
+                  [Op.and]: [{ [Op.gte]: start_at }, { [Op.lte]: stop_at }],
+                },
+              },
             },
             {
               model: db.SstaBoat2km,
               as: 'Ssta_boat_2km',
               attributes: ['id', 'key', 'value', 'detect_at'],
               through: { attributes: [] },
+              where: {
+                created_at: {
+                  [Op.and]: [{ [Op.gte]: start_at }, { [Op.lte]: stop_at }],
+                },
+              },
             },
             {
               model: db.SstaBoat30,
               as: 'Ssta_boat_30',
               attributes: ['id', 'key', 'value', 'detect_at'],
               through: { attributes: [] },
+              where: {
+                created_at: {
+                  [Op.and]: [{ [Op.gte]: start_at }, { [Op.lte]: stop_at }],
+                },
+              },
             },
             {
               model: db.SstaBw,
               as: 'Ssta_bw',
               attributes: ['id', 'key', 'value', 'detect_at'],
               through: { attributes: [] },
+              where: {
+                created_at: {
+                  [Op.and]: [{ [Op.gte]: start_at }, { [Op.lte]: stop_at }],
+                },
+              },
             },
             {
               model: db.SstaCyclingVo2,
               as: 'Ssta_cycling_vo2',
               attributes: ['id', 'key', 'value', 'detect_at'],
               through: { attributes: [] },
+              where: {
+                created_at: {
+                  [Op.and]: [{ [Op.gte]: start_at }, { [Op.lte]: stop_at }],
+                },
+              },
             },
             {
               model: db.SstaFootball20m,
               as: 'Ssta_football_20m',
               attributes: ['id', 'key', 'value', 'detect_at'],
               through: { attributes: [] },
+              where: {
+                created_at: {
+                  [Op.and]: [{ [Op.gte]: start_at }, { [Op.lte]: stop_at }],
+                },
+              },
             },
             {
               model: db.SstaFootball505,
               as: 'Ssta_football_505',
               attributes: ['id', 'key', 'value', 'detect_at'],
               through: { attributes: [] },
+              where: {
+                created_at: {
+                  [Op.and]: [{ [Op.gte]: start_at }, { [Op.lte]: stop_at }],
+                },
+              },
             },
             {
               model: db.SstaFootballLight,
               as: 'Ssta_football_light',
               attributes: ['id', 'key', 'value', 'detect_at'],
               through: { attributes: [] },
+              where: {
+                created_at: {
+                  [Op.and]: [{ [Op.gte]: start_at }, { [Op.lte]: stop_at }],
+                },
+              },
             },
           ],
         })
@@ -386,30 +436,55 @@ const coachServices = {
               as: 'Ssta2_fm',
               attributes: ['id', 'key', 'value', 'detect_at'],
               through: { attributes: [] },
+              where: {
+                created_at: {
+                  [Op.and]: [{ [Op.gte]: start_at }, { [Op.lte]: stop_at }],
+                },
+              },
             },
             {
               model: db.Ssta2LEST,
               as: 'Ssta2_lest',
               attributes: ['id', 'key', 'value', 'detect_at'],
               through: { attributes: [] },
+              where: {
+                created_at: {
+                  [Op.and]: [{ [Op.gte]: start_at }, { [Op.lte]: stop_at }],
+                },
+              },
             },
             {
               model: db.Ssta2SEBT_L,
               as: 'Ssta2_sebt_l',
               attributes: ['id', 'key', 'value', 'detect_at'],
               through: { attributes: [] },
+              where: {
+                created_at: {
+                  [Op.and]: [{ [Op.gte]: start_at }, { [Op.lte]: stop_at }],
+                },
+              },
             },
             {
               model: db.Ssta2SEBT_R,
               as: 'Ssta2_sebt_r',
               attributes: ['id', 'key', 'value', 'detect_at'],
               through: { attributes: [] },
+              where: {
+                created_at: {
+                  [Op.and]: [{ [Op.gte]: start_at }, { [Op.lte]: stop_at }],
+                },
+              },
             },
             {
               model: db.Ssta2UEST,
               as: 'Ssta2_uest',
               attributes: ['id', 'key', 'value', 'detect_at'],
               through: { attributes: [] },
+              where: {
+                created_at: {
+                  [Op.and]: [{ [Op.gte]: start_at }, { [Op.lte]: stop_at }],
+                },
+              },
             },
           ],
         })
@@ -433,23 +508,29 @@ const coachServices = {
   getTraineesDate: async (req, callback) => {
     try {
       let { labName, athlete_id, start_at, stop_at } = req.body
-      stop_at = stop_at.map((_stop_at) => {
-        if (!_stop_at) return new Date()
-      })
-      const dateList = await db[lab_correspondence_ship[labName]].findAll({
-        where: {
-          [Op.and]: [
-            { user_id: athlete_id },
-            {
-              created_at: {
-                [Op.and]: [{ [Op.gte]: start_at[0] }, { [Op.lte]: stop_at[0] }],
-              },
+      const dateList = await Promise.all(
+        start_at.map(async (_start_at, index) => {
+          if (!stop_at[index]) stop_at[index] = new Date()
+          return await db[lab_correspondence_ship[labName]].findAll({
+            where: {
+              [Op.and]: [
+                { user_id: athlete_id },
+                {
+                  created_at: {
+                    [Op.and]: [
+                      { [Op.gte]: start_at[index] },
+                      { [Op.lte]: stop_at[index] },
+                    ],
+                  },
+                },
+              ],
             },
-          ],
-        },
-        attributes: ['detect_at'],
-        raw: true,
-      })
+            attributes: ['detect_at'],
+            raw: true,
+          })
+        })
+      )
+      console.log('-----------dateList: ', dateList)
       return callback(null, {
         status: 'success',
         data: dateList,
