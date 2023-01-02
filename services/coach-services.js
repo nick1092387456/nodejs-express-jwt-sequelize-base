@@ -271,6 +271,28 @@ const coachServices = {
                 },
               },
             },
+            {
+              model: db.BaatStaticBalance,
+              as: 'Baat_static_balance',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+              where: {
+                created_at: {
+                  [Op.and]: [{ [Op.gte]: start_at }, { [Op.lte]: stop_at }],
+                },
+              },
+            },
+            {
+              model: db.BaatDynamicBalance,
+              as: 'Baat_dynamic_balance',
+              attributes: ['id', 'key', 'value', 'detect_at'],
+              through: { attributes: [] },
+              where: {
+                created_at: {
+                  [Op.and]: [{ [Op.gte]: start_at }, { [Op.lte]: stop_at }],
+                },
+              },
+            },
           ],
         })
       }
