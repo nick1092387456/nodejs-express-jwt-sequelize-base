@@ -8,7 +8,17 @@ const lab_correspondence_ship = {
   ssta2: 'Ssta2UserShip',
   src: 'SrcUserShip',
   spc: 'SpcUserShip',
-  sptc: 'SptcUserShip',
+  // sptc: 'SptcUserShip',
+}
+
+const lab_column_id = {
+  baat: ['baat_inbody_id'],
+  snc: ['snc_inbody_id'],
+  ssta: ['ssta_inbody_id'],
+  ssta2: ['ssta2_lest_id'],
+  src: ['src_id'],
+  spc: ['spc_id'],
+  // sptc: ['sptc_id'],
 }
 
 const coachServices = {
@@ -297,7 +307,8 @@ const coachServices = {
         })
       }
       if (labName === 'snc') {
-        traineesData = await db.User.findByPk(athleteId, {
+        traineesData = await db.User.findOne({
+          where: { id: athleteId },
           attributes: [],
           include: [
             {
@@ -315,7 +326,8 @@ const coachServices = {
         })
       }
       if (labName === 'spc') {
-        traineesData = await db.User.findByPk(athleteId, {
+        traineesData = await db.User.findOne({
+          where: { id: athleteId },
           attributes: [],
           include: [
             {
@@ -333,7 +345,8 @@ const coachServices = {
         })
       }
       if (labName === 'ssta') {
-        traineesData = await db.User.findByPk(athleteId, {
+        traineesData = await db.User.findOne({
+          where: { id: athleteId },
           attributes: [],
           include: [
             {
@@ -428,7 +441,8 @@ const coachServices = {
         })
       }
       if (labName === 'ssta2') {
-        traineesData = await db.User.findByPk(athleteId, {
+        traineesData = await db.User.findOne({
+          where: { id: athleteId },
           attributes: [],
           include: [
             {
@@ -507,13 +521,14 @@ const coachServices = {
   },
   getTraineesDate: async (req, callback) => {
     try {
-      let { labName, athlete_id, start_at, stop_at } = req.body
+      let { labName, athleteName, athlete_id, start_at, stop_at } = req.body
       const dateList = await Promise.all(
         start_at.map(async (_start_at, index) => {
           if (!stop_at[index]) stop_at[index] = new Date()
-          return await db[lab_correspondence_ship[labName]].findAll({
+          const queryDate = await db[lab_correspondence_ship[labName]].findAll({
             where: {
               [Op.and]: [
+                { [lab_column_id[labName]]: { [Op.not]: null } },
                 { user_id: athlete_id },
                 {
                   created_at: {
@@ -527,10 +542,22 @@ const coachServices = {
             },
             attributes: ['detect_at'],
             raw: true,
+            limit: 1,
           })
+          const date = new Date(queryDate[0].detect_at)
+            .toISOString()
+            .substr(0, 10)
+          const result = [
+            { header: athleteName },
+            {
+              name: `${athleteName}: ${date}`,
+              value: date,
+            },
+          ]
+
+          return result
         })
       )
-      console.log('-----------dateList: ', dateList)
       return callback(null, {
         status: 'success',
         data: dateList,
