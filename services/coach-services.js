@@ -517,7 +517,7 @@ const coachServices = {
         }
       }
       if (labName === 'ssta2') {
-        const { Ssta2_fm } = await db.User.findByPk(athleteId, {
+        const { Ssta2_fms } = await db.User.findByPk(athleteId, {
           attributes: [],
           include: [
             {
@@ -601,7 +601,7 @@ const coachServices = {
         traineesData = {
           Ssta2_uest,
           Ssta2_lest,
-          Ssta2_fm,
+          Ssta2_fms,
           Ssta2_sebt_r,
           Ssta2_sebt_l,
         }

@@ -710,33 +710,53 @@ const userServices = {
   },
   getSsta2: async (req, callback) => {
     try {
-      const userData = await db.User.findByPk(req.user.id, {
+      const { Ssta2_fms } = await db.User.findByPk(req.user.id, {
         attributes: [],
         include: [
           {
             model: db.Ssta2FMS,
-            as: 'Ssta2_fms',
+            as: 'Ssta2_fm',
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },
+        ],
+      })
+      const { Ssta2_lest } = await db.User.findByPk(req.user.id, {
+        attributes: [],
+        include: [
           {
             model: db.Ssta2LEST,
             as: 'Ssta2_lest',
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },
+        ],
+      })
+      const { Ssta2_sebt_l } = await db.User.findByPk(req.user.id, {
+        attributes: [],
+        include: [
           {
             model: db.Ssta2SEBT_L,
             as: 'Ssta2_sebt_l',
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },
+        ],
+      })
+      const { Ssta2_sebt_r } = await db.User.findByPk(req.user.id, {
+        attributes: [],
+        include: [
           {
             model: db.Ssta2SEBT_R,
             as: 'Ssta2_sebt_r',
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },
+        ],
+      })
+      const { Ssta2_uest } = await db.User.findByPk(req.user.id, {
+        attributes: [],
+        include: [
           {
             model: db.Ssta2UEST,
             as: 'Ssta2_uest',
@@ -745,6 +765,15 @@ const userServices = {
           },
         ],
       })
+
+      const userData = {
+        Ssta2_uest,
+        Ssta2_lest,
+        Ssta2_fms,
+        Ssta2_sebt_r,
+        Ssta2_sebt_l,
+      }
+
       if (!userData) {
         return callback(null, { status: 'error', message: '找不到使用者資料' })
       }
