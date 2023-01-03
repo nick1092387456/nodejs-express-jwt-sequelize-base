@@ -217,97 +217,8 @@ const coachServices = {
       if (!stop_at) stop_at = new Date()
       let traineesData = null
 
-      // if (labName === 'baat') {
-      //   traineesData = await db.User.findOne({
-      //     where: { id: athleteId },
-      //     attributes: [],
-      //     include: [
-      //       {
-      //         model: db.BaatInbody,
-      //         as: 'Baat_inbodies',
-      //         attributes: ['id', 'key', 'value', 'detect_at'],
-      //         through: { attributes: [] },
-      //         where: {
-      //           created_at: {
-      //             [Op.and]: [{ [Op.gte]: start_at }, { [Op.lte]: stop_at }],
-      //           },
-      //         },
-      //       },
-      //       {
-      //         model: db.BaatGripStrength,
-      //         as: 'Baat_grip_strengths',
-      //         attributes: ['id', 'key', 'value', 'detect_at'],
-      //         through: { attributes: [] },
-      //         where: {
-      //           created_at: {
-      //             [Op.and]: [{ [Op.gte]: start_at }, { [Op.lte]: stop_at }],
-      //           },
-      //         },
-      //       },
-      //       {
-      //         model: db.BaatCmj,
-      //         as: 'Baat_cmj',
-      //         attributes: ['id', 'key', 'value', 'detect_at'],
-      //         through: { attributes: [] },
-      //         where: {
-      //           created_at: {
-      //             [Op.and]: [{ [Op.gte]: start_at }, { [Op.lte]: stop_at }],
-      //           },
-      //         },
-      //       },
-      //       {
-      //         model: db.BaatImtp,
-      //         as: 'Baat_imtp',
-      //         attributes: ['id', 'key', 'value', 'detect_at'],
-      //         through: { attributes: [] },
-      //         where: {
-      //           created_at: {
-      //             [Op.and]: [{ [Op.gte]: start_at }, { [Op.lte]: stop_at }],
-      //           },
-      //         },
-      //       },
-      //       {
-      //         model: db.BaatWingateTest,
-      //         as: 'Baat_wingate_test',
-      //         attributes: ['id', 'key', 'value', 'detect_at'],
-      //         through: { attributes: [] },
-      //         where: {
-      //           created_at: {
-      //             [Op.and]: [{ [Op.gte]: start_at }, { [Op.lte]: stop_at }],
-      //           },
-      //         },
-      //       },
-      //       {
-      //         model: db.BaatStaticBalance,
-      //         as: 'Baat_static_balance',
-      //         attributes: ['id', 'key', 'value', 'detect_at'],
-      //         through: { attributes: [] },
-      //         where: {
-      //           created_at: {
-      //             [Op.and]: [{ [Op.gte]: start_at }, { [Op.lte]: stop_at }],
-      //           },
-      //         },
-      //       },
-      //       {
-      //         model: db.BaatDynamicBalance,
-      //         as: 'Baat_dynamic_balance',
-      //         attributes: ['id', 'key', 'value', 'detect_at'],
-      //         through: { attributes: [] },
-      //         where: {
-      //           created_at: {
-      //             [Op.and]: [{ [Op.gte]: start_at }, { [Op.lte]: stop_at }],
-      //           },
-      //         },
-      //       },
-      //     ],
-      //   })
-      // }
       if (labName === 'baat') {
-        await db.BaatUserShip.findOne({
-          where:{[Op.and]:[{user_id:athleteId},]}
-        })
-        traineesData = await db.User.findOne({
-          where: { id: athleteId },
+        const { Baat_inbodies } = await db.User.findByPk(athleteId, {
           attributes: [],
           include: [
             {
@@ -321,6 +232,11 @@ const coachServices = {
                 },
               },
             },
+          ],
+        })
+        const { Baat_grip_strengths } = await db.User.findByPk(athleteId, {
+          attributes: [],
+          include: [
             {
               model: db.BaatGripStrength,
               as: 'Baat_grip_strengths',
@@ -332,6 +248,11 @@ const coachServices = {
                 },
               },
             },
+          ],
+        })
+        const { Baat_cmj } = await db.User.findByPk(athleteId, {
+          attributes: [],
+          include: [
             {
               model: db.BaatCmj,
               as: 'Baat_cmj',
@@ -343,6 +264,11 @@ const coachServices = {
                 },
               },
             },
+          ],
+        })
+        const { Baat_imtp } = await db.User.findByPk(athleteId, {
+          attributes: [],
+          include: [
             {
               model: db.BaatImtp,
               as: 'Baat_imtp',
@@ -354,6 +280,11 @@ const coachServices = {
                 },
               },
             },
+          ],
+        })
+        const { Baat_wingate_test } = await db.User.findByPk(athleteId, {
+          attributes: [],
+          include: [
             {
               model: db.BaatWingateTest,
               as: 'Baat_wingate_test',
@@ -365,6 +296,11 @@ const coachServices = {
                 },
               },
             },
+          ],
+        })
+        const { Baat_static_balance } = await db.User.findByPk(athleteId, {
+          attributes: [],
+          include: [
             {
               model: db.BaatStaticBalance,
               as: 'Baat_static_balance',
@@ -376,6 +312,11 @@ const coachServices = {
                 },
               },
             },
+          ],
+        })
+        const { Baat_dynamic_balance } = await db.User.findByPk(athleteId, {
+          attributes: [],
+          include: [
             {
               model: db.BaatDynamicBalance,
               as: 'Baat_dynamic_balance',
@@ -389,10 +330,18 @@ const coachServices = {
             },
           ],
         })
+        traineesData = {
+          Baat_inbodies,
+          Baat_grip_strengths,
+          Baat_cmj,
+          Baat_imtp,
+          Baat_wingate_test,
+          Baat_static_balance,
+          Baat_dynamic_balance,
+        }
       }
       if (labName === 'snc') {
-        traineesData = await db.User.findOne({
-          where: { id: athleteId },
+        traineesData = await db.User.findByPk(athleteId, {
           attributes: [],
           include: [
             {
@@ -410,8 +359,7 @@ const coachServices = {
         })
       }
       if (labName === 'spc') {
-        traineesData = await db.User.findOne({
-          where: { id: athleteId },
+        traineesData = await db.User.findByPk(athleteId, {
           attributes: [],
           include: [
             {
@@ -429,8 +377,7 @@ const coachServices = {
         })
       }
       if (labName === 'ssta') {
-        traineesData = await db.User.findOne({
-          where: { id: athleteId },
+        const { Ssta_inbody } = await db.User.findByPk(athleteId, {
           attributes: [],
           include: [
             {
@@ -444,6 +391,11 @@ const coachServices = {
                 },
               },
             },
+          ],
+        })
+        const { Ssta_boat_2km } = await db.User.findByPk(athleteId, {
+          attributes: [],
+          include: [
             {
               model: db.SstaBoat2km,
               as: 'Ssta_boat_2km',
@@ -455,6 +407,11 @@ const coachServices = {
                 },
               },
             },
+          ],
+        })
+        const { Ssta_boat_30 } = await db.User.findByPk(athleteId, {
+          attributes: [],
+          include: [
             {
               model: db.SstaBoat30,
               as: 'Ssta_boat_30',
@@ -466,6 +423,11 @@ const coachServices = {
                 },
               },
             },
+          ],
+        })
+        const { Ssta_bw } = await db.User.findByPk(athleteId, {
+          attributes: [],
+          include: [
             {
               model: db.SstaBw,
               as: 'Ssta_bw',
@@ -477,6 +439,11 @@ const coachServices = {
                 },
               },
             },
+          ],
+        })
+        const { Ssta_cycling_vo2 } = await db.User.findByPk(athleteId, {
+          attributes: [],
+          include: [
             {
               model: db.SstaCyclingVo2,
               as: 'Ssta_cycling_vo2',
@@ -488,6 +455,11 @@ const coachServices = {
                 },
               },
             },
+          ],
+        })
+        const { Ssta_football_20m } = await db.User.findByPk(athleteId, {
+          attributes: [],
+          include: [
             {
               model: db.SstaFootball20m,
               as: 'Ssta_football_20m',
@@ -499,6 +471,11 @@ const coachServices = {
                 },
               },
             },
+          ],
+        })
+        const { Ssta_football_505 } = await db.User.findByPk(athleteId, {
+          attributes: [],
+          include: [
             {
               model: db.SstaFootball505,
               as: 'Ssta_football_505',
@@ -510,6 +487,11 @@ const coachServices = {
                 },
               },
             },
+          ],
+        })
+        const { Ssta_football_light } = await db.User.findByPk(athleteId, {
+          attributes: [],
+          include: [
             {
               model: db.SstaFootballLight,
               as: 'Ssta_football_light',
@@ -523,10 +505,19 @@ const coachServices = {
             },
           ],
         })
+        traineesData = {
+          Ssta_inbody,
+          Ssta_boat_30,
+          Ssta_boat_2km,
+          Ssta_bw,
+          Ssta_football_20m,
+          Ssta_football_505,
+          Ssta_football_light,
+          Ssta_cycling_vo2,
+        }
       }
       if (labName === 'ssta2') {
-        traineesData = await db.User.findOne({
-          where: { id: athleteId },
+        const { Ssta2_fm } = await db.User.findByPk(athleteId, {
           attributes: [],
           include: [
             {
@@ -540,6 +531,11 @@ const coachServices = {
                 },
               },
             },
+          ],
+        })
+        const { Ssta2_lest } = await db.User.findByPk(athleteId, {
+          attributes: [],
+          include: [
             {
               model: db.Ssta2LEST,
               as: 'Ssta2_lest',
@@ -551,6 +547,11 @@ const coachServices = {
                 },
               },
             },
+          ],
+        })
+        const { Ssta2_sebt_l } = await db.User.findByPk(athleteId, {
+          attributes: [],
+          include: [
             {
               model: db.Ssta2SEBT_L,
               as: 'Ssta2_sebt_l',
@@ -562,6 +563,11 @@ const coachServices = {
                 },
               },
             },
+          ],
+        })
+        const { Ssta2_sebt_r } = await db.User.findByPk(athleteId, {
+          attributes: [],
+          include: [
             {
               model: db.Ssta2SEBT_R,
               as: 'Ssta2_sebt_r',
@@ -573,6 +579,11 @@ const coachServices = {
                 },
               },
             },
+          ],
+        })
+        const { Ssta2_uest } = await db.User.findByPk(athleteId, {
+          attributes: [],
+          include: [
             {
               model: db.Ssta2UEST,
               as: 'Ssta2_uest',
@@ -586,6 +597,14 @@ const coachServices = {
             },
           ],
         })
+
+        traineesData = {
+          Ssta2_uest,
+          Ssta2_lest,
+          Ssta2_fm,
+          Ssta2_sebt_r,
+          Ssta2_sebt_l,
+        }
       }
 
       if (!traineesData) {
