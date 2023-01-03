@@ -474,7 +474,7 @@ const userServices = {
   },
   getBaat: async (req, callback) => {
     try {
-      const userData = await db.User.findByPk(req.user.id, {
+      const { Baat_inbodies } = await db.User.findByPk(req.user.id, {
         attributes: [],
         include: [
           {
@@ -483,36 +483,66 @@ const userServices = {
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },
+        ],
+      })
+      const { Baat_grip_strengths } = await db.User.findByPk(req.user.id, {
+        attributes: [],
+        include: [
           {
             model: db.BaatGripStrength,
             as: 'Baat_grip_strengths',
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },
+        ],
+      })
+      const { Baat_cmj } = await db.User.findByPk(req.user.id, {
+        attributes: [],
+        include: [
           {
             model: db.BaatCmj,
             as: 'Baat_cmj',
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },
+        ],
+      })
+      const { Baat_imtp } = await db.User.findByPk(req.user.id, {
+        attributes: [],
+        include: [
           {
             model: db.BaatImtp,
             as: 'Baat_imtp',
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },
+        ],
+      })
+      const { Baat_wingate_test } = await db.User.findByPk(req.user.id, {
+        attributes: [],
+        include: [
           {
             model: db.BaatWingateTest,
             as: 'Baat_wingate_test',
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },
+        ],
+      })
+      const { Baat_static_balance } = await db.User.findByPk(req.user.id, {
+        attributes: [],
+        include: [
           {
             model: db.BaatStaticBalance,
             as: 'Baat_static_balance',
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },
+        ],
+      })
+      const { Baat_dynamic_balance } = await db.User.findByPk(req.user.id, {
+        attributes: [],
+        include: [
           {
             model: db.BaatDynamicBalance,
             as: 'Baat_dynamic_balance',
@@ -521,6 +551,17 @@ const userServices = {
           },
         ],
       })
+
+      const userData = {
+        Baat_inbodies,
+        Baat_grip_strengths,
+        Baat_cmj,
+        Baat_imtp,
+        Baat_wingate_test,
+        Baat_static_balance,
+        Baat_dynamic_balance,
+      }
+
       if (!userData) {
         return callback(null, {
           status: 'error',
@@ -532,6 +573,7 @@ const userServices = {
         data: userData,
       })
     } catch (err) {
+      console.log(err)
       return callback(null, { status: 'error', message: err })
     }
   },
@@ -558,7 +600,7 @@ const userServices = {
   },
   getSsta: async (req, callback) => {
     try {
-      const userData = await db.User.findByPk(req.user.id, {
+      const { Ssta_inbody } = await db.User.findByPk(req.user.id, {
         attributes: [],
         include: [
           {
@@ -567,42 +609,77 @@ const userServices = {
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },
+        ],
+      })
+      const { Ssta_boat_2km } = await db.User.findByPk(req.user.id, {
+        attributes: [],
+        include: [
           {
             model: db.SstaBoat2km,
             as: 'Ssta_boat_2km',
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },
+        ],
+      })
+      const { Ssta_boat_30 } = await db.User.findByPk(req.user.id, {
+        attributes: [],
+        include: [
           {
             model: db.SstaBoat30,
             as: 'Ssta_boat_30',
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },
+        ],
+      })
+      const { Ssta_bw } = await db.User.findByPk(req.user.id, {
+        attributes: [],
+        include: [
           {
             model: db.SstaBw,
             as: 'Ssta_bw',
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },
+        ],
+      })
+      const { Ssta_cycling_vo2 } = await db.User.findByPk(req.user.id, {
+        attributes: [],
+        include: [
           {
             model: db.SstaCyclingVo2,
             as: 'Ssta_cycling_vo2',
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },
+        ],
+      })
+      const { Ssta_football_20m } = await db.User.findByPk(req.user.id, {
+        attributes: [],
+        include: [
           {
             model: db.SstaFootball20m,
             as: 'Ssta_football_20m',
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },
+        ],
+      })
+      const { Ssta_football_505 } = await db.User.findByPk(req.user.id, {
+        attributes: [],
+        include: [
           {
             model: db.SstaFootball505,
             as: 'Ssta_football_505',
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },
+        ],
+      })
+      const { Ssta_football_light } = await db.User.findByPk(req.user.id, {
+        attributes: [],
+        include: [
           {
             model: db.SstaFootballLight,
             as: 'Ssta_football_light',
@@ -611,6 +688,18 @@ const userServices = {
           },
         ],
       })
+
+      const userData = {
+        Ssta_inbody,
+        Ssta_boat_30,
+        Ssta_boat_2km,
+        Ssta_bw,
+        Ssta_football_20m,
+        Ssta_football_505,
+        Ssta_football_light,
+        Ssta_cycling_vo2,
+      }
+
       if (!userData) {
         return callback(null, { status: 'error', message: '找不到使用者資料' })
       }
