@@ -715,7 +715,7 @@ const userServices = {
         include: [
           {
             model: db.Ssta2FMS,
-            as: 'Ssta2_fm',
+            as: 'Ssta2_fms',
             attributes: ['id', 'key', 'value', 'detect_at'],
             through: { attributes: [] },
           },

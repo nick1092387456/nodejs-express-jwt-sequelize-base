@@ -522,7 +522,7 @@ const coachServices = {
           include: [
             {
               model: db.Ssta2FMS,
-              as: 'Ssta2_fm',
+              as: 'Ssta2_fms',
               attributes: ['id', 'key', 'value', 'detect_at'],
               through: { attributes: [] },
               where: {
@@ -605,6 +605,24 @@ const coachServices = {
           Ssta2_sebt_r,
           Ssta2_sebt_l,
         }
+      }
+      if (labName === 'src') {
+        traineesData = await db.User.findByPk(athleteId, {
+          attributes: [],
+          include: [
+            {
+              model: db.Src,
+              as: 'Src',
+              attributes: ['id', 'data'],
+              through: { attributes: [] },
+              where: {
+                created_at: {
+                  [Op.and]: [{ [Op.gte]: start_at }, { [Op.lte]: stop_at }],
+                },
+              },
+            },
+          ],
+        })
       }
 
       if (!traineesData) {
