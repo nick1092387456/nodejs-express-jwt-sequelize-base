@@ -852,7 +852,7 @@ const coachServices = {
               dateList.map(async (data) => {
                 result = await db.User.findAll({
                   where: { id: athlete.id },
-                  attributes: ['id', 'name'],
+                  attributes: [],
                   include: [
                     {
                       model: db.SncInbody,
@@ -879,7 +879,7 @@ const coachServices = {
               dateList.map(async (data) => {
                 result = await db.User.findAll({
                   where: { id: athlete.id },
-                  attributes: ['id', 'name'],
+                  attributes: [],
                   include: [
                     {
                       model: db.Spc,
