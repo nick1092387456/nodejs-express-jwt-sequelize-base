@@ -663,19 +663,22 @@ const coachServices = {
             },
             attributes: ['detect_at'],
             raw: true,
-            limit: 1,
           })
-          const date = new Date(queryDate[0].detect_at)
-            .toISOString()
-            .substring(0, 10)
-          const result = [
-            { header: athleteName },
-            {
-              name: `${athleteName}: ${date}`,
+          const dateFormated = queryDate.map((data) => {
+            return new Date(data.detect_at).toISOString().substring(0, 10)
+          })
+          const dateRemoveDuplicate = dateFormated.filter(
+            (date, index, arr) => {
+              return arr.indexOf(date) === index
+            }
+          )
+          const result = [{ header: athleteName }]
+          dateRemoveDuplicate.map((date) => {
+            result.push({
+              name: `${athleteName} ${date}`,
               value: date,
-            },
-          ]
-
+            })
+          })
           return result
         })
       )
@@ -690,232 +693,476 @@ const coachServices = {
   },
   getTraineesFabData: async (req, callback) => {
     try {
-      const { lab, athleteId, athleteName, detect_at } = req.body
-      let result = null
+      const { lab, athleteData, dateList } = req.body
+      let result = []
       if (lab === 'baat') {
-        const Baat_inbodies = await db.User.findAll({
-          where: { id: athleteId },
-          attributes: ['id', 'name'],
-          include: [
-            {
-              model: db.BaatInbody,
-              as: 'Baat_inbodies',
-              attributes: ['id', 'key', 'value', 'detect_at'],
-              through: { attributes: [] },
-              where: {
-                detect_at: {
-                  [Op.eq]: new Date(detect_at),
-                },
-              },
-            },
-          ],
-        })
+        await Promise.all(
+          athleteData.map(async (athlete) => {
+            await Promise.all(
+              dateList.map(async (data) => {
+                const Baat_inbodies = await db.User.findAll({
+                  where: { id: athlete.id },
+                  attributes: [],
+                  include: [
+                    {
+                      model: db.BaatInbody,
+                      as: 'Baat_inbodies',
+                      attributes: ['id', 'key', 'value', 'detect_at'],
+                      through: { attributes: [] },
+                      where: {
+                        detect_at: {
+                          [Op.eq]: new Date(data.value),
+                        },
+                      },
+                    },
+                  ],
+                })
 
-        const Baat_grip_strengths = await db.User.findAll({
-          where: { id: athleteId },
-          attributes: ['id', 'name'],
-          include: [
-            {
-              model: db.BaatGripStrength,
-              as: 'Baat_grip_strengths',
-              attributes: ['id', 'key', 'value', 'detect_at'],
-              through: { attributes: [] },
-              where: {
-                detect_at: {
-                  [Op.eq]: new Date(detect_at),
-                },
-              },
-            },
-          ],
-        })
+                const Baat_grip_strengths = await db.User.findAll({
+                  where: { id: athlete.id },
+                  attributes: [],
+                  include: [
+                    {
+                      model: db.BaatGripStrength,
+                      as: 'Baat_grip_strengths',
+                      attributes: ['id', 'key', 'value', 'detect_at'],
+                      through: { attributes: [] },
+                      where: {
+                        detect_at: {
+                          [Op.eq]: new Date(data.value),
+                        },
+                      },
+                    },
+                  ],
+                })
 
-        const Baat_cmj = await db.User.findAll({
-          where: { id: athleteId },
-          attributes: ['id', 'name'],
-          include: [
-            {
-              model: db.BaatCmj,
-              as: 'Baat_cmj',
-              attributes: ['id', 'key', 'value', 'detect_at'],
-              through: { attributes: [] },
-              where: {
-                detect_at: {
-                  [Op.eq]: new Date(detect_at),
-                },
-              },
-            },
-          ],
-        })
+                const Baat_cmj = await db.User.findAll({
+                  where: { id: athlete.id },
+                  attributes: [],
+                  include: [
+                    {
+                      model: db.BaatCmj,
+                      as: 'Baat_cmj',
+                      attributes: ['id', 'key', 'value', 'detect_at'],
+                      through: { attributes: [] },
+                      where: {
+                        detect_at: {
+                          [Op.eq]: new Date(data.value),
+                        },
+                      },
+                    },
+                  ],
+                })
 
-        const Baat_imtp = await db.User.findAll({
-          where: { id: athleteId },
-          attributes: ['id', 'name'],
-          include: [
-            {
-              model: db.BaatImtp,
-              as: 'Baat_imtp',
-              attributes: ['id', 'key', 'value', 'detect_at'],
-              through: { attributes: [] },
-              where: {
-                detect_at: {
-                  [Op.eq]: new Date(detect_at),
-                },
-              },
-            },
-          ],
-        })
+                const Baat_imtp = await db.User.findAll({
+                  where: { id: athlete.id },
+                  attributes: [],
+                  include: [
+                    {
+                      model: db.BaatImtp,
+                      as: 'Baat_imtp',
+                      attributes: ['id', 'key', 'value', 'detect_at'],
+                      through: { attributes: [] },
+                      where: {
+                        detect_at: {
+                          [Op.eq]: new Date(data.value),
+                        },
+                      },
+                    },
+                  ],
+                })
 
-        const Baat_wingate_test = await db.User.findAll({
-          where: { id: athleteId },
-          attributes: ['id', 'name'],
-          include: [
-            {
-              model: db.BaatWingateTest,
-              as: 'Baat_wingate_test',
-              attributes: ['id', 'key', 'value', 'detect_at'],
-              through: { attributes: [] },
-              where: {
-                detect_at: {
-                  [Op.eq]: new Date(detect_at),
-                },
-              },
-            },
-          ],
-        })
+                const Baat_wingate_test = await db.User.findAll({
+                  where: { id: athlete.id },
+                  attributes: [],
+                  include: [
+                    {
+                      model: db.BaatWingateTest,
+                      as: 'Baat_wingate_test',
+                      attributes: ['id', 'key', 'value', 'detect_at'],
+                      through: { attributes: [] },
+                      where: {
+                        detect_at: {
+                          [Op.eq]: new Date(data.value),
+                        },
+                      },
+                    },
+                  ],
+                })
 
-        const Baat_static_balance = await db.User.findAll({
-          where: { id: athleteId },
-          attributes: ['id', 'name'],
-          include: [
-            {
-              model: db.BaatStaticBalance,
-              as: 'Baat_static_balance',
-              attributes: ['id', 'key', 'value', 'detect_at'],
-              through: { attributes: [] },
-              where: {
-                detect_at: {
-                  [Op.eq]: new Date(detect_at),
-                },
-              },
-            },
-          ],
-        })
+                const Baat_static_balance = await db.User.findAll({
+                  where: { id: athlete.id },
+                  attributes: [],
+                  include: [
+                    {
+                      model: db.BaatStaticBalance,
+                      as: 'Baat_static_balance',
+                      attributes: ['id', 'key', 'value', 'detect_at'],
+                      through: { attributes: [] },
+                      where: {
+                        detect_at: {
+                          [Op.eq]: new Date(data.value),
+                        },
+                      },
+                    },
+                  ],
+                })
 
-        const Baat_dynamic_balance = await db.User.findAll({
-          where: { id: athleteId },
-          attributes: ['id', 'name'],
-          include: [
-            {
-              model: db.BaatDynamicBalance,
-              as: 'Baat_dynamic_balance',
-              attributes: ['id', 'key', 'value', 'detect_at'],
-              through: { attributes: [] },
-              where: {
-                detect_at: {
-                  [Op.eq]: new Date(detect_at),
-                },
-              },
-            },
-          ],
-        })
+                const Baat_dynamic_balance = await db.User.findAll({
+                  where: { id: athlete.id },
+                  attributes: [],
+                  include: [
+                    {
+                      model: db.BaatDynamicBalance,
+                      as: 'Baat_dynamic_balance',
+                      attributes: ['id', 'key', 'value', 'detect_at'],
+                      through: { attributes: [] },
+                      where: {
+                        detect_at: {
+                          [Op.eq]: new Date(data.value),
+                        },
+                      },
+                    },
+                  ],
+                })
 
-        result = [
-          {
-            id: athleteId,
-            name: athleteName,
-            Baat_inbodies: Baat_inbodies[0].Baat_inbodies,
-            Baat_grip_strengths: Baat_grip_strengths[0].Baat_grip_strengths,
-            Baat_cmj: Baat_cmj[0].Baat_cmj,
-            Baat_imtp: Baat_imtp[0].Baat_imtp,
-            Baat_wingate_test: Baat_wingate_test[0].Baat_wingate_test,
-            Baat_static_balance: Baat_static_balance[0].Baat_static_balance,
-            Baat_dynamic_balance: Baat_dynamic_balance[0].Baat_dynamic_balance,
-          },
-        ]
+                result.push({
+                  id: athlete.id,
+                  name: athlete.name,
+                  Baat_inbodies: Baat_inbodies[0].Baat_inbodies,
+                  Baat_grip_strengths:
+                    Baat_grip_strengths[0].Baat_grip_strengths,
+                  Baat_cmj: Baat_cmj[0].Baat_cmj,
+                  Baat_imtp: Baat_imtp[0].Baat_imtp,
+                  Baat_wingate_test: Baat_wingate_test[0].Baat_wingate_test,
+                  Baat_static_balance:
+                    Baat_static_balance[0].Baat_static_balance,
+                  Baat_dynamic_balance:
+                    Baat_dynamic_balance[0].Baat_dynamic_balance,
+                })
+              })
+            )
+          })
+        )
       }
       if (lab === 'snc') {
-        result = await db.User.findAll({
-          where: { id: athleteId },
-          attributes: ['id', 'name'],
-          include: [
-            {
-              model: db.SncInbody,
-              as: 'Snc_inbody',
-              attributes: ['id', 'key', 'value', 'detect_at'],
-              through: { attributes: [] },
-            },
-          ],
-        })
+        await Promise.all(
+          athleteData.map(async (athlete) => {
+            await Promise.all(
+              dateList.map(async (data) => {
+                result = await db.User.findAll({
+                  where: { id: athlete.id },
+                  attributes: ['id', 'name'],
+                  include: [
+                    {
+                      model: db.SncInbody,
+                      as: 'Snc_inbody',
+                      attributes: ['id', 'key', 'value', 'detect_at'],
+                      through: { attributes: [] },
+                      where: {
+                        detect_at: {
+                          [Op.eq]: new Date(data.value),
+                        },
+                      },
+                    },
+                  ],
+                })
+              })
+            )
+          })
+        )
       }
       if (lab === 'spc') {
-        result = await db.User.findAll({
-          where: { id: athleteId },
-          attributes: ['id', 'name'],
-          include: [
-            {
-              model: db.Spc,
-              as: 'Spc',
-              attributes: ['id', 'key', 'value', 'detect_at'],
-              through: { attributes: [] },
-            },
-          ],
-        })
+        await Promise.all(
+          athleteData.map(async (athlete) => {
+            await Promise.all(
+              dateList.map(async (data) => {
+                result = await db.User.findAll({
+                  where: { id: athlete.id },
+                  attributes: ['id', 'name'],
+                  include: [
+                    {
+                      model: db.Spc,
+                      as: 'Spc',
+                      attributes: ['id', 'key', 'value', 'detect_at'],
+                      through: { attributes: [] },
+                      where: {
+                        detect_at: {
+                          [Op.eq]: new Date(data.value),
+                        },
+                      },
+                    },
+                  ],
+                })
+              })
+            )
+          })
+        )
       }
       if (lab === 'ssta') {
-        result = await db.User.findAll({
-          where: { id: athleteId },
-          attributes: ['id', 'name'],
-          include: [
-            {
-              model: db.SstaInbody,
-              as: 'Ssta_inbody',
-              attributes: ['id', 'key', 'value', 'detect_at'],
-              through: { attributes: [] },
-            },
-            {
-              model: db.SstaBoat2km,
-              as: 'Ssta_boat_2km',
-              attributes: ['id', 'key', 'value', 'detect_at'],
-              through: { attributes: [] },
-            },
-            {
-              model: db.SstaBoat30,
-              as: 'Ssta_boat_30',
-              attributes: ['id', 'key', 'value', 'detect_at'],
-              through: { attributes: [] },
-            },
-            {
-              model: db.SstaBw,
-              as: 'Ssta_bw',
-              attributes: ['id', 'key', 'value', 'detect_at'],
-              through: { attributes: [] },
-            },
-            {
-              model: db.SstaCyclingVo2,
-              as: 'Ssta_cycling_vo2',
-              attributes: ['id', 'key', 'value', 'detect_at'],
-              through: { attributes: [] },
-            },
-            {
-              model: db.SstaFootball20m,
-              as: 'Ssta_football_20m',
-              attributes: ['id', 'key', 'value', 'detect_at'],
-              through: { attributes: [] },
-            },
-            {
-              model: db.SstaFootball505,
-              as: 'Ssta_football_505',
-              attributes: ['id', 'key', 'value', 'detect_at'],
-              through: { attributes: [] },
-            },
-            {
-              model: db.SstaFootballLight,
-              as: 'Ssta_football_light',
-              attributes: ['id', 'key', 'value', 'detect_at'],
-              through: { attributes: [] },
-            },
-          ],
-        })
+        await Promise.all(
+          athleteData.map(async (athlete) => {
+            await Promise.all(
+              dateList.map(async (data) => {
+                const Ssta_inbody = await db.User.findAll({
+                  where: { id: athlete.id },
+                  attributes: [],
+                  include: [
+                    {
+                      model: db.SstaInbody,
+                      as: 'Ssta_inbody',
+                      attributes: ['id', 'key', 'value', 'detect_at'],
+                      through: { attributes: [] },
+                      where: {
+                        detect_at: {
+                          [Op.eq]: new Date(data.value),
+                        },
+                      },
+                    },
+                  ],
+                })
+                const Ssta_boat_2km = await db.User.findAll({
+                  where: { id: athlete.id },
+                  attributes: [],
+                  include: [
+                    {
+                      model: db.SstaBoat2km,
+                      as: 'Ssta_boat_2km',
+                      attributes: ['id', 'key', 'value', 'detect_at'],
+                      through: { attributes: [] },
+                      where: {
+                        detect_at: {
+                          [Op.eq]: new Date(data.value),
+                        },
+                      },
+                    },
+                  ],
+                })
+                const Ssta_boat_30 = await db.User.findAll({
+                  where: { id: athlete.id },
+                  attributes: [],
+                  include: [
+                    {
+                      model: db.SstaBoat30,
+                      as: 'Ssta_boat_30',
+                      attributes: ['id', 'key', 'value', 'detect_at'],
+                      through: { attributes: [] },
+                      where: {
+                        detect_at: {
+                          [Op.eq]: new Date(data.value),
+                        },
+                      },
+                    },
+                  ],
+                })
+                const Ssta_bw = await db.User.findAll({
+                  where: { id: athlete.id },
+                  attributes: [],
+                  include: [
+                    {
+                      model: db.SstaBw,
+                      as: 'Ssta_bw',
+                      attributes: ['id', 'key', 'value', 'detect_at'],
+                      through: { attributes: [] },
+                      where: {
+                        detect_at: {
+                          [Op.eq]: new Date(data.value),
+                        },
+                      },
+                    },
+                  ],
+                })
+                const Ssta_cycling_vo2 = await db.User.findAll({
+                  where: { id: athlete.id },
+                  attributes: [],
+                  include: [
+                    {
+                      model: db.SstaCyclingVo2,
+                      as: 'Ssta_cycling_vo2',
+                      attributes: ['id', 'key', 'value', 'detect_at'],
+                      through: { attributes: [] },
+                      where: {
+                        detect_at: {
+                          [Op.eq]: new Date(data.value),
+                        },
+                      },
+                    },
+                  ],
+                })
+                const Ssta_football_20m = await db.User.findAll({
+                  where: { id: athlete.id },
+                  attributes: [],
+                  include: [
+                    {
+                      model: db.SstaFootball20m,
+                      as: 'Ssta_football_20m',
+                      attributes: ['id', 'key', 'value', 'detect_at'],
+                      through: { attributes: [] },
+                      where: {
+                        detect_at: {
+                          [Op.eq]: new Date(data.value),
+                        },
+                      },
+                    },
+                  ],
+                })
+                const Ssta_football_505 = await db.User.findAll({
+                  where: { id: athlete.id },
+                  attributes: [],
+                  include: [
+                    {
+                      model: db.SstaFootball505,
+                      as: 'Ssta_football_505',
+                      attributes: ['id', 'key', 'value', 'detect_at'],
+                      through: { attributes: [] },
+                      where: {
+                        detect_at: {
+                          [Op.eq]: new Date(data.value),
+                        },
+                      },
+                    },
+                  ],
+                })
+                const Ssta_football_light = await db.User.findAll({
+                  where: { id: athlete.id },
+                  attributes: [],
+                  include: [
+                    {
+                      model: db.SstaFootballLight,
+                      as: 'Ssta_football_light',
+                      attributes: ['id', 'key', 'value', 'detect_at'],
+                      through: { attributes: [] },
+                      where: {
+                        detect_at: {
+                          [Op.eq]: new Date(data.value),
+                        },
+                      },
+                    },
+                  ],
+                })
+
+                result.push({
+                  id: athlete.id,
+                  name: athlete.name,
+                  Ssta_inbody: Ssta_inbody[0].Ssta_inbody,
+                  Ssta_boat_2km: Ssta_boat_2km[0].Ssta_boat_2km,
+                  Ssta_boat_30: Ssta_boat_30[0].Ssta_boat_30,
+                  Ssta_bw: Ssta_bw[0].Ssta_bw,
+                  Ssta_cycling_vo2: Ssta_cycling_vo2[0].Ssta_cycling_vo2,
+                  Ssta_football_20m: Ssta_football_20m[0].Ssta_football_20m,
+                  Ssta_football_505: Ssta_football_505[0].Ssta_football_505,
+                  Ssta_football_light:
+                    Ssta_football_light[0].Ssta_football_light,
+                })
+              })
+            )
+          })
+        )
+      }
+      if (lab === 'ssta2') {
+        await Promise.all(
+          athleteData.map(async (athlete) => {
+            await Promise.all(
+              dateList.map(async (data) => {
+                const Ssta2_fms = await db.User.findAll({
+                  where: { id: athlete.id },
+                  attributes: [],
+                  include: [
+                    {
+                      model: db.Ssta2FMS,
+                      as: 'Ssta2_fms',
+                      attributes: ['id', 'key', 'value', 'detect_at'],
+                      through: { attributes: [] },
+                      where: {
+                        detect_at: {
+                          [Op.eq]: new Date(data.value),
+                        },
+                      },
+                    },
+                  ],
+                })
+                const Ssta2_lest = await db.User.findAll({
+                  where: { id: athlete.id },
+                  attributes: [],
+                  include: [
+                    {
+                      model: db.Ssta2LEST,
+                      as: 'Ssta2_lest',
+                      attributes: ['id', 'key', 'value', 'detect_at'],
+                      through: { attributes: [] },
+                      where: {
+                        detect_at: {
+                          [Op.eq]: new Date(data.value),
+                        },
+                      },
+                    },
+                  ],
+                })
+                const Ssta2_sebt_l = await db.User.findAll({
+                  where: { id: athlete.id },
+                  attributes: [],
+                  include: [
+                    {
+                      model: db.Ssta2SEBT_L,
+                      as: 'Ssta2_sebt_l',
+                      attributes: ['id', 'key', 'value', 'detect_at'],
+                      through: { attributes: [] },
+                      where: {
+                        detect_at: {
+                          [Op.eq]: new Date(data.value),
+                        },
+                      },
+                    },
+                  ],
+                })
+                const Ssta2_sebt_r = await db.User.findAll({
+                  where: { id: athlete.id },
+                  attributes: [],
+                  include: [
+                    {
+                      model: db.Ssta2SEBT_R,
+                      as: 'Ssta2_sebt_r',
+                      attributes: ['id', 'key', 'value', 'detect_at'],
+                      through: { attributes: [] },
+                      where: {
+                        detect_at: {
+                          [Op.eq]: new Date(data.value),
+                        },
+                      },
+                    },
+                  ],
+                })
+                const Ssta2_uest = await db.User.findAll({
+                  where: { id: athlete.id },
+                  attributes: [],
+                  include: [
+                    {
+                      model: db.Ssta2UEST,
+                      as: 'Ssta2_uest',
+                      attributes: ['id', 'key', 'value', 'detect_at'],
+                      through: { attributes: [] },
+                      where: {
+                        detect_at: {
+                          [Op.eq]: new Date(data.value),
+                        },
+                      },
+                    },
+                  ],
+                })
+
+                result.push({
+                  id: athlete.id,
+                  name: athlete.name,
+                  Ssta2_fms: Ssta2_fms[0].Ssta2_fms,
+                  Ssta2_lest: Ssta2_lest[0].Ssta2_lest,
+                  Ssta2_sebt_l: Ssta2_sebt_l[0].Ssta2_sebt_l,
+                  Ssta2_sebt_r: Ssta2_sebt_r[0].Ssta2_sebt_r,
+                  Ssta2_uest: Ssta2_uest[0].Ssta2_uest,
+                })
+              })
+            )
+          })
+        )
       }
 
       return callback(null, {

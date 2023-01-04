@@ -144,7 +144,7 @@ const adminServices = {
           name,
           email,
           duty,
-          team,
+          sport: team,
         })
 
         const privacy = await db.Privacy_consent_status.findOne({
