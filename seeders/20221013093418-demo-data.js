@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs')
 const { faker } = require('@faker-js/faker')
 
 module.exports = {
-  up: (queryInterface) => {
+  up: async (queryInterface) => {
     // generate user seed
     queryInterface.bulkInsert(
       'Users',
@@ -237,7 +237,7 @@ module.exports = {
   },
 
   // 把 Users Table 中的資料清空，並且寫入 null
-  down: (queryInterface) => {
+  down: async (queryInterface) => {
     queryInterface.bulkDelete('Users', null, {})
     return queryInterface.bulkDelete('Coach_athlete_ships', null, {})
   },
