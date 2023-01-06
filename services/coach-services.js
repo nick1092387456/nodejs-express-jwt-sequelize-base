@@ -1045,14 +1045,14 @@ const coachServices = {
                   id: athlete.id,
                   name: athlete.name,
                   Ssta_inbody: Ssta_inbody[0].Ssta_inbody,
-                  Ssta_boat_2km: Ssta_boat_2km[0].Ssta_boat_2km,
                   Ssta_boat_30: Ssta_boat_30[0].Ssta_boat_30,
+                  Ssta_boat_2km: Ssta_boat_2km[0].Ssta_boat_2km,
                   Ssta_bw: Ssta_bw[0].Ssta_bw,
-                  Ssta_cycling_vo2: Ssta_cycling_vo2[0].Ssta_cycling_vo2,
                   Ssta_football_20m: Ssta_football_20m[0].Ssta_football_20m,
                   Ssta_football_505: Ssta_football_505[0].Ssta_football_505,
                   Ssta_football_light:
                     Ssta_football_light[0].Ssta_football_light,
+                  Ssta_cycling_vo2: Ssta_cycling_vo2[0].Ssta_cycling_vo2,                 
                 })
               })
             )
@@ -1153,11 +1153,11 @@ const coachServices = {
                 result.push({
                   id: athlete.id,
                   name: athlete.name,
-                  Ssta2_fms: Ssta2_fms[0].Ssta2_fms,
-                  Ssta2_lest: Ssta2_lest[0].Ssta2_lest,
-                  Ssta2_sebt_l: Ssta2_sebt_l[0].Ssta2_sebt_l,
-                  Ssta2_sebt_r: Ssta2_sebt_r[0].Ssta2_sebt_r,
                   Ssta2_uest: Ssta2_uest[0].Ssta2_uest,
+                  Ssta2_lest: Ssta2_lest[0].Ssta2_lest,
+                  Ssta2_fms: Ssta2_fms[0].Ssta2_fms,
+                  Ssta2_sebt_r: Ssta2_sebt_r[0].Ssta2_sebt_r,
+                  Ssta2_sebt_l: Ssta2_sebt_l[0].Ssta2_sebt_l,
                 })
               })
             )
