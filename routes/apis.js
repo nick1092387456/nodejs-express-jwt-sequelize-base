@@ -105,12 +105,12 @@ router.put(
   avatarUpload.single('avatar'),
   userController.putUser
 )
-router.get('/user/getBaat', authenticated, userController.getBaat)
-router.get('/user/getSnc', authenticated, userController.getSnc)
-router.get('/user/getSpc', authenticated, userController.getSpc)
-router.get('/user/getSsta', authenticated, userController.getSsta)
-router.get('/user/getSsta2', authenticated, userController.getSsta2)
-router.get('/user/getSrc', authenticated, userController.getSrc)
+router.post('/user/getBaat', authenticated, userController.getBaat)
+router.post('/user/getSnc', authenticated, userController.getSnc)
+router.post('/user/getSpc', authenticated, userController.getSpc)
+router.post('/user/getSsta', authenticated, userController.getSsta)
+router.post('/user/getSsta2', authenticated, userController.getSsta2)
+router.post('/user/getSrc', authenticated, userController.getSrc)
 router.get(
   '/user/getUserFileList',
   authenticated,

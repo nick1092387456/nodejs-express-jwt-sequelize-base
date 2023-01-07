@@ -806,7 +806,7 @@ const userServices = {
   },
   getSrc: async (req, callback) => {
     try {
-      const userData = await db.User.findByPk(req.user.id, {
+      const { Src } = await db.User.findByPk(req.user.id, {
         attributes: [],
         include: [
           {
@@ -817,10 +817,13 @@ const userServices = {
           },
         ],
       })
-      if (!userData) {
+      if (!Src) {
         return callback(null, { status: 'error', message: '找不到使用者資料' })
       }
-      return callback(null, { status: 'success', data: userData })
+      if (!Src.length) {
+        return callback(null, { status: 'success', data: {} })
+      }
+      return callback(null, { status: 'success', data: Src[0].data })
     } catch (err) {
       console.log(err)
       return callback(null, { status: 'error', message: err })
