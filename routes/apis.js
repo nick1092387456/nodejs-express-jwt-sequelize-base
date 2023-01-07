@@ -12,7 +12,7 @@ const { csvUpload } = require('../middleware/csvUpload')
 
 //admin
 router.post('/admin/signin', adminController.signIn)
-router.get(
+router.post(
   '/admin/users',
   authenticated,
   authenticatedAdmin,
@@ -25,7 +25,7 @@ router.put(
   adminController.putUser
 )
 //analyst
-router.get('/analyst/getTemplate', authenticated, analystController.getTemplate)
+router.post('/analyst/getTemplate', authenticated, analystController.getTemplate)
 router.post(
   '/analyst/putTemplate',
   authenticated,
@@ -42,12 +42,12 @@ router.post(
   },
   analystController.uploadTemplate
 )
-router.get(
+router.post(
   '/analyst/reviewTemplate',
   authenticated,
   analystController.reviewTemplate
 )
-router.get(
+router.post(
   '/analyst/downloadTemplate',
   authenticated,
   analystController.downloadTemplate
@@ -74,12 +74,12 @@ router.post(
   authenticated,
   coachController.getTraineesDate
 )
-router.get(
+router.post(
   '/coach/getTraineesByDate',
   authenticated,
   coachController.getTraineesByDate
 )
-router.get(
+router.post(
   '/coach/getTraineesShip',
   authenticated,
   coachController.getTraineesShip
@@ -97,8 +97,8 @@ router.post(
 )
 
 //users
-router.get('/getCurrentUser', authenticated, userController.getCurrentUsers)
-router.get('/user', authenticated, userController.getUser)
+router.post('/getCurrentUser', authenticated, userController.getCurrentUser)
+router.post('/user', authenticated, userController.getUser)
 router.put(
   '/user',
   authenticated,
@@ -111,12 +111,12 @@ router.post('/user/getSpc', authenticated, userController.getSpc)
 router.post('/user/getSsta', authenticated, userController.getSsta)
 router.post('/user/getSsta2', authenticated, userController.getSsta2)
 router.post('/user/getSrc', authenticated, userController.getSrc)
-router.get(
+router.post(
   '/user/getUserFileList',
   authenticated,
   userController.getUserFileList
 )
-router.get(
+router.post(
   '/user/downloadUserFile',
   authenticated,
   userController.downloadUserFile
@@ -152,10 +152,10 @@ router.put(
 router.post('/signup', userController.signUp)
 router.post('/sendVerifyEmail', userController.sendVerifyEmail)
 router.post('/sendResetEmail', userController.sendResetEmail)
-router.get('/verifyEmail', userController.verifyEmail)
+router.post('/verifyEmail', userController.verifyEmail)
 router.put('/resetPassword', userController.resetPassword)
 router.post('/signin', userController.signIn)
-router.get('/getUserRoles', userController.getUserRoles)
+router.post('/getUserRoles', userController.getUserRoles)
 
 //error handle
 router.use('/', generalErrorHandler)

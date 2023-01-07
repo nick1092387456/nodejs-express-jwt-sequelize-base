@@ -339,7 +339,7 @@ const userServices = {
       return callback(err)
     }
   },
-  getCurrentUsers: async (req, callback) => {
+  getCurrentUser: async (req, callback) => {
     try {
       const roles = await db.Role.findByPk(req.user.id, {
         raw: true,

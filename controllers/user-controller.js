@@ -31,8 +31,8 @@ const userController = {
       err ? next(err) : res.status(200).json(data)
     )
   },
-  getCurrentUsers: (req, res, next) => {
-    userServices.getCurrentUsers(req, (err, data) =>
+  getCurrentUser: (req, res, next) => {
+    userServices.getCurrentUser(req, (err, data) =>
       err ? next(err) : res.status(200).json(data)
     )
   },
