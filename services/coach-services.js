@@ -218,7 +218,7 @@ const coachServices = {
       let traineesData = null
 
       if (labName === 'baat') {
-        const { Baat_inbodies } = await db.User.findByPk(athleteId, {
+        const { Baat_inbodies } = (await db.User.findByPk(athleteId, {
           attributes: [],
           include: [
             {
@@ -233,8 +233,9 @@ const coachServices = {
               },
             },
           ],
-        })
-        const { Baat_grip_strengths } = await db.User.findByPk(athleteId, {
+        })) || { Baat_inbodies: [] }
+
+        const { Baat_grip_strengths } = (await db.User.findByPk(athleteId, {
           attributes: [],
           include: [
             {
@@ -249,8 +250,8 @@ const coachServices = {
               },
             },
           ],
-        })
-        const { Baat_cmj } = await db.User.findByPk(athleteId, {
+        })) || { Baat_grip_strengths: [] }
+        const { Baat_cmj } = (await db.User.findByPk(athleteId, {
           attributes: [],
           include: [
             {
@@ -265,8 +266,8 @@ const coachServices = {
               },
             },
           ],
-        })
-        const { Baat_imtp } = await db.User.findByPk(athleteId, {
+        })) || { Baat_cmj: [] }
+        const { Baat_imtp } = (await db.User.findByPk(athleteId, {
           attributes: [],
           include: [
             {
@@ -281,8 +282,8 @@ const coachServices = {
               },
             },
           ],
-        })
-        const { Baat_wingate_test } = await db.User.findByPk(athleteId, {
+        })) || { Baat_imtp: [] }
+        const { Baat_wingate_test } = (await db.User.findByPk(athleteId, {
           attributes: [],
           include: [
             {
@@ -297,8 +298,8 @@ const coachServices = {
               },
             },
           ],
-        })
-        const { Baat_static_balance } = await db.User.findByPk(athleteId, {
+        })) || { Baat_wingate_test: [] }
+        const { Baat_static_balance } = (await db.User.findByPk(athleteId, {
           attributes: [],
           include: [
             {
@@ -313,8 +314,8 @@ const coachServices = {
               },
             },
           ],
-        })
-        const { Baat_dynamic_balance } = await db.User.findByPk(athleteId, {
+        })) || { Baat_static_balance: [] }
+        const { Baat_dynamic_balance } = (await db.User.findByPk(athleteId, {
           attributes: [],
           include: [
             {
@@ -329,7 +330,7 @@ const coachServices = {
               },
             },
           ],
-        })
+        })) || { Baat_dynamic_balance: [] }
         traineesData = {
           Baat_inbodies,
           Baat_grip_strengths,
@@ -377,7 +378,7 @@ const coachServices = {
         })
       }
       if (labName === 'ssta') {
-        const { Ssta_inbody } = await db.User.findByPk(athleteId, {
+        const { Ssta_inbody } = (await db.User.findByPk(athleteId, {
           attributes: [],
           include: [
             {
@@ -392,8 +393,8 @@ const coachServices = {
               },
             },
           ],
-        })
-        const { Ssta_boat_2km } = await db.User.findByPk(athleteId, {
+        })) || { Ssta_inbody: [] }
+        const { Ssta_boat_2km } = (await db.User.findByPk(athleteId, {
           attributes: [],
           include: [
             {
@@ -408,8 +409,8 @@ const coachServices = {
               },
             },
           ],
-        })
-        const { Ssta_boat_30 } = await db.User.findByPk(athleteId, {
+        })) || { Ssta_boat_2km: [] }
+        const { Ssta_boat_30 } = (await db.User.findByPk(athleteId, {
           attributes: [],
           include: [
             {
@@ -424,8 +425,8 @@ const coachServices = {
               },
             },
           ],
-        })
-        const { Ssta_bw } = await db.User.findByPk(athleteId, {
+        })) || { Ssta_boat_30: [] }
+        const { Ssta_bw } = (await db.User.findByPk(athleteId, {
           attributes: [],
           include: [
             {
@@ -440,8 +441,8 @@ const coachServices = {
               },
             },
           ],
-        })
-        const { Ssta_cycling_vo2 } = await db.User.findByPk(athleteId, {
+        })) || { Ssta_bw: [] }
+        const { Ssta_cycling_vo2 } = (await db.User.findByPk(athleteId, {
           attributes: [],
           include: [
             {
@@ -456,8 +457,8 @@ const coachServices = {
               },
             },
           ],
-        })
-        const { Ssta_football_20m } = await db.User.findByPk(athleteId, {
+        })) || { Ssta_cycling_vo2: [] }
+        const { Ssta_football_20m } = (await db.User.findByPk(athleteId, {
           attributes: [],
           include: [
             {
@@ -472,8 +473,8 @@ const coachServices = {
               },
             },
           ],
-        })
-        const { Ssta_football_505 } = await db.User.findByPk(athleteId, {
+        })) || { Ssta_football_20m: [] }
+        const { Ssta_football_505 } = (await db.User.findByPk(athleteId, {
           attributes: [],
           include: [
             {
@@ -488,8 +489,8 @@ const coachServices = {
               },
             },
           ],
-        })
-        const { Ssta_football_light } = await db.User.findByPk(athleteId, {
+        })) || { Ssta_football_505: [] }
+        const { Ssta_football_light } = (await db.User.findByPk(athleteId, {
           attributes: [],
           include: [
             {
@@ -504,7 +505,7 @@ const coachServices = {
               },
             },
           ],
-        })
+        })) || { Ssta_football_light: [] }
         traineesData = {
           Ssta_inbody,
           Ssta_boat_30,
@@ -517,7 +518,7 @@ const coachServices = {
         }
       }
       if (labName === 'ssta2') {
-        const { Ssta2_fms } = await db.User.findByPk(athleteId, {
+        const { Ssta2_fms } = (await db.User.findByPk(athleteId, {
           attributes: [],
           include: [
             {
@@ -532,8 +533,8 @@ const coachServices = {
               },
             },
           ],
-        })
-        const { Ssta2_lest } = await db.User.findByPk(athleteId, {
+        })) || { Ssta2_fms: [] }
+        const { Ssta2_lest } = (await db.User.findByPk(athleteId, {
           attributes: [],
           include: [
             {
@@ -548,8 +549,8 @@ const coachServices = {
               },
             },
           ],
-        })
-        const { Ssta2_sebt_l } = await db.User.findByPk(athleteId, {
+        })) || { Ssta2_lest: [] }
+        const { Ssta2_sebt_l } = (await db.User.findByPk(athleteId, {
           attributes: [],
           include: [
             {
@@ -564,8 +565,8 @@ const coachServices = {
               },
             },
           ],
-        })
-        const { Ssta2_sebt_r } = await db.User.findByPk(athleteId, {
+        })) || { Ssta2_sebt_l: [] }
+        const { Ssta2_sebt_r } = (await db.User.findByPk(athleteId, {
           attributes: [],
           include: [
             {
@@ -580,8 +581,8 @@ const coachServices = {
               },
             },
           ],
-        })
-        const { Ssta2_uest } = await db.User.findByPk(athleteId, {
+        })) || { Ssta2_sebt_r: [] }
+        const { Ssta2_uest } = (await db.User.findByPk(athleteId, {
           attributes: [],
           include: [
             {
@@ -596,7 +597,7 @@ const coachServices = {
               },
             },
           ],
-        })
+        })) || { Ssta2_uest: [] }
 
         traineesData = {
           Ssta2_uest,
@@ -627,10 +628,11 @@ const coachServices = {
 
       if (!traineesData) {
         return callback(null, {
-          status: 'error',
-          message: '找不到資料或使用者',
+          status: 'success',
+          data: [[]],
         })
       }
+
       return callback(null, {
         status: 'success',
         data: traineesData,
@@ -1052,7 +1054,7 @@ const coachServices = {
                   Ssta_football_505: Ssta_football_505[0].Ssta_football_505,
                   Ssta_football_light:
                     Ssta_football_light[0].Ssta_football_light,
-                  Ssta_cycling_vo2: Ssta_cycling_vo2[0].Ssta_cycling_vo2,                 
+                  Ssta_cycling_vo2: Ssta_cycling_vo2[0].Ssta_cycling_vo2,
                 })
               })
             )
